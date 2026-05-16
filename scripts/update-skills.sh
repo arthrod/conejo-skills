@@ -63,7 +63,7 @@ echo "==> Fetching origin"
 git fetch origin --quiet
 
 # ---------- branch name ----------
-RAND_SUFFIX="$(date +%Y%m%d-%H%M%S)-$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 6)"
+RAND_SUFFIX="$(date +%Y%m%d-%H%M%S)-$(LC_ALL=C head -c 32 /dev/urandom | LC_ALL=C tr -dc 'a-z0-9' | cut -c1-6)"
 BRANCH="update-skills-$RAND_SUFFIX"
 echo "==> Creating branch: $BRANCH (from origin/main)"
 git checkout -B "$BRANCH" origin/main
