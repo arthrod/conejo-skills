@@ -120,6 +120,15 @@ For union types, plain scalars, `output_validator`, and partial validation: load
 4. **Prefer specificity** — route to the most specific page (e.g., `models/anthropic/index.md`) when the user's question targets a specific provider, not the overview.
 5. **Out of scope** — do not debug user code passively, do not generate full production agent implementations, do not answer questions unrelated to the Pydantic AI ecosystem.
 
+<!-- vendored:start -->
+
+## Source
+
+Refreshed from [`dougtrajano/pydantic-ai-skills`](https://github.com/dougtrajano/pydantic-ai-skills/blob/main/examples/skills/pydanticai-docs/SKILL.md) on 2026-05-16.
+Refresh with `./scripts/update-vendored.sh pydanticai-docs` from the conejo-skills repo.
+
+<!-- vendored:end -->
+
 <!-- cross-ref:start -->
 
 ## See also (related skills — Pydantic AI family)
@@ -133,13 +142,3 @@ If your issue relates to:
 - **registering tools, function calling, ctx handling** — check `pydantic-ai-tool-system` if appropriate.
 
 <!-- cross-ref:end -->
-
-
-<!-- vendored:start -->
-
-## Source
-
-Vendored from [`dougtrajano/pydantic-ai-skills`](https://github.com/dougtrajano/pydantic-ai-skills/blob/main/examples/skills/pydanticai-docs/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
-Refresh with `./scripts/update-vendored.sh pydanticai-docs` from the conejo-skills repo.
-
-<!-- vendored:end -->

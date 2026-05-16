@@ -167,7 +167,7 @@ If they agree to the companion, read the detailed guide before proceeding:
 
 ## Source
 
-Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/brainstorming/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/brainstorming/SKILL.md) on 2026-05-16.
 Refresh with `./scripts/update-vendored.sh brainstorming` from the conejo-skills repo.
 
 <!-- vendored:end -->

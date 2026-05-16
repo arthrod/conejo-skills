@@ -299,7 +299,7 @@ From debugging sessions:
 
 ## Source
 
-Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md) on 2026-05-16.
 Refresh with `./scripts/update-vendored.sh systematic-debugging` from the conejo-skills repo.
 
 <!-- vendored:end -->

@@ -185,7 +185,7 @@ From debugging session (2025-10-03):
 
 ## Source
 
-Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/dispatching-parallel-agents/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/dispatching-parallel-agents/SKILL.md) on 2026-05-16.
 Refresh with `./scripts/update-vendored.sh dispatching-parallel-agents` from the conejo-skills repo.
 
 <!-- vendored:end -->

@@ -216,7 +216,7 @@ No performative agreement. Technical rigor always.
 
 ## Source
 
-Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/receiving-code-review/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/receiving-code-review/SKILL.md) on 2026-05-16.
 Refresh with `./scripts/update-vendored.sh receiving-code-review` from the conejo-skills repo.
 
 <!-- vendored:end -->

@@ -162,6 +162,17 @@ def test_agent_output():
 # uv run pytest --inline-snapshot=fix
 ```
 
+## Gates: VCR cassettes and inline snapshots
+
+Recording or fixing rewrites files on disk. Follow this sequence; do not skip steps.
+
+1. **Replay pass (no record/fix flags):** Run `uv run pytest` on the target path; **all green** (or failures are understood and unrelated to the artifact you will refresh).
+2. **Scope locked:** Identify the cassette under `tests/cassettes/` or the `snapshot(...)` assertion to update; confirm **only** those files should change.
+3. **Record or fix:** Run **one** scoped command: `uv run pytest --record-mode=rewrite …` **or** `uv run pytest --inline-snapshot=fix …` for that path only.
+4. **Post-condition:** Run the same tests again **without** record/fix flags; **all green**. Inspect `git diff` — only expected `.yaml` / snapshot changes.
+
+If step 4 fails, revert unintended diffs and fix the test or model before re-recording.
+
 ## Testing Tools
 
 ```python
@@ -261,6 +272,15 @@ uv run pytest tests/test_agent.py -v
 uv run pytest --inline-snapshot=fix  # Update snapshots
 ```
 
+<!-- vendored:start -->
+
+## Source
+
+Refreshed from [`existential-birds/beagle`](https://github.com/existential-birds/beagle/blob/main/plugins/beagle-ai/skills/pydantic-ai-testing/SKILL.md) on 2026-05-16.
+Refresh with `./scripts/update-vendored.sh pydantic-ai-testing` from the conejo-skills repo.
+
+<!-- vendored:end -->
+
 <!-- cross-ref:start -->
 
 ## See also (related skills — Pydantic AI family)
@@ -274,4 +294,3 @@ If your issue relates to:
 - **framework reference — structured outputs, providers, streaming** — check `pydanticai-docs` if appropriate.
 
 <!-- cross-ref:end -->
-
