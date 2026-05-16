@@ -211,3 +211,12 @@ When replying to inline review comments on GitHub, reply in the comment thread (
 Verify. Question. Then implement.
 
 No performative agreement. Technical rigor always.
+
+<!-- vendored:start -->
+
+## Source
+
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/receiving-code-review/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refresh with `./scripts/update-vendored.sh receiving-code-review` from the conejo-skills repo.
+
+<!-- vendored:end -->

@@ -180,3 +180,12 @@ From debugging session (2025-10-03):
 - All investigations completed concurrently
 - All fixes integrated successfully
 - Zero conflicts between agent changes
+
+<!-- vendored:start -->
+
+## Source
+
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/dispatching-parallel-agents/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refresh with `./scripts/update-vendored.sh dispatching-parallel-agents` from the conejo-skills repo.
+
+<!-- vendored:end -->

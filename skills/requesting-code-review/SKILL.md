@@ -103,3 +103,12 @@ You: [Fix progress indicators]
 - Request clarification
 
 See template at: requesting-code-review/code-reviewer.md
+
+<!-- vendored:start -->
+
+## Source
+
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/requesting-code-review/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refresh with `./scripts/update-vendored.sh requesting-code-review` from the conejo-skills repo.
+
+<!-- vendored:end -->

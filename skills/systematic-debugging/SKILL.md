@@ -294,3 +294,12 @@ From debugging sessions:
 - Random fixes approach: 2-3 hours of thrashing
 - First-time fix rate: 95% vs 40%
 - New bugs introduced: Near zero vs common
+
+<!-- vendored:start -->
+
+## Source
+
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refresh with `./scripts/update-vendored.sh systematic-debugging` from the conejo-skills repo.
+
+<!-- vendored:end -->

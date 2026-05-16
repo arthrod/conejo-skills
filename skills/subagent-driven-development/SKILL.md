@@ -275,3 +275,12 @@ Done!
 
 **Alternative workflow:**
 - **superpowers:executing-plans** - Use for parallel session instead of same-session execution
+
+<!-- vendored:start -->
+
+## Source
+
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/subagent-driven-development/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refresh with `./scripts/update-vendored.sh subagent-driven-development` from the conejo-skills repo.
+
+<!-- vendored:end -->

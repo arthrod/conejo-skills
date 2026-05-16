@@ -162,3 +162,12 @@ A question about a UI topic is not automatically a visual question. "What does p
 
 If they agree to the companion, read the detailed guide before proceeding:
 `skills/brainstorming/visual-companion.md`
+
+<!-- vendored:start -->
+
+## Source
+
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/brainstorming/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refresh with `./scripts/update-vendored.sh brainstorming` from the conejo-skills repo.
+
+<!-- vendored:end -->

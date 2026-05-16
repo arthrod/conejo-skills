@@ -134,3 +134,12 @@ If your issue relates to:
 
 <!-- cross-ref:end -->
 
+
+<!-- vendored:start -->
+
+## Source
+
+Vendored from [`dougtrajano/pydantic-ai-skills`](https://github.com/dougtrajano/pydantic-ai-skills/blob/main/examples/skills/pydanticai-docs/SKILL.md) (mere-copy / light-edit, verified 2026-05-16).
+Refresh with `./scripts/update-vendored.sh pydanticai-docs` from the conejo-skills repo.
+
+<!-- vendored:end -->
