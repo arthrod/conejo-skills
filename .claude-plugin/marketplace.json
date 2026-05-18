@@ -34,6 +34,7 @@
         "./skills/brainstorming",
         "./skills/browser-test-agent",
         "./skills/changeset",
+        "./skills/code-review",
         "./skills/coderlm",
         "./skills/colorize",
         "./skills/computer-use-agents",

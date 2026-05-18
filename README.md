@@ -1,6 +1,6 @@
 # arthrod's Skill Registry
 
-**94 skills** — last sync `2026-05-16` (yolo mode). **v2.0.0**
+**95 skills** — last sync `2026-05-18` (yolo mode). **v2.0.0**
 
 Major restructure: families collapsed (Pi → 2 skills, Pydantic AI → 1 with `references/`,
 Rust → `rust-author` + `rust-review`, Better Auth slimmed, design dials folded into `impeccable`),
@@ -28,7 +28,7 @@ SOURCE=/path ./scripts/update-skills.sh
 
 | Family | Skills |
 |---|---|
-| **PR / code review workflow** | `conejo`, `proud-zanahoria`, `zanahoria-plans`, `zanahoria-multi-assumptions`, `zanahoria-decisions`, `receiving-code-review`, `requesting-code-review` |
+| **PR / code review workflow** | `conejo`, `code-review`, `proud-zanahoria`, `zanahoria-plans`, `zanahoria-multi-assumptions`, `zanahoria-decisions`, `receiving-code-review`, `requesting-code-review` |
 | **Design (Stitch-first)** | `impeccable`, `ui-ux-pro-max`, `ux-design-brief`, `shadcn-parity`, `stitch-design-taste`, `refine-distill-frontend`, `increase-impact-personality-frontend`, `typeset`, `adapt`, `layout`, `colorize` |
 | **Pydantic AI** | `pydantic-ai-agent-builder`, `pydanticai-docs`, `pydantic-ai-common-pitfalls`, `pydantic-ai-testing` |
 | **Better Auth** | `better-auth`, `better-auth-best-practices`, `better-auth-security`, `better-auth-providers`, `better-auth-explain-error`, `better-auth-tauri-setup`, `better-auth-tauri-pitfalls` |
@@ -120,6 +120,10 @@ Web browser automation & testing for AI agents — agent-browser CLI (Chrome/CDP
 ### `changeset`
 
 Write concise package-release changesets for monorepo publishing — one action verb + one impact statement per bullet, imperative voice, user-impact only. Use when creating a `.changeset/*.md` for a published package.
+
+### `code-review`
+
+AI-powered code review using CodeRabbit CLI (`coderabbit review --agent`). Default code-review skill. Trigger for any explicit review request AND autonomously when the agent thinks a review is needed (code/PR/quality/security).
 
 ### `coderlm`
 
