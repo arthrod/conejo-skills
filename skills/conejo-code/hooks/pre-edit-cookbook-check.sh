@@ -8,6 +8,13 @@
 #
 # Exit 0 = allow (already read, or not a code file)
 # Exit 2 = block  (cookbook/memory not yet read — ask Claude to read them first)
+#
+# NOTE — project-layout assumptions (arthrod's setup):
+#   This hook is tailored to a layout where the cookbook lives at docs/cookbook/
+#   and per-session memory feedback files match the pattern MEMORY.md /
+#   feedback_*.md.  If you adopt this hook in a different project, update the
+#   grep patterns on the COOKBOOK_READ and MEMORY_READ lines below to match
+#   your actual paths and file-naming conventions.
 
 INPUT=$(cat)
 
