@@ -1,5 +1,5 @@
 ---
-name: conejo
+name: conejo-merge
 description: Main PR-comment handler. Two modes — skeptical (hunt PRs, file CR-plan issues, TDD-implement) and calm-implement (gate each comment, group into tasks, test/install/ship). Use for conejo, rabbit review, just implement, ship the comments, interrogate PRs.
 ---
 
