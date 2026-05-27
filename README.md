@@ -1,12 +1,36 @@
 # arthrod's Skill Registry
 
-**95 skills** — last sync `2026-05-18` (yolo mode). **v2.0.0**
+**85 skills** — last sync `2026-05-27`. **v3.0.0**
 
 Major restructure: families collapsed (Pi → 2 skills, Pydantic AI → 1 with `references/`,
 Rust → `rust-author` + `rust-review`, Better Auth slimmed, design dials folded into `impeccable`),
 new combined skills (`conejo` absorbs code-review + autofix + pr-triage-gh, `marimo` absorbs 4
 marimo skills, `ml-gpu-training` absorbs CUDA setup). All design tools include a Stitch-first
-mandate (`STITCH-DESIGN.md` in each design-skill folder).
+mandate (`STITCH-DESIGN.md` in each design-skill folder). 13 design/UI skills folded into
+`conejo-frontend/refs/` as reference docs.
+
+## Conejo coding-philosophy family
+
+The four `conejo-*` skills form a tightly coupled PR workflow. They share a doctrine
+(`references/testing-doctrine.md` inside `conejo-code`) and route to each other.
+
+| Skill | Role |
+|---|---|
+| **`conejo`** | Universal dispatcher/philosophy — enforces red-green TDD, stacked PRs, and evidence-before-claims. Routes incoming PR comments to the three specialised siblings below. |
+| **`conejo-code`** | Active coding loop. Holds the canonical testing doctrine at `references/testing-doctrine.md` (red-green-refactor, no green-without-red, no implementation without a failing test). |
+| **`conejo-frontend`** | VERY STRICT UI gate. Mandates agent-browser E2E click-flows for every UI assertion; forbids tRPC calls to assert UI state (allowed only for auth/seeding). Requires a 24/7 dev server, React + Tailwind v4 + shadcn/ui; rejects Ant Design. 13 design/UI skills live under `skills/conejo-frontend/refs/` as reference docs reached via its index — they are **not** standalone registered skills. |
+| **`conejo-merge`** | Calm, slow PR review and merge approach. Checks test coverage, CI green, no regressions, reviewer sign-off before squash-merge. |
+
+> **Foundational top-level skills** — `react`, `react-best-practices`, `react-composables`,
+> `layout`, and `tailwind-v4` remain registered as independent top-level skills because they are
+> used well beyond frontend work and are referenced by non-frontend skill families.
+
+### Helper scripts
+
+| Script | Purpose |
+|---|---|
+| `scripts/install-conejo-hooks.sh` | Opt-in hook installer: copies the `conejo` git hooks (pre-commit TDD guard, commit-msg format check) into `.git/hooks/` for the current repo. |
+| `scripts/sync-to-claude.sh` | Mirrors the `conejo-*` skills to `~/.claude/skills` and prunes the 13 folded design skills that now live inside `conejo-frontend/refs/`. Symlink-aware, refuses to delete locally-modified directories, supports `--dry-run` and `--root <path>`. |
 
 ## Sync
 
