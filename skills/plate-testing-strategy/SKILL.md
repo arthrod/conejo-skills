@@ -16,7 +16,7 @@ Hard constraints:
 - Bun-first and speed-first. `bun run test` is the default iterative workflow.
 - `pnpm test:all` is the full end-of-task and CI run. Do not use it as the default inner-loop command.
 - Keep the default iterative suite fast.
-- No browser or e2e coverage in this program.
+- Browser/e2e coverage lives in `tooling/e2e/` (Playwright) and runs via `pnpm e2e`, outside the bun fast/slow lanes — keep it there so the inner loop stays fast. Reach for it only for genuinely browser-level contracts (overlay geometry, DOM measurement, viewport behavior) that unit/contract tests cannot prove.
 - Coverage is hotspot telemetry, not a vanity target. Do not chase repo-wide numbers blindly.
 - Use coverage after each phase only to choose the next hotspot.
 - No one-smoke-test-per-package sweep.

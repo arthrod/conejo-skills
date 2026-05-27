@@ -38,7 +38,7 @@
         "./skills/coderlm",
         "./skills/colorize",
         "./skills/computer-use-agents",
-        "./skills/conejo",
+        "./skills/conejo-merge",
         "./skills/deepagents",
         "./skills/desktop-test-agent-tauri",
         "./skills/dispatching-parallel-agents",
