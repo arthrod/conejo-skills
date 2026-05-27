@@ -24,18 +24,25 @@ Make **`conejo` our general coding philosophy** and split the work into a focuse
 
 ## Strict TypeScript / visual testing doctrine
 
-**Canonical location (resolves drift, per review I1):** the doctrine is authored **once** in `skills/conejo-code/references/testing-doctrine.md`. Both `conejo-code` and `conejo-frontend` link to it; neither restates it. conejo-frontend adds only the *enforcement* posture, not a second copy.
+**One doctrine, universal red-green base, frontend is a superset.** The strict TDD red-green discipline is **identical and mandatory for backend and frontend alike** — there is no "frontend TDD" vs "backend TDD." Frontend is exactly the backend doctrine **plus** additional implementations (a 24/7 dev server and agent-browser E2E click-flows as the red-green vehicle for UI behavior). The discipline never changes; only the *vehicle* for a given test layer differs.
 
-**Scope (per review I2):** "UI behavior" = anything a user sees or triggers in a running web app. The doctrine's E2E/dev-server rules apply **only when a web frontend exists**. Backend-only, CLI, and library changes use ordinary `vitest` unit/integration TDD.
+**Universal red-green (applies to every change — backend, frontend, CLI, library):**
+1. Write the failing test **first**; run it; **watch it fail (red)** for the right reason.
+2. Write the minimal code to make it pass; **watch it pass (green)**.
+3. Refactor under green. Commit. No implementation before a failing test — no exceptions (mirrors the existing `test-driven-development` skill, which conejo links to rather than restating).
 
-1. **Layered testing (per review C2 — the doctrine does NOT ban unit tests):**
-   - **Unit tests (`vitest`)** for pure logic, transforms, schema/Zod validators, formatters, state reducers — fast, no server.
-   - **Agent-browser E2E** for any **UI behavior** assertion: drive the real UI by clicking buttons via `agent-browser`.
-2. **NEVER call tRPC to assert UI behavior under test.** tRPC is permitted **only** to obtain tokens, authenticate, or seed/reset state — never as a stand-in for a user action.
-3. **For UI work, keep a dev server running 24/7**; the failing→passing UI checks are agent-browser click-flows against that server. (Pure-logic TDD needs no server.)
-4. **Test isolation is mandatory** for E2E: each test seeds/reset its own state (via the permitted tRPC seeding) and cleans up — no shared mutable state between click-flows.
-5. **No Ant Design.** Frontend stack is React + Tailwind v4 + shadcn. Any antd reference inherited from shipshape is removed; Vue patterns are dropped.
-6. **conejo-frontend is "very, very strict":** it refuses tRPC-driven UI assertions, refuses antd, requires a running dev server for UI work, requires test isolation, and requires the relevant design-skill references to be consulted before frontend work is accepted as done.
+**Canonical location (resolves drift, per review I1):** authored **once** in `skills/conejo-code/references/testing-doctrine.md`. `conejo` states the philosophy and links here; `conejo-code` owns this base doctrine; `conejo-frontend` links here and adds **only** the frontend-specific additions below + the enforcement posture — never a second copy.
+
+**Test vehicle by code kind (per review C2 — the doctrine does NOT ban unit tests):**
+- **Backend / pure logic / CLI / library:** the red-green vehicle is **`vitest`** unit/integration tests (transforms, schema/Zod validators, reducers, tRPC router shape, services) — fast, no server.
+- **Frontend UI behavior:** the red-green vehicle is **agent-browser E2E click-flows** — the failing test is a user action (click) whose expected on-screen result doesn't exist yet, then you implement until the click-flow goes green.
+
+**Additional frontend implementations (the superset — `conejo-frontend`):**
+1. **Keep a dev server running 24/7**; UI red-green checks run against it as agent-browser click-flows. (Pure-logic units still run serverless via vitest, same as backend.)
+2. **NEVER call tRPC to assert UI behavior.** tRPC is permitted **only** to obtain tokens, authenticate, or seed/reset state — never as a stand-in for a user action.
+3. **Test isolation is mandatory** for E2E: each click-flow seeds/resets its own state (via permitted tRPC seeding) and cleans up — no shared mutable state.
+4. **No Ant Design.** Stack is React + Tailwind v4 + shadcn; antd inherited from shipshape is removed, Vue patterns dropped.
+5. **conejo-frontend is "very, very strict":** it enforces the universal red-green base AND refuses tRPC-driven UI assertions, refuses antd, requires the 24/7 dev server for UI work, requires test isolation, and requires the relevant design-skill references before frontend work is accepted as done.
 
 ## shipshape adaptation = content-fold, not plugin-port
 
