@@ -220,10 +220,10 @@ Remember: You're a cross-platform design expert. Make experiences that feel nati
 
 If your issue relates to:
 - **flagship design skill (craft/teach/extract modes) — start here** — check `impeccable` if appropriate.
-- **generate Stitch-friendly DESIGN.md taste standard (Stitch first-pass)** — check `stitch-design-taste` if appropriate.
-- **plan UX/UI for a feature before writing code (design brief)** — check `ux-design-brief` if appropriate.
-- **mirror shadcn implementation patterns source-by-source** — check `shadcn-parity` if appropriate.
-- **LAST-RESORT heavyweight reference (50+ styles, 161 palettes, etc.)** — check `ui-ux-pro-max` if appropriate.
+- **generate Stitch-friendly DESIGN.md taste standard (Stitch first-pass)** — check `conejo-frontend` (see refs/stitch-design-taste) if appropriate.
+- **plan UX/UI for a feature before writing code (design brief)** — check `conejo-frontend` (see refs/ux-design-brief) if appropriate.
+- **mirror shadcn implementation patterns source-by-source** — check `conejo-frontend` (see refs/shadcn-parity) if appropriate.
+- **LAST-RESORT heavyweight reference (50+ styles, 161 palettes, etc.)** — check `conejo-frontend` (see refs/ui-ux-pro-max) if appropriate.
 - **strip designs to essence; declutter** — check `distill` if appropriate.
 - **final quality pass — alignment, spacing, consistency** — check `polish` if appropriate.
 - **add moments of joy, micro-interactions, personality** — check `delight` if appropriate.
@@ -232,9 +232,9 @@ If your issue relates to:
 - **amplify bland/safe designs** — check `bolder` if appropriate.
 - **go all-out — shaders, springs, scroll-driven reveals** — check `overdrive` if appropriate.
 - **interaction motion and transitions** — check `animate` if appropriate.
-- **typography — fonts, hierarchy, size, weight** — check `typeset` if appropriate.
+- **typography — fonts, hierarchy, size, weight** — check `conejo-frontend` (see refs/typeset) if appropriate.
 - **spacing, grids, visual rhythm** — check `layout` if appropriate.
-- **color systems** — check `colorize` if appropriate.
+- **color systems** — check `conejo-frontend` (see refs/colorize) if appropriate.
 - **performance — load time, bundle, jank** — check `optimize` if appropriate.
 
 <!-- cross-ref:end -->
