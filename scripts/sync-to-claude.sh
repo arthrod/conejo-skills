@@ -40,4 +40,4 @@ for s in $PRUNE; do
     fi
   fi
 done
-echo "sync complete${DRY:+ (dry-run)}"
+if [ "$DRY" = "1" ]; then echo "sync complete (dry-run)"; else echo "sync complete"; fi
