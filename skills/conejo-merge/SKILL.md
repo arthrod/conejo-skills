@@ -960,6 +960,18 @@ gh pr view <NUMBER> --comments --json comments
 - Bloated diff that touches unrelated files vs a focused alternative
 - Major version bumps from bots (e.g., Renovate eslint-plugin 1.x→4.x) — too risky without manual testing
 
+**INTEGRATE (mix-and-match)** when:
+- Two or more **diverged** branches/PRs each carry something worth keeping — one has the robust error handling, another the broader feature coverage, a third the security check. Do NOT just merge one and close the rest as "duplicates": cherry-pick the best of each.
+- The goal is the **union of robustness + functionality + security**, not "pick a winner." Never drop a security check or an edge-case guard just to make a merge easier.
+
+How to mix-and-match:
+1. Diff each candidate against `main` AND against each other to see who has what: `gh pr diff <N>`; `git range-diff main..<branchA> main..<branchB>`.
+2. For each branch, list what it does *best* across the three axes — **robustness** (error handling, edge cases, retries/timeouts, null/empty/concurrent), **functionality** (features, coverage), **security** (authz/ownership in the query, input validation, no secret/PII leakage).
+3. Open an integration branch off `main`: `git checkout -b conejo/integrate-<topic> origin/main`.
+4. Bring in the best pieces — `git cherry-pick <sha>` for clean self-contained commits, or hand-merge the specific hunks when they interleave. On every conflict, resolve toward the **strongest** version of each concern (the more-defensive error path, the tighter authz check), not the easiest merge.
+5. Keep the tests from **all** source branches so no functionality regresses, and add a test for any seam you hand-merged.
+6. Run the full suite, open the integration PR, then close each source PR with a comment pointing at it (e.g. "superseded by #<INT>, which combines the robust retry logic from #A, the feature set from #B, and the ownership check from #C").
+
 **DELETE branch only** when:
 - Stale branch with no open PR attached
 - Use `git push origin --delete <branch>` (not gh)
