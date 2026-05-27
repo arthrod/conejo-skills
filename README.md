@@ -1,12 +1,36 @@
 # arthrod's Skill Registry
 
-**95 skills** — last sync `2026-05-18` (yolo mode). **v2.0.0**
+**85 skills** — last sync `2026-05-27`. **v3.0.0**
 
 Major restructure: families collapsed (Pi → 2 skills, Pydantic AI → 1 with `references/`,
 Rust → `rust-author` + `rust-review`, Better Auth slimmed, design dials folded into `impeccable`),
 new combined skills (`conejo` absorbs code-review + autofix + pr-triage-gh, `marimo` absorbs 4
 marimo skills, `ml-gpu-training` absorbs CUDA setup). All design tools include a Stitch-first
-mandate (`STITCH-DESIGN.md` in each design-skill folder).
+mandate (`STITCH-DESIGN.md` in each design-skill folder). 13 design/UI skills folded into
+`conejo-frontend/refs/` as reference docs.
+
+## Conejo coding-philosophy family
+
+The four `conejo-*` skills form a tightly coupled PR workflow. They share a doctrine
+(`references/testing-doctrine.md` inside `conejo-code`) and route to each other.
+
+| Skill | Role |
+|---|---|
+| **`conejo`** | Universal dispatcher/philosophy — enforces red-green TDD, stacked PRs, and evidence-before-claims. Routes incoming PR comments to the three specialised siblings below. |
+| **`conejo-code`** | Active coding loop. Holds the canonical testing doctrine at `references/testing-doctrine.md` (red-green-refactor, no green-without-red, no implementation without a failing test). |
+| **`conejo-frontend`** | VERY STRICT UI gate. Mandates agent-browser E2E click-flows for every UI assertion; forbids tRPC calls to assert UI state (allowed only for auth/seeding). Requires a 24/7 dev server, React + Tailwind v4 + shadcn/ui; rejects Ant Design. 13 design/UI skills live under `skills/conejo-frontend/refs/` as reference docs reached via its index — they are **not** standalone registered skills. |
+| **`conejo-merge`** | Two-mode PR handler: **skeptical mode** (hunt PRs, interrogate the code/plan, file CR-plan issues, TDD-implement) and **calm-implement mode** (gate each comment, group into tasks, test/install/ship). Also documents the stacked-PR merge method. |
+
+> **Foundational top-level skills** — `react`, `react-best-practices`, `react-composables`,
+> `layout`, and `tailwind-v4` remain registered as independent top-level skills because they are
+> used well beyond frontend work and are referenced by non-frontend skill families.
+
+### Helper scripts
+
+| Script | Purpose |
+|---|---|
+| `scripts/install-conejo-hooks.sh` | Opt-in hook installer: idempotently merges two **Claude Code** hooks into a `settings.json` (default `~/.claude/settings.json`, override with `--settings`) — a `PreToolUse(Edit|Write)` cookbook-check and a `Stop` bug-fix-learning hook. Supports `--dry-run`. Does **not** touch git hooks. |
+| `scripts/sync-to-claude.sh` | Mirrors the `conejo-*` skills to `~/.claude/skills` and prunes the 13 folded design skills that now live inside `conejo-frontend/refs/`. Symlink-aware, refuses to delete locally-modified directories, supports `--dry-run` and `--root <path>`. |
 
 ## Sync
 
@@ -29,7 +53,7 @@ SOURCE=/path ./scripts/update-skills.sh
 | Family | Skills |
 |---|---|
 | **PR / code review workflow** | `conejo`, `code-review`, `proud-zanahoria`, `zanahoria-plans`, `zanahoria-multi-assumptions`, `zanahoria-decisions`, `receiving-code-review`, `requesting-code-review` |
-| **Design (Stitch-first)** | `impeccable`, `ui-ux-pro-max`, `ux-design-brief`, `shadcn-parity`, `stitch-design-taste`, `refine-distill-frontend`, `increase-impact-personality-frontend`, `typeset`, `adapt`, `layout`, `colorize` |
+| **Design (Stitch-first)** | `impeccable`, `adapt`, `layout` — plus 13 design/UI skills folded under `conejo-frontend/refs/` (not separately invocable: `ui-ux-pro-max`, `ux-design-brief`, `shadcn-parity`, `stitch-design-taste`, `refine-distill-frontend`, `increase-impact-personality-frontend`, `typeset`, `colorize`, `type-mania`, `tanstack-router`, `tanstack-router-best-practices`, `json-render`, `seo-audit`) |
 | **Pydantic AI** | `pydantic-ai-agent-builder`, `pydanticai-docs`, `pydantic-ai-common-pitfalls`, `pydantic-ai-testing` |
 | **Better Auth** | `better-auth`, `better-auth-best-practices`, `better-auth-security`, `better-auth-providers`, `better-auth-explain-error`, `better-auth-tauri-setup`, `better-auth-tauri-pitfalls` |
 | **Rust** | `rust-author`, `rust-review` |
@@ -39,9 +63,9 @@ SOURCE=/path ./scripts/update-skills.sh
 | **ML / GPU** | `ml-gpu-training` |
 | **i18n / Docs / Blog / Releases** | `i18n-inlang-localization`, `blog-handoff`, `blog-writing`, `adr`, `changeset`, `pr-docx` |
 | **Process discipline (local copies — also exist in superpowers plugin)** | `brainstorming`, `writing-plans`, `executing-plans`, `subagent-driven-development`, `dispatching-parallel-agents`, `systematic-debugging`, `verification-before-completion`, `test-driven-development`, `using-superpowers`, `using-git-worktrees`, `writing-skills`, `finishing-a-development-branch` |
-| **Frontend stacks** | `react`, `react-best-practices`, `react-composables`, `tailwind-v4`, `tanstack-router`, `tanstack-router-best-practices`, `hono` |
+| **Frontend stacks** | `react`, `react-best-practices`, `react-composables`, `tailwind-v4`, `hono` |
 | **Infra / env / sandbox / Val Town** | `env-dogma`, `val-town`, `agent-sandbox` |
-| **Other** | `advanced-elicitation`, `coderlm`, `draft-docs`, `json-render`, `major-task`, `marimo`, `python-code-review`, `ralph-prd-generator`, `review-llm-artifacts`, `review-plan`, `review-python`, `review-rust`, `seo-audit`, `sqlalchemy-code-review`, `sqlite-vec`, `type-mania`, `work-task` |
+| **Other** | `advanced-elicitation`, `coderlm`, `draft-docs`, `major-task`, `marimo`, `python-code-review`, `ralph-prd-generator`, `review-llm-artifacts`, `review-plan`, `review-python`, `review-rust`, `sqlalchemy-code-review`, `sqlite-vec`, `work-task` |
 
 ## Full Index
 
@@ -129,10 +153,6 @@ AI-powered code review using CodeRabbit CLI (`coderabbit review --agent`). Defau
 
 Primary tool for all code navigation and reading in supported languages (Rust, Python, TypeScript, JavaScript, Go, Java, Scala, SQL). Use instead of Read, Grep, and Glob for finding symbols, reading function implementati…
 
-### `colorize`
-
-Add strategic color to features that are too monochromatic or lack visual interest, making interfaces more engaging and expressive. Use when the user mentions the design looking gray, dull, lacking warmth, needing more c…
-
 ### `computer-use-agents`
 
 Build AI agents that interact with computers like humans do - viewing screens, moving cursors, clicking buttons, and typing text. Covers Anthropic's Computer Use, OpenAI's Operator/CUA, and open-source alternatives.
@@ -188,14 +208,6 @@ Everything i18n/localization for apps — inlang projects (setup, plugins, valid
 ### `impeccable`
 
 Create distinctive, production-grade frontend interfaces with high design quality. Generates creative, polished code that avoids generic AI aesthetics. Use when the user asks to build web components, pages, artifacts, po…
-
-### `increase-impact-personality-frontend`
-
-Amplify a frontend design's impact, boldness, and personality. Three modes — Overdrive (technically ambitious, shaders/spring physics/scroll-driven, "wow"), Bolder (turn bland/safe into striking while keeping usability),…
-
-### `json-render`
-
-Use when building Generative UI with json-render — AI generates JSON specs that render as React/Vue/Svelte/Solid/Native/PDF/Email/Video/3D/Terminal/Image components within a fixed catalog. Triggers on @json-render/* impo…
 
 ### `layout`
 
@@ -285,10 +297,6 @@ React component architecture for creating composable, accessible components with
 
 Use when receiving code review feedback, before implementing suggestions, especially if feedback seems unclear or technically questionable - requires technical rigor and verification, not performative agreement or blind …
 
-### `refine-distill-frontend`
-
-Refine a frontend design — strip complexity, polish details, and tone down intensity. Three modes — Distill (strip to essence, declutter, reduce noise), Polish (final quality pass: alignment, spacing, consistency, micro-…
-
 ### `requesting-code-review`
 
 Use when completing tasks, implementing major features, or before merging to verify work meets requirements
@@ -317,14 +325,6 @@ Authoring & setting up Rust projects — idiomatic Rust (ownership/borrowing/clo
 
 Comprehensive Rust code review across four lenses — source code (ownership, borrowing, lifetimes, errors, trait design, unsafe, common mistakes), tests (unit, integration, async testing, mocking, property-based), tokio a…
 
-### `seo-audit`
-
-When the user wants to audit, review, or diagnose SEO issues on their site. Also use when the user mentions "SEO audit," "technical SEO," "why am I not ranking," "SEO issues," "on-page SEO," "meta tags review," "SEO heal…
-
-### `shadcn-parity`
-
-Clone shadcn implementation patterns with source-by-source parity. Use when the user says "shadcn parity", asks to mirror shadcn, copy shadcn UX/architecture/tests, or wants more than inspiration.
-
 ### `sqlalchemy-code-review`
 
 Reviews SQLAlchemy code for session management, relationships, N+1 queries, and migration patterns. Use when reviewing SQLAlchemy 2.0 code, checking session lifecycle, relationship() usage, or Alembic migrations.
@@ -332,10 +332,6 @@ Reviews SQLAlchemy code for session management, relationships, N+1 queries, and 
 ### `sqlite-vec`
 
 sqlite-vec extension for vector similarity search in SQLite. Use when storing embeddings, performing KNN queries, or building semantic search features. Triggers on sqlite-vec, vec0, MATCH, vec_distance, partition key, fl…
-
-### `stitch-design-taste`
-
-Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files that enforce premium, anti-generic UI standards — strict typography, calibrated color, asymmetric layouts, perpetual micro-motion, …
 
 ### `subagent-driven-development`
 
@@ -349,14 +345,6 @@ Use when encountering any bug, test failure, or unexpected behavior, before prop
 
 Tailwind CSS v4 with CSS-first configuration and design tokens. Use when setting up Tailwind v4, defining theme variables, using OKLCH colors, or configuring dark mode. Triggers on @theme, @tailwindcss/vite, oklch, CSS v…
 
-### `tanstack-router`
-
-Type-safe routing for React and Solid applications with first-class search params, data loading, and seamless integration with the React ecosystem.
-
-### `tanstack-router-best-practices`
-
-TanStack Router best practices for type-safe routing, data loading, search params, and navigation. Activate when building React applications with complex routing needs.
-
 ### `test-driven-development`
 
 Use when implementing any feature or bugfix, before writing implementation code
@@ -369,18 +357,6 @@ Review whole-repo test quality, rerun coverage, score remaining worth-testing fi
 
 Enforces dependency isolation, coverage, and test quality standards for Python pytest suites. Use when writing tests, fixing test failures, increasing coverage, or reviewing test quality. Triggers on: write tests, fix te…
 
-### `type-mania`
-
-Use when adding types to untyped code (any, implicit any, missing annotations, untyped params/returns) and you want each annotation justified by tests rather than guesses. Drives a one-item-at-a-time RED-GREEN loop where…
-
-### `typeset`
-
-Improves typography by fixing font choices, hierarchy, sizing, weight, and readability so text feels intentional. Use when the user mentions fonts, type, readability, text hierarchy, sizing looks off, or wants more polis…
-
-### `ui-ux-pro-max`
-
-Heavyweight UI/UX reference (50+ styles, 161 palettes, 57 font pairings, 161 product types, 99 UX guidelines, 25 chart types, shadcn/ui MCP). LAST-RESORT skill — invoke ONLY when stuck on UX/UI decisions OR when the user…
-
 ### `using-git-worktrees`
 
 Use when starting feature work that needs isolation from current workspace or before executing implementation plans - creates isolated git worktrees with smart directory selection and safety verification
@@ -388,10 +364,6 @@ Use when starting feature work that needs isolation from current workspace or be
 ### `using-superpowers`
 
 Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
-
-### `ux-design-brief`
-
-Plan the UX and UI for a feature before writing code. Runs a structured discovery interview, then produces a design brief that guides implementation. Use during the planning phase to establish design direction, constrain…
 
 ### `val-town`
 

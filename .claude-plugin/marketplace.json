@@ -5,13 +5,13 @@
     "email": "arthursrodrigues@gmail.com"
   },
   "metadata": {
-    "description": "arthrod's curated skill set \u2014 Pydantic AI, Plate/DOCX, Tauri/better-auth, Rust, Pi terminal agent, GLiNER training, design family with Stitch-first mandate, Conejo PR workflow.",
-    "version": "2.0.0"
+    "description": "arthrod's curated skill set \u2014 centred on the Conejo coding-philosophy family (conejo/conejo-code/conejo-frontend/conejo-merge) with strict frontend testing doctrine, plus Pydantic AI, Plate/DOCX, Tauri/better-auth, Rust, and Pi terminal agent.",
+    "version": "3.0.0"
   },
   "plugins": [
     {
       "name": "arthrod-skills",
-      "description": "All 94 skills as one bundle. See README.md for the family map.",
+      "description": "85 skills as one bundle, organized around the Conejo coding-philosophy family. See README.md for the family map.",
       "source": "./",
       "strict": false,
       "skills": [
