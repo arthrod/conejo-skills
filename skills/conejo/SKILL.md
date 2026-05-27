@@ -273,6 +273,14 @@ gh api repos/<owner>/<repo>/issues/<NUMBER>/comments --paginate
 gh api repos/<owner>/<repo>/pulls/<NUMBER>/reviews --paginate
 ```
 
+**If CodeRabbit left nothing** (none of the pulls above return anything from `coderabbitai[bot]`/`@coderabbitai`), do NOT proceed with an empty comment set and do NOT ask the user whether to request a review — just ask CodeRabbit automatically, then wait for it to finish and re-pull:
+
+```bash
+gh pr comment <NUMBER> -R <owner>/<repo> --body "@coderabbitai review"
+```
+
+(Use `@coderabbitai full review` to force a fresh pass if a stale partial review exists.) Only after CodeRabbit has responded do you continue to Step 2.
+
 Record per comment: `id`, `author.login`, `path`, `line`, `body`, `in_reply_to_id` (so threads stay together).
 
 ### Step 2 — Group by commenter, NOT by file
@@ -494,6 +502,7 @@ This is the mode you'll be in most often. Skip Phases 1-4. Start at Phase 5.
 5. **Be fun, not mean**. Skeptical != hostile. You're a rabbit, not a wolf.
 6. **One concern per issue**. Don't bundle unrelated questions.
 7. **Document the journey**. The issue thread should tell the full story from question to fix.
+8. **No CodeRabbit review → request one yourself, don't ask the user**. If a PR has no `coderabbitai[bot]` comments/reviews, automatically post `@coderabbitai review` and wait — never pause to ask the user whether to.
 
 <!-- cross-ref:start -->
 
@@ -963,9 +972,30 @@ gh pr view <NUMBER> --comments --json comments
    ```
 
 2. **Merge approved PRs sequentially** (one at a time, pulling between if needed):
-   ```bash
-   gh pr merge <NUMBER> --merge --delete-branch
-   ```
+   - **Independent PRs (all based on `main`):**
+     ```bash
+     gh pr merge <NUMBER> --merge --delete-branch
+     ```
+   - **Detect stacked PRs first.** Before merging anything, read every candidate PR's base and head:
+     ```bash
+     gh pr list -R <OWNER/REPO> --state open --json number,baseRefName,headRefName
+     ```
+     A PR is **stacked** when its `baseRefName` is another open PR's `headRefName` (not `main`/the default branch). Chain those links into bottom-up order (the one based on `main` is the bottom). If every PR's base is `main`, they're **independent** — merge them normally with `--delete-branch`. Only use the procedure below when at least one PR is stacked on another.
+   - **Stacked PRs (each based on the previous branch, not `main`) — do NOT use `--delete-branch` while merging.** Deleting a branch that another open PR is *based on* orphans that PR: GitHub auto-closes it and it CANNOT be reopened against a deleted base. Instead:
+     1. Retarget every still-open PR in the stack to the final base (`main`) **before** merging anything — use the REST API, because `gh pr edit --base` currently aborts on repos that still expose the deprecated projects-classic GraphQL field:
+        ```bash
+        gh api -X PATCH repos/<OWNER>/<REPO>/pulls/<N> -f base=main
+        ```
+     2. Merge bottom-up **without** `--delete-branch`:
+        ```bash
+        gh pr merge <N> --merge
+        ```
+        Re-check `mergeable` / `mergeStateStatus` between merges — a stacked PR carries the lower layers' commits until they land, then collapses to its own diff.
+     3. Delete the merged branches only at the very end (step 4/5 below).
+   - **Recovering an already-orphaned PR:** if a stacked PR was auto-closed when its base branch was deleted (it can't be reopened — the base is gone), recreate its content as a fresh PR to `main` and merge that. No commits are lost; the head branch still exists:
+     ```bash
+     gh pr create --base main --head <its-branch> --title "…" --body "Re-targeted replacement for #<CLOSED>."
+     ```
 
 3. **Close rejected/duplicate PRs** with explanatory comments:
    ```bash
@@ -998,6 +1028,7 @@ Summarize what was done:
 - **Bot-only PRs**: When all authors/reviewers are bots (Jules, Renovate, CodeRabbit, etc.), there are no human sign-offs — apply extra scrutiny to the diff yourself
 - **Duplicate detection**: Compare PR titles AND diffs — two PRs can have different titles but fix the same code path
 - **Post-merge conflicts**: After merging PR A, PR B targeting the same files may shift from CLEAN to UNKNOWN — re-check merge state before proceeding
+- **Stacked-PR orphaning**: `--delete-branch` on a PR whose head branch is the *base* of another open PR auto-closes that dependent PR — and it can't be reopened against a deleted base. For a stack, retarget every dependent to `main` first (`gh api -X PATCH .../pulls/<N> -f base=main`), merge bottom-up **without** `--delete-branch`, and delete branches last. Recover an already-orphaned PR by recreating its content as a new PR to `main`. See Phase 3 step 2.
 - **Security patterns to watch for**:
   - IDOR: `protectedProcedure` alone is insufficient; ownership must be checked in the DB query (`eq(table.userId, ctx.userId)`)
   - Substring matching: `"admin@x.com".includes("min@x.com")` is true — use `.split(",").map(s => s.trim()).includes(email)` instead
