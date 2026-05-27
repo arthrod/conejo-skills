@@ -81,7 +81,7 @@ shipshape's hooks (`pre-edit-cookbook-check`, `post-stop-bug-fix-learning`) are 
 
 ## Marketplace + deployment
 
-- `marketplace.json`: remove the old `conejo` entry and the 13 folded skills; add `conejo`, `conejo-code`, `conejo-frontend`, `conejo-merge`. Net registered skills: 94 − 1 − 13 + 4 = **84**.
+- `marketplace.json`: remove the old `conejo` entry and the 13 folded skills; add `conejo`, `conejo-code`, `conejo-frontend`, `conejo-merge`. Net registered skills: 95 − 1 − 13 + 4 = **85**.
 - **Source of truth is the repo.** The four conejo-* `SKILL.md`s are also mirrored to `~/.claude/skills/<name>/SKILL.md` for immediate local use (as done previously). The 13 folded skills are removed from top-level `~/.claude/skills` via the same sync so they stop loading; a `scripts/sync-to-claude.sh` performs this mirror+prune idempotently.
 - **Safe pruning (per review I5):** before deleting any `~/.claude/skills/<x>`, the sync script checks whether the target is a symlink (safe to remove) or a real directory; if real, it diffs against the repo and **refuses to prune / warns** on local modifications rather than destroying work. `--dry-run` prints the full plan.
 - **Other skill roots (per review M5):** the same machine also has `~/.agents/skills`, `~/.opencode/skills`, `~/.config/opencode/skills`. The sync script targets `~/.claude/skills` only by default but takes a `--root <dir>` flag so the prune/mirror can be repeated for the others if they shadow the folded names.
