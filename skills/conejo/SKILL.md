@@ -31,3 +31,11 @@ routes you to the focused skill for the task at hand.
 
 The testing doctrine is authored once in `conejo-code/references/testing-doctrine.md`;
 conejo-frontend adds the UI superset. Read the doctrine before writing any test.
+
+## Example
+- Brainstorm (Specs) → run "opencode run $PROMPT --model zai-coding-plan/glm-5.1 --dangerously-skip-permissions --dir  path/to/this/dir" to review your specs → Plan "opencode run $PROMPT --model deepseek/deepseek-v4-pro --dangerously-skip-permissions --dir  path/to/this/dir" to review your plan (glm-5.1 is smarter but slow, deepseek is a bit faster) → Interface → "opencode run $PROMPT --model deepseek/deepseek-v4-pro --dangerously-skip-permissions --dir  path/to/a/clone/of/this/dir" to create tests **failing tests** → "opencode run $PROMPT --model deepseek/deepseek-v4-pro --dangerously-skip-permissions --dir  path/to/a/clone/of/this/dir" to Implement → Improve tests → Code review  → (loop).
+- Full stage notes: `references/feature-stages.md`. UI stages (design/UIUX-review) and any
+visual work are owned by [[conejo-frontend]].
+- Attention! Don't be afraid of sending several agents: split the tasks as much as possible. 
+- PR over PR ALWAYS. Push. After it is at Github, clean their mess.
+- PRESERVE your context no matter what! Send these other agents first, so we can have different perspectives, but if you need to do the work, send your agents. Don't pollute your context.
