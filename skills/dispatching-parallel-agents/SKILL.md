@@ -65,13 +65,16 @@ Each agent gets:
 
 ### 3. Dispatch in Parallel
 
-```typescript
-// In Claude Code / AI environment
-Task("Fix agent-tool-abort.test.ts failures")
-Task("Fix batch-completion-behavior.test.ts failures")
-Task("Fix tool-approval-race-conditions.test.ts failures")
-// All three run concurrently
+Issue all three subagent dispatches in the same response — they run in parallel:
+
+```text
+Subagent (general-purpose): "Fix agent-tool-abort.test.ts failures"
+Subagent (general-purpose): "Fix batch-completion-behavior.test.ts failures"
+Subagent (general-purpose): "Fix tool-approval-race-conditions.test.ts failures"
+# All three run concurrently.
 ```
+
+Multiple dispatch calls in one response = parallel execution. One per response = sequential.
 
 ### 4. Review and Integrate
 
@@ -185,7 +188,7 @@ From debugging session (2025-10-03):
 
 ## Source
 
-Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/dispatching-parallel-agents/SKILL.md) on 2026-05-16.
-Refresh with `./scripts/update-vendored.sh dispatching-parallel-agents` from the conejo-skills repo.
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/dispatching-parallel-agents/SKILL.md) on 2026-07-18.
+Refresh with: `./scripts/update-vendored.sh dispatching-parallel-agents`
 
 <!-- vendored:end -->

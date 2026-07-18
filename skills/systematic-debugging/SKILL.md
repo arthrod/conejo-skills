@@ -237,7 +237,7 @@ If you catch yourself thinking:
 - "Is that not happening?" - You assumed without verifying
 - "Will it show us...?" - You should have added evidence gathering
 - "Stop guessing" - You're proposing fixes without understanding
-- "Ultrathink this" - Question fundamentals, not just symptoms
+- "Ultra-think this" - Question fundamentals, not just symptoms
 - "We're stuck?" (frustrated) - Your approach isn't working
 
 **When you see these:** STOP. Return to Phase 1.
@@ -299,7 +299,7 @@ From debugging sessions:
 
 ## Source
 
-Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md) on 2026-05-16.
-Refresh with `./scripts/update-vendored.sh systematic-debugging` from the conejo-skills repo.
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md) on 2026-07-18.
+Refresh with: `./scripts/update-vendored.sh systematic-debugging`
 
 <!-- vendored:end -->

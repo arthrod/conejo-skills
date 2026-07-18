@@ -27,7 +27,7 @@ WHEN receiving code review feedback:
 ## Forbidden Responses
 
 **NEVER:**
-- "You're absolutely right!" (explicit CLAUDE.md violation)
+- "You're absolutely right!" (explicit instruction-file violation)
 - "Great point!" / "Excellent feedback!" (performative)
 - "Let me implement that now" (before verification)
 
@@ -126,7 +126,7 @@ Push back when:
 - Reference working tests/code
 - Involve your human partner if architectural
 
-**Signal if uncomfortable pushing back out loud:** "Strange things are afoot at the Circle K"
+**If you're uncomfortable pushing back out loud:** Name that tension, then tell your partner about the issue you've seen. They'll appreciate your honesty.
 
 ## Acknowledging Correct Feedback
 
@@ -216,7 +216,7 @@ No performative agreement. Technical rigor always.
 
 ## Source
 
-Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/receiving-code-review/SKILL.md) on 2026-05-16.
-Refresh with `./scripts/update-vendored.sh receiving-code-review` from the conejo-skills repo.
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/receiving-code-review/SKILL.md) on 2026-07-18.
+Refresh with: `./scripts/update-vendored.sh receiving-code-review`
 
 <!-- vendored:end -->
