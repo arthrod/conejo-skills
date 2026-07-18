@@ -124,8 +124,8 @@ For union types, plain scalars, `output_validator`, and partial validation: load
 
 ## Source
 
-Refreshed from [`dougtrajano/pydantic-ai-skills`](https://github.com/dougtrajano/pydantic-ai-skills/blob/main/examples/skills/pydanticai-docs/SKILL.md) on 2026-05-16.
-Refresh with `./scripts/update-vendored.sh pydanticai-docs` from the conejo-skills repo.
+Vendored from [`dougtrajano/pydantic-ai-skills`](https://github.com/dougtrajano/pydantic-ai-skills/blob/main/examples/skills/pydanticai-docs/SKILL.md) on 2026-07-18.
+Refresh with: `./scripts/update-vendored.sh pydanticai-docs`
 
 <!-- vendored:end -->
 
