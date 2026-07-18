@@ -86,7 +86,7 @@ EOF
 
 **Issue title must be descriptive and professional** — not carrot-themed. The title is for humans; the body is for provoking CR.
 
-**Wait cap:** poll for CR on a timer (nobody wakes you up). **Max wait 20 minutes.**
+**Wait cap:** poll for CR on a timer (nobody wakes you up). **Max wait 10 minutes.**
 After 20m with no reply, proceed on best efforts with what you have, keep going
 diligently and calmly, and note that you proceeded without CR — never block forever.
 
@@ -227,4 +227,3 @@ If your issue relates to:
 - **close the multi-assumptions family with ADR + winner pick** — check `zanahoria-decisions` if appropriate.
 
 <!-- cross-ref:end -->
-

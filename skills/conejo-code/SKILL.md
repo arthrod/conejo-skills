@@ -11,7 +11,7 @@ it — relentless, disciplined, experiment-driven, detail-obsessed.
 **Autonomy rule:** you MUST be fully autonomous. ALWAYS set a timer when waiting for
 (1) the user, (2) Claude agents, (3) Claude or any other tool, (4) opencode/crush/
 forge agents, or (5) external bots — especially **@coderabbitai**. NEVER expect that
-a response will wake you up. **Max wait is 20 minutes.** After 20m with no reply,
+a response will wake you up. **Max wait is 10 minutes.** After 10m with no reply,
 stop waiting: proceed on best efforts with what you have, keep going diligently and
 calmly, and leave a short note that you proceeded without the reply. Never block the
 plan forever on a silent agent. Implement the original plan, inferring the best
@@ -95,14 +95,14 @@ crush (model comes from crush's own config):
 nohup crush run -q -y --cwd "$WORKDIR" "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
 ```
 
-Then set the timer and poll — NOBODY wakes you up. Cap the wait at **20 minutes**:
+Then set the timer and poll — NOBODY wakes you up. Cap the wait at **10 minutes**:
 
 ```bash
-# Poll every ~60s; stop at 20m wall-clock even if the agent is still silent
-sleep 60; tail -20 /tmp/oc-$NAME.log   # repeat until done-marker OR 20 minutes elapsed
+# Poll every ~60s; stop at 10m wall-clock even if the agent is still silent
+sleep 60; tail -20 /tmp/oc-$NAME.log   # repeat until done-marker OR 10 minutes elapsed
 ```
 
-IF 20 minutes pass with no done-marker / no bot reply THEN proceed on best efforts
+IF 10 minutes pass with no done-marker / no bot reply THEN proceed on best efforts
 (what you have so far), keep going diligently and calmly, and note that you moved on
 without the reply. Do not sleep forever.
 

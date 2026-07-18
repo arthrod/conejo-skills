@@ -63,7 +63,7 @@ see `../conejo-code/references/agent-dispatch.md`). Then:
   for corpus diversity.
 - **ALWAYS set a timer and poll the logs.** NOBODY wakes you up — not CodeRabbit, not
   opencode, not crush, not the user. `sleep 60; tail -20 /tmp/oc-$NAME.log` and
-  repeat. **Max wait: 20 minutes.** After 20m with no reply, stop waiting: proceed on
+  repeat. **Max wait: 10 minutes.** After 10m with no reply, stop waiting: proceed on
   best efforts, keep going diligently and calmly, and leave a short note that you
   moved on without the reply. Never sleep forever on a silent agent.
 
@@ -199,17 +199,17 @@ very first line. This triggers CodeRabbitAI to generate/update an implementation
 
 ## Phase 3: Interrogate the Plan
 
-### Step 5 — Wait for CodeRabbitAI's plan (max 20m), then stress-test it
+### Step 5 — Wait for CodeRabbitAI's plan (max 10m), then stress-test it
 
 **Set a timer immediately after filing. DO NOT THINK THEY WILL WAKE YOU UP!** Poll
-for up to **20 minutes**:
+for up to **10 minutes**:
 
 ```bash
-# Read the plan (poll every ~60s; stop at 20m wall-clock)
+# Read the plan (poll every ~60s; stop at 10m wall-clock)
 gh issue view <ISSUE_NUMBER> -R <OWNER/REPO> --json comments --jq '.comments[-1].body'
 ```
 
-IF CodeRabbitAI has not replied after 20 minutes THEN stop waiting: proceed on best
+IF CodeRabbitAI has not replied after 10 minutes THEN stop waiting: proceed on best
 efforts with your own plan / available evidence, keep going diligently and calmly,
 note on the issue that you proceeded without CR's plan, and continue. Prefer partial
 progress over an infinite wait.
@@ -246,10 +246,10 @@ EOF
 
 **MANDATORY IN FOLLOW-UPS**: IF your comment asks CodeRabbitAI to revise/refresh/expand
 the plan THEN include the exact mandatory plan-request string verbatim. And set the
-timer again — same **20-minute max** per round. After 20m with no reply, best efforts
+timer again — same **20-minute max** per round. After 10m with no reply, best efforts
 and keep going (do not stack infinite waits).
 
-Repeat until the plan is solid (usually 1–2 rounds), or until a 20m wait expires with
+Repeat until the plan is solid (usually 1–2 rounds), or until a 10m wait expires with
 no reply — then proceed without it.
 
 ## Phase 4: Implement with Strict TDD
@@ -326,7 +326,7 @@ EOF
 ```
 
 Then request reviews per the Commenter Source Matrix in [[conejo-merge]] — each bot in
-its own comment — and set a timer (max 20 minutes; then best efforts and keep going).
+its own comment — and set a timer (max 10 minutes; then best efforts and keep going).
 
 ## Red Flags — STOP and Reconsider
 
@@ -334,7 +334,7 @@ its own comment — and set a timer (max 20 minutes; then best efforts and keep 
 - Two PRs open in your head at once (batch)
 - A hypothesis with no killing evidence (vibe, not hypothesis)
 - Dismissing a weird bot comment without reading the dependency source (discarded gem)
-- Waiting for a bot/agent without a timer set, or waiting past 20 minutes (you will
+- Waiting for a bot/agent without a timer set, or waiting past 10 minutes (you will
   sleep forever — cap the wait, then best efforts and keep going)
 - Writing implementation code before the failing regression test
 

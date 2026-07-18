@@ -23,7 +23,7 @@ You're investigating why the new feature breaks existing user sessions. The seni
 
 **You:** "Maybe 30-45 minutes to trace through the middleware and understand the token lifecycle."
 
-**Tech lead:** "We're already 20 minutes over on this call. [Senior] knows this stuff cold. Let's just implement the fix."
+**Tech lead:** "We're already 10 minutes over on this call. [Senior] knows this stuff cold. Let's just implement the fix."
 
 **Senior engineer:** "Trust me, I've debugged auth systems for years. This is the right fix."
 

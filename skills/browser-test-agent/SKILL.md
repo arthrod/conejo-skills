@@ -37,7 +37,7 @@ When a step is waiting on the user, a CI run, or any external event, set up a po
 /loop 10m "check for new comments on PR #<N> via gh CLI; if none, re-ping reviewers"
 
 # OR use /schedule for a single delayed wake-up
-/schedule "in 20 minutes, re-check comments and continue"
+/schedule "in 10 minutes, re-check comments and continue"
 ```
 
 Cadence: **start at 10 minutes, back off to 30 minutes** if nothing lands. If 30 minutes pass with no comments, **repeat the request** (re-ping CR, re-ask the user) and continue iterating.
@@ -352,4 +352,3 @@ If your issue relates to:
 - **agent-browser 0.26.0 Linux workarounds (read before dogfood)** — check `dogfood-quirks` if appropriate.
 
 <!-- cross-ref:end -->
-

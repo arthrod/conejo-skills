@@ -31,10 +31,10 @@ One rabbit, many burrows.
    corpus doesn't hold. Adversarial framing always: reviewers refute, they don't admire.
 9. **No batch review. Ever.** Every comment, finding, and hypothesis gets its own
    individual verdict. Batching is how gems get swept out with the dust.
-10. **Max wait 20 minutes for another agent — then best efforts.** Cap every wait on
+10. **Max wait 10 minutes for another agent — then best efforts.** Cap every wait on
     another agent (especially @coderabbitai, also opencode/crush/forge/Jules/Gemini
-    or any other bot) at **20 minutes**. Poll on a timer; nobody wakes you up. IF the
-    reply is still missing at 20m THEN stop waiting: proceed on best efforts with what
+    or any other bot) at **10 minutes**. Poll on a timer; nobody wakes you up. IF the
+    reply is still missing at 10m THEN stop waiting: proceed on best efforts with what
     you have, keep going diligently and calmly, and leave a short note that you
     proceeded without the reply. Never block the plan forever on a silent agent.
     Canonical detail: `conejo-code/references/agent-dispatch.md`.

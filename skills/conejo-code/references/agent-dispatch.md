@@ -122,13 +122,13 @@ in parallel (one per family) and judge; never sequentialize.
   a bot), poll yourself:
 
 ```bash
-# Poll every ~60s. Cap the wait at 20 minutes wall-clock.
+# Poll every ~60s. Cap the wait at 10 minutes wall-clock.
 sleep 60; tail -20 /tmp/oc-$NAME.log   # repeat until done-marker OR 20m elapsed
 # For GitHub bots (CodeRabbit etc.):
 # sleep 60; gh issue/pr view … --json comments  # same 20m cap
 ```
 
-- **Max wait: 20 minutes.** Cap every wait on another agent at **20 minutes** —
+- **Max wait: 10 minutes.** Cap every wait on another agent at **10 minutes** —
   especially @coderabbitai (also Jules, Gemini, crush, opencode, forge, or any other
   bot/agent). IF the reply is still missing at the 20m mark THEN **stop waiting**:
   proceed on best efforts with what you have, keep going diligently and calmly, and

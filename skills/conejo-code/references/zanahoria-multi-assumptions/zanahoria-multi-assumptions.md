@@ -134,7 +134,7 @@ gh issue comment <N> --repo <owner>/<repo> \
 
 ## Step 4 — Wait for CR (max 20m); only fire the load-bearing follow-up if needed
 
-Poll on a timer (nobody wakes you up). **Max wait: 20 minutes** for @coderabbitai
+Poll on a timer (nobody wakes you up). **Max wait: 10 minutes** for @coderabbitai
 across the variant family. IF CR has not replied on a variant after 20m THEN stop
 waiting on that one: proceed on best efforts with the replies you have, keep going
 diligently and calmly, and note that you proceeded without a full CR round — never
@@ -213,4 +213,3 @@ If your issue relates to:
 - **close the multi-assumptions family with ADR + winner pick** — check `zanahoria-decisions` if appropriate.
 
 <!-- cross-ref:end -->
-

@@ -25,7 +25,7 @@ This skill is **never** the first one in a session. It runs after at least one r
 ## When NOT to use
 
 - Only one variant was filed. → use `zanahoria-plans` or just decide normally.
-- CR hasn't responded yet. → wait up to **20 minutes** (poll on a timer; nobody wakes
+- CR hasn't responded yet. → wait up to **10 minutes** (poll on a timer; nobody wakes
   you up), or follow up explicitly: "@coderabbitai please respond to variant X". After
   20m with no reply: best efforts with what you have, keep going diligently and calmly
   — never block forever.
@@ -245,4 +245,3 @@ If your issue relates to:
 - **file N parallel issues with same goal, different assumptions** — check `zanahoria-multi-assumptions` if appropriate.
 
 <!-- cross-ref:end -->
-
