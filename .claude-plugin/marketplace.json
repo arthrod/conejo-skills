@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "arthrod-skills",
-      "description": "All 211 skills as one bundle. See README.md for the family map.",
+      "description": "All 207 skills as one bundle. See README.md for the family map.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -29,9 +29,6 @@
         "./skills/autofix",
         "./skills/better-auth",
         "./skills/better-auth-best-practices",
-        "./skills/better-auth-explain-error",
-        "./skills/better-auth-providers",
-        "./skills/better-auth-security",
         "./skills/better-auth-security-best-practices",
         "./skills/better-auth-tauri-pitfalls",
         "./skills/better-auth-tauri-setup",
@@ -53,7 +50,6 @@
         "./skills/conejo-debug",
         "./skills/conejo-frontend",
         "./skills/conejo-kitty",
-        "./skills/conejo-legal",
         "./skills/conejo-merge",
         "./skills/conejo-smith",
         "./skills/core-actionbook",
@@ -69,7 +65,6 @@
         "./skills/dispatching-parallel-agents",
         "./skills/docs-style",
         "./skills/dogfood",
-        "./skills/dogfood-quirks",
         "./skills/domain-cli",
         "./skills/domain-cloud-native",
         "./skills/domain-embedded",
@@ -185,6 +180,7 @@
         "./skills/security-scanning",
         "./skills/sqlalchemy-code-review",
         "./skills/sqlite-vec",
+        "./skills/stella-auth",
         "./skills/subagent-driven-development",
         "./skills/systematic-debugging",
         "./skills/tailwind-v4",
