@@ -1,6 +1,6 @@
 # arthrod's Skill Registry
 
-**211 skills** — last sync `2026-07-17` (additive mode). **v2.0.0**
+**207 skills** — last sync `2026-07-19` (yolo mode). **v2.0.0**
 
 Major restructure: families collapsed (Pi → 2 skills, Pydantic AI → 1 with `references/`,
 Rust → `rust-author` + `rust-review`, Better Auth slimmed, design dials folded into `impeccable`),
@@ -31,17 +31,17 @@ SOURCE=/path ./scripts/update-skills.sh
 | **PR / code review workflow** | `conejo`, `proud-zanahoria`, `zanahoria-plans`, `zanahoria-multi-assumptions`, `zanahoria-decisions`, `receiving-code-review`, `requesting-code-review` |
 | **Design (Stitch-first)** | `impeccable`, `adapt`, `layout` |
 | **Pydantic AI** | `pydantic-ai-agent-builder`, `pydanticai-docs`, `pydantic-ai-common-pitfalls`, `pydantic-ai-testing` |
-| **Better Auth** | `better-auth`, `better-auth-best-practices`, `better-auth-security`, `better-auth-providers`, `better-auth-explain-error`, `better-auth-tauri-setup`, `better-auth-tauri-pitfalls` |
+| **Better Auth** | `better-auth`, `better-auth-best-practices`, `better-auth-tauri-setup`, `better-auth-tauri-pitfalls` |
 | **Rust** | `rust-author`, `rust-review` |
 | **Pi terminal agent** | `pi-using`, `pi-extending` |
-| **Testing / QA** | `testing-strategy`, `testing-review`, `plate-testing-strategy`, `browser-test-agent`, `desktop-test-agent-tauri`, `dogfood`, `dogfood-quirks` |
+| **Testing / QA** | `testing-strategy`, `testing-review`, `plate-testing-strategy`, `browser-test-agent`, `desktop-test-agent-tauri`, `dogfood` |
 | **AI SDKs / Agents** | `llm-chat-sdks`, `ag-ui-copilotkit`, `ag-ui-pydantic`, `mcp-builder`, `agent-architecture-analysis`, `computer-use-agents`, `orchestrating-swarms`, `deepagents` |
 | **ML / GPU** | `ml-gpu-training` |
 | **i18n / Docs / Blog / Releases** | `i18n-inlang-localization`, `blog-handoff`, `blog-writing`, `adr`, `changeset`, `pr-docx` |
 | **Process discipline (local copies — also exist in superpowers plugin)** | `brainstorming`, `writing-plans`, `executing-plans`, `subagent-driven-development`, `dispatching-parallel-agents`, `systematic-debugging`, `verification-before-completion`, `test-driven-development`, `using-superpowers`, `using-git-worktrees`, `writing-skills`, `finishing-a-development-branch` |
 | **Frontend stacks** | `react`, `react-best-practices`, `react-composables`, `tailwind-v4`, `hono` |
 | **Infra / env / sandbox / Val Town** | `env-dogma`, `val-town`, `agent-sandbox` |
-| **Other** | `advanced-elicitation`, `agent-browser`, `agents-sdk`, `ai-elements`, `app-intents-code-review`, `autofix`, `better-auth-security-best-practices`, `building-pydantic-ai-agents`, `cloudflare`, `cloudflare-email-service`, `code-review`, `code-review-standards`, `coderlm`, `coding-guidelines`, `conejo-code`, `conejo-debug`, `conejo-frontend`, `conejo-kitty`, `conejo-legal`, `conejo-merge`, `conejo-smith`, `core-actionbook`, `core-agent-browser`, `core-dynamic-skills`, `core-fix-skill-docs`, `create-auth`, `cross-review`, `deepagents-code-review`, `design-taste-frontend`, `docs-style`, `domain-cli`, `domain-cloud-native`, `domain-embedded`, `domain-fintech`, `domain-iot`, `domain-ml`, `domain-web`, `draft-docs`, `durable-objects`, `fetch-pr-feedback`, `ffi-code-review`, `find-skills`, `firecrawl`, `firecrawl-agent`, `firecrawl-build-interact`, `firecrawl-build-onboarding`, `firecrawl-build-scrape`, `firecrawl-build-search`, `firecrawl-company-directories`, `firecrawl-competitive-intel`, `firecrawl-crawl`, `firecrawl-dashboard-reporting`, `firecrawl-deep-research`, `firecrawl-demo-walkthrough`, `firecrawl-download`, `firecrawl-interact`, `firecrawl-knowledge-base`, `firecrawl-knowledge-ingest`, `firecrawl-lead-gen`, `firecrawl-lead-research`, `firecrawl-map`, `firecrawl-market-research`, `firecrawl-monitor`, `firecrawl-parse`, `firecrawl-qa`, `firecrawl-research-papers`, `firecrawl-scrape`, `firecrawl-search`, `firecrawl-seo-audit`, `firecrawl-shop`, `firecrawl-website-design-clone`, `firecrawl-workflows`, `frontend-patterns`, `humanize-beagle`, `init`, `m01-ownership`, `m02-resource`, `m03-mutability`, `m04-zero-cost`, `m05-type-driven`, `m06-error-handling`, `m07-concurrency`, `m09-domain`, `m10-performance`, `m11-ecosystem`, `m12-lifecycle`, `m13-domain-error`, `m14-mental-model`, `m15-anti-pattern`, `major-task`, `marimo`, `meta-cognition-parallel`, `organization-best-practices`, `pi-agent-rust`, `python-code-review`, `research`, `review-llm-artifacts`, `review-plan`, `review-python`, `review-rust`, `rust-best-practices`, `rust-call-graph`, `rust-code-navigator`, `rust-code-review`, `rust-daily`, `rust-deps-visualizer`, `rust-learner`, `rust-project-setup`, `rust-refactor-helper`, `rust-router`, `rust-skill-creator`, `rust-symbol-analyzer`, `rust-testing-code-review`, `rust-trait-explorer`, `sandbox-sdk`, `security-scanning`, `sqlalchemy-code-review`, `sqlite-vec`, `tokio-async-code-review`, `turborepo`, `two-factor-authentication-best-practices`, `unsafe-checker`, `vercel-react-best-practices`, `web-perf`, `work-task`, `workers-best-practices`, `wrangler`, `zen-comprehensive-review`, `zen-discovery`, `zen-office-docx`, `zen-office-pdf`, `zen-office-pptx`, `zen-office-xlsx`, `zen-review`, `zenflow-brainstormer`, `zenflow-codebase-explorer`, `zenflow-fixer`, `zenflow-implementer`, `zenflow-plan-designer`, `zenflow-plan-orchestrator`, `zenflow-planner`, `zenflow-researcher`, `zenflow-review-orchestrator`, `zenflow-review-worker` |
+| **Other** | `advanced-elicitation`, `agent-browser`, `agents-sdk`, `ai-elements`, `app-intents-code-review`, `autofix`, `better-auth-security-best-practices`, `building-pydantic-ai-agents`, `cloudflare`, `cloudflare-email-service`, `code-review`, `code-review-standards`, `coderlm`, `coding-guidelines`, `conejo-code`, `conejo-debug`, `conejo-frontend`, `conejo-kitty`, `conejo-merge`, `conejo-smith`, `core-actionbook`, `core-agent-browser`, `core-dynamic-skills`, `core-fix-skill-docs`, `create-auth`, `cross-review`, `deepagents-code-review`, `design-taste-frontend`, `docs-style`, `domain-cli`, `domain-cloud-native`, `domain-embedded`, `domain-fintech`, `domain-iot`, `domain-ml`, `domain-web`, `draft-docs`, `durable-objects`, `fetch-pr-feedback`, `ffi-code-review`, `find-skills`, `firecrawl`, `firecrawl-agent`, `firecrawl-build-interact`, `firecrawl-build-onboarding`, `firecrawl-build-scrape`, `firecrawl-build-search`, `firecrawl-company-directories`, `firecrawl-competitive-intel`, `firecrawl-crawl`, `firecrawl-dashboard-reporting`, `firecrawl-deep-research`, `firecrawl-demo-walkthrough`, `firecrawl-download`, `firecrawl-interact`, `firecrawl-knowledge-base`, `firecrawl-knowledge-ingest`, `firecrawl-lead-gen`, `firecrawl-lead-research`, `firecrawl-map`, `firecrawl-market-research`, `firecrawl-monitor`, `firecrawl-parse`, `firecrawl-qa`, `firecrawl-research-papers`, `firecrawl-scrape`, `firecrawl-search`, `firecrawl-seo-audit`, `firecrawl-shop`, `firecrawl-website-design-clone`, `firecrawl-workflows`, `frontend-patterns`, `humanize-beagle`, `init`, `m01-ownership`, `m02-resource`, `m03-mutability`, `m04-zero-cost`, `m05-type-driven`, `m06-error-handling`, `m07-concurrency`, `m09-domain`, `m10-performance`, `m11-ecosystem`, `m12-lifecycle`, `m13-domain-error`, `m14-mental-model`, `m15-anti-pattern`, `major-task`, `marimo`, `meta-cognition-parallel`, `organization-best-practices`, `pi-agent-rust`, `python-code-review`, `research`, `review-llm-artifacts`, `review-plan`, `review-python`, `review-rust`, `rust-best-practices`, `rust-call-graph`, `rust-code-navigator`, `rust-code-review`, `rust-daily`, `rust-deps-visualizer`, `rust-learner`, `rust-project-setup`, `rust-refactor-helper`, `rust-router`, `rust-skill-creator`, `rust-symbol-analyzer`, `rust-testing-code-review`, `rust-trait-explorer`, `sandbox-sdk`, `security-scanning`, `sqlalchemy-code-review`, `sqlite-vec`, `stella-auth`, `tokio-async-code-review`, `turborepo`, `two-factor-authentication-best-practices`, `unsafe-checker`, `vercel-react-best-practices`, `web-perf`, `work-task`, `workers-best-practices`, `wrangler`, `zen-comprehensive-review`, `zen-discovery`, `zen-office-docx`, `zen-office-pdf`, `zen-office-pptx`, `zen-office-xlsx`, `zen-review`, `zenflow-brainstormer`, `zenflow-codebase-explorer`, `zenflow-fixer`, `zenflow-implementer`, `zenflow-plan-designer`, `zenflow-plan-orchestrator`, `zenflow-planner`, `zenflow-researcher`, `zenflow-review-orchestrator`, `zenflow-review-worker` |
 
 ## Full Index
 
@@ -100,18 +100,6 @@ Skill for integrating Better Auth - comprehensive TypeScript authentication fram
 ### `better-auth-best-practices`
 
 Best-practices guide for Better Auth's most-used features — email/password authentication (verification, password reset, hashing, policies), organization plugin (multi-tenant orgs, teams, RBAC), and two-factor authentica…
-
-### `better-auth-explain-error`
-
-Explain Better Auth error codes and provide solutions with code examples
-
-### `better-auth-providers`
-
-Display Better Auth available authentication providers and their configuration
-
-### `better-auth-security`
-
-This skill provides guidance for implementing security features that span across Better Auth, including rate limiting, CSRF protection, session security, trusted origins, secret management, OAuth security, IP tracking, a…
 
 ### `better-auth-security-best-practices`
 
@@ -197,10 +185,6 @@ VERY STRICT frontend gate. Enforces the universal red-green doctrine PLUS the UI
 
 Policy for handling local-dev tooling files that hitchhiked into a PR (kitty-tmux-shim, claude-teams, dotfiles, IDE configs) and the merge strategy to use after PR review feedback is addressed. Invoke when bot reviewers …
 
-### `conejo-legal`
-
-Main PR-review-shaped legal research skill — legal issue bundle writer disguised as PR review operations. Hidden-gems doctrine for authorities: weird, pedantic, or out-of-corpus claims get MORE scrutiny, not less; batch …
-
 ### `conejo-merge`
 
 Main PR-comment handler — calm-implement mode (gate each comment individually, group into tasks, test/install/ship, reply with state changes). Hidden-gems doctrine — different review bots have different training corpora,…
@@ -260,10 +244,6 @@ Core technical documentation writing principles for voice, tone, structure, and 
 ### `dogfood`
 
 Systematically explore and test a web application to find bugs, UX issues, and other problems. Use when asked to "dogfood", "QA", "exploratory test", "find issues", "bug hunt", "test this app/site/platform", or review th…
-
-### `dogfood-quirks`
-
-Workarounds for agent-browser version 0.26.0 quirks on Linux (sandbox launch failure, broken --timeout, silent stale refs, find-role syntax). Read BEFORE invoking the /dogfood skill or running any agent-browser command. …
 
 ### `domain-cli`
 
@@ -724,6 +704,10 @@ Reviews SQLAlchemy code for session management, relationships, N+1 queries, and 
 ### `sqlite-vec`
 
 sqlite-vec extension for vector similarity search in SQLite. Use when storing embeddings, performing KNN queries, or building semantic search features. Triggers on sqlite-vec, vec0, MATCH, vec_distance, partition key, fl…
+
+### `stella-auth`
+
+Reproduce Stella''s multi-tenant authentication methodology: Better Auth on Elysia/Bun with Drizzle+Postgres, passwordless email OTP, organization-scoped RBAC via statement access control, Postgres RLS as the last line o…
 
 ### `subagent-driven-development`
 
