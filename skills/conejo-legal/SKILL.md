@@ -1,6 +1,6 @@
 ---
 name: conejo-legal
-description: Use when the user says "conejo legal", "rabbit legal review", "interrogate the doctrine", "stress-test the issue", "just research the issue", "ship the digest", "build the bundle", or "write the legal_issue" — or when the task is deep research of a single US doctrinal legal issue, an OKF legal_issue bundle, or a source-audited legal digest.
+description: Research a single US doctrinal legal issue with PR-review discipline and produce a source-audited OKF legal_issue bundle (SKOS digest, source/snippet audit, retained sources), with every run ending merged or closed. Use this skill whenever the user says "conejo legal", "rabbit legal review", "interrogate the doctrine", "stress-test the issue", "just research the issue", "ship the digest", "build the bundle", or "write the legal_issue", or asks for deep legal research, doctrinal synthesis, or a legal-issue taxonomy entry. Uses only free public sources (CourtListener, GovInfo, eCFR, Cornell LII, CRS) — never Lexis, Westlaw, or other paywalled databases. Also use when the user wants caselaw or statutory research on a single issue for the OKF taxonomy. Even if the user just says "research this legal question", consider this skill. Not for code PR review — that's conejo-merge.
 ---
 
 # Conejo-Legal — Two Modes, One Rabbit (Legal Edition)
