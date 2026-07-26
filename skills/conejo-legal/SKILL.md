@@ -1,6 +1,6 @@
 ---
 name: conejo-legal
-description: Use when the user says "conejo legal", "rabbit legal review", "interrogate the doctrine", "stress-test the issue", "just research the issue", "ship the digest", "build the bundle", or "write the legal_issue" — or when a task calls for deep legal research on a single doctrinal issue producing an OKF legal_issue bundle (digest, source audit, retained sources) from free public authority.
+description: Use when the user says "conejo legal", "rabbit legal review", "interrogate the doctrine", "stress-test the issue", "just research the issue", "ship the digest", "build the bundle", or "write the legal_issue" — or when the task is deep research of a single US doctrinal legal issue, an OKF legal_issue bundle, or a source-audited legal digest.
 ---
 
 # Conejo-Legal — Two Modes, One Rabbit (Legal Edition)
