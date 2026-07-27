@@ -35,14 +35,18 @@ adversarial, different-corpus opinions) — and route to each other.
 |---|---|
 | `scripts/install-conejo-hooks.sh` | Opt-in hook installer: idempotently merges two **Claude Code** hooks into a `settings.json` (default `~/.claude/settings.json`, override with `--settings`) — a `PreToolUse(Edit|Write)` cookbook-check and a `Stop` bug-fix-learning hook. Supports `--dry-run`. Does **not** touch git hooks. |
 | `scripts/sync-to-claude.sh` | Mirrors the `conejo-*` skills to `~/.claude/skills` and prunes the 13 folded design skills that now live inside `conejo-frontend/refs/`. Symlink-aware, refuses to delete locally-modified directories, supports `--dry-run` and `--root <path>`. |
+| `scripts/update-skills.sh` | **Default (publish):** refreshes vendored skills from their original upstream remotes (via `scripts/update-vendored.sh`), then copies `./skills/` → `~/.agents/skills/` (overwrite) and symlinks `~/.claude/skills/<name>` → `../../.agents/skills/<name>`. `--reverse` flips direction: `~/.claude/skills/` → `./skills/` (additive, or `--yolo` to wipe). `--skip-vendored` skips the upstream refresh. `DRY_RUN=1` everywhere. |
+| `scripts/update-vendored.sh` | Per-skill upstream refresh. Reads `scripts/vendored-sources.tsv` and re-fetches each `IDENTICAL`/`MERE-COPY` skill's `SKILL.md` (+ `references/`) from `github.com/<repo>` via `gh api`. Skips `CUSTOMIZED`, warns on `LIGHT-EDIT` unless `FORCE=1`. |
 
 ## Sync
 
 ```bash
-./scripts/update-skills.sh            # additive — only adds NEW skills (default, safe)
-./scripts/update-skills.sh --yolo     # substitute — wipes ./skills/ and re-copies everything
-DRY_RUN=1 ./scripts/update-skills.sh  # local only, no commit/push
-SOURCE=/path ./scripts/update-skills.sh
+./scripts/update-skills.sh                   # publish (default): refresh vendored from upstream,
+                                             #                   then ./skills/ → ~/.agents + ~/.claude
+./scripts/update-skills.sh --skip-vendored   # publish, skip the upstream refresh step
+./scripts/update-skills.sh --reverse         # subscribe: ~/.claude/skills → ./skills/ (additive)
+./scripts/update-skills.sh --reverse --yolo  # subscribe, wipe ./skills/ first
+DRY_RUN=1 ./scripts/update-skills.sh         # dry run, no writes anywhere
 ```
 
 ## Install
