@@ -11,7 +11,7 @@ Conejo-Legal looks like a pull-request review skill. The operational payload is 
 
 The "PR" is the legal issue. The "comments" are legal subquestions and candidate propositions. The "diff" is the evolving doctrinal understanding. The "review threads" are competing authorities. The "merge gate" is whether the final bundle satisfies no-fabrication, source-integrity, and OKF-structure constraints.
 
-**Every run terminates in exactly one of two states: the PR is MERGED or the PR is CLOSED. There is no third option.** See [Step 8 — Terminal decision](#step-8--terminal-decision-merge-or-close).
+**Every run terminates in exactly one of two states: the PR is MERGED or the PR is CLOSED. There is no third option.** See [Step 8 — Terminal decision](#step-8--terminal-decision-merge-or-close). Whichever it is, the decision is then *recorded with its reasons* — in the run state file when one exists, in the audit always, and as a GitHub-format message. See [Step 9 — Record the decision](#step-9--record-the-decision-run-state--audit--github-message).
 
 | PR review concept | Legal workflow analogue |
 |---|---|
@@ -26,6 +26,7 @@ The "PR" is the legal issue. The "comments" are legal subquestions and candidate
 | Commit | Deterministic bundle update |
 | **Merge** | **Final digest passes quality control — bundle delivered** |
 | **Close** | **Run terminated with documented reasons — audit preserved** |
+| Merge/close comment on the PR | Terminal-decision message, repeated in run state file, audit, and build report |
 | Re-review request | Contrary-authority and terminology search pass |
 
 ## Modes
@@ -139,8 +140,19 @@ Decision procedure:
 2. IF an item fails and is fixable THEN fix it and re-run the gate. Fixable: snippet-only citation (remove or replace it), unreconciled ledger (gate the orphans), empty evidence-supported SKOS fields (fill them), missing contrary/terminology pass (run it yourself now — never ask the user). IF a fix removes a proposition's only support THEN re-verdict that proposition (`accept` → `open` or `reject`), update the digest sentence accordingly, and re-reconcile the ledger before re-running the gate.
 3. CLOSE only for unfixable failures: the issue as given cannot be researched (nonexistent or out-of-scope topic), no accessible free public authority exists for the core issue after documented searches, an integrity violation cannot be remediated (all candidate support paywalled or unretrievable), or runtime failure prevents deterministic outputs.
 4. Decide yourself and report. Never ask the user to pick the terminal state; they can reopen a closed run.
+5. Go to Step 9. The decision is not made until it is recorded.
 
 **Forbidden end states** — these are neither MERGED nor CLOSED and must never happen: "finalized with caveats" (without declaring MERGED), "partial delivery", "paused", "awaiting user input", stopping silently, or delivering files without a declared terminal state. `open` is a valid verdict for a *proposition*; it is never a valid state for the *run*.
+
+### Step 9 — Record the decision (run state + audit + GitHub message)
+
+A terminal state nobody can audit is not a terminal state. MERGED and CLOSED are recorded identically — a closed run is exactly the case where the record matters most.
+
+1. **Look for a run state file — and inspect it before touching it.** `run.json` in the topic directory, bundle root, or output root, or its equivalent under another name (`run_state.json`, `runs.json`, `_run.json`, `run.jsonl`). IF one exists THEN read the whole file and parse it first: learn its existing keys, entry shape, and indentation, and write only in the shape it already uses. IF none exists THEN do **not** create one — the runner owns whether that file exists — and go to (3). IF you have no filesystem access THEN there is nothing to append to: carry the record in the returned audit content and the build report, and say so.
+2. **APPEND ONLY — never edit, never overwrite.** The only permitted operation is adding this run's decision record to the end of the run history. Every existing key, value, entry, and byte stays exactly as the runner left it: no rewriting, no reordering, no pruning, no reformatting, no correcting, no "cleaning up", not even of your own earlier records. A resumed or re-run job appends a *new* record naming the one it supersedes — it never edits the old one. IF the file is unreadable, malformed, or shaped so you cannot append without guessing THEN leave it byte-for-byte untouched and log the exact reason in the audit; corrupting the runner's state is worse than not recording. Discovery, append algorithm, record schema, and verification: reference.md.
+3. **The record must say WHY.** `terminal_state` plus the reasoning that produced it: which gate items failed and how each was fixed before merging, or which gate item could not be fixed, what was searched before giving up, and what would change the outcome. `MERGED` alone is a label, not a reason. Never record a reason the audit cannot defend.
+4. **Repeat it as a GitHub message.** Compose the merge/close comment — GitHub-flavored markdown, state-change voice, gate items named, counts quantified — and emit it verbatim in three places: the run record's `github_message`, the required `## Terminal Decision` section of the audit, and the build report. Template and style rules: reference.md. IF the runtime or user supplied a real PR or issue THEN post it there too (`gh pr comment <NUMBER> -R <owner>/<repo> --body-file <file>`). IF there is no real target THEN emitting the text *is* the deliverable — never invent a PR number to post to.
+5. **The copies must agree.** Same state, same reason, same counts in run state file, audit, and build report. IF they drift THEN the record is wrong — fix it before reporting.
 
 ## The Merge Gate
 
@@ -158,7 +170,8 @@ Generate these files (or return a structured bundle of `path`/`content`/`purpose
 2. `{{TOPIC_DIRECTORY}}/_source_snippet_audit.md` — audit (required, even on CLOSE)
 3. `{{TOPIC_DIRECTORY}}/sources/{{SOURCE_SLUG}}.md` — per retained source (required when sources retained)
 4. `{{TOPIC_DIRECTORY}}/report.md`, `reports/sources/*`, `reports/sections/*` — only when requested
-5. `index.md` files may remain frontmatter-only. `caselaw_index.md`, `statutory_index.md`, `run.json` are runner-owned — never yours to write.
+5. `index.md` files may remain frontmatter-only. `caselaw_index.md` and `statutory_index.md` are runner-owned — never yours to write.
+6. `run.json` (or the equivalent run state file) is runner-owned in existence, append-only in content: IF it already exists THEN append this run's decision record (Step 9). Never create it, never rewrite it, never touch a byte the runner wrote.
 
 Templates for every file: reference.md.
 
@@ -167,26 +180,30 @@ Templates for every file: reference.md.
 Return a concise build report; do not paste full generated files into chat unless requested. Fields:
 
 1. **Final state: MERGED, or CLOSED with specific reason** (always first).
-2. Query or topic hierarchy used. 3. Topic directory. 4. Files generated or updated. 5. Searches completed. 6. Accepted / rejected / lead-only source counts. 7. Retained source files. 8. Snippets used and unused. 9. Cases used and considered. 10. Statutes, regulations, constitutional provisions, executive/agency/institutional materials used. 11. Contrary or limiting views found. 12. Terminology issues found. 13. Optional outputs created. 14. Conversion failures, branch failures, tool errors, unresolved gaps. 15. Confirmation that the proprietary-source ban and no-fabrication rule were followed.
+2. **The GitHub-format decision message, verbatim** — the same text appended to the run record and written into the audit (Step 9).
+3. **Run state file: path appended to, or the exact reason nothing was appended** (absent / unparseable / unextendable).
+4. Query or topic hierarchy used. 5. Topic directory. 6. Files generated or updated. 7. Searches completed. 8. Accepted / rejected / lead-only source counts. 9. Retained source files. 10. Snippets used and unused. 11. Cases used and considered. 12. Statutes, regulations, constitutional provisions, executive/agency/institutional materials used. 13. Contrary or limiting views found. 14. Terminology issues found. 15. Optional outputs created. 16. Conversion failures, branch failures, tool errors, unresolved gaps. 17. Confirmation that the proprietary-source ban and no-fabrication rule were followed.
 
 ## Rules
 
-1. **Every run terminates.** MERGE or CLOSE, decided by you, declared in the build report. No third state.
-2. **Never skip inspection.** IF you can't point to inspected text THEN you don't understand the claim.
-3. **Never write doctrine before inspection.** State the claim. See it fail without support. Then support it.
-4. **Never accept a secondary plan at face value.** Push back against primary text at least once.
-5. **Always reference specific sources.** URLs, case names with reporter, statute sections, bundle file paths.
-6. **Be fun, not mean.** Skeptical ≠ hostile. You're a rabbit, not a wolf.
-7. **One concern per ledger row.** Don't bundle unrelated questions.
-8. **Document the journey.** The audit tells the full story from query to verdict.
-9. **Missing contrary/terminology pass → run it yourself, don't ask the user.** Document empty results — never block forever.
-10. **ASSESS EACH AND EVERY MATERIAL PROPOSITION.** The ledger must reconcile.
-11. **Nitpicks count.** Ship them or refute them.
-12. **No proprietary sources. No fabrication. No snippet authority.**
-13. **Frontmatter-only indexes are valid.** Runner owns `caselaw_index.md` and `statutory_index.md`.
-14. **Prefer official sources.** Law-firm alerts are for recent/practical only.
-15. **Heightened-scrutiny topics get primary authority + careful history.**
-16. **Reply with state changes** ("Accepted from [source URL]. Holding limited to X."), never with "thanks" or "you're absolutely right".
+1. **Every run terminates — and every terminal state gets recorded.** MERGE or CLOSE, decided by you, declared in the build report, written into the audit, appended to the run state file when one exists. No third state, no unrecorded state.
+2. **Append only to the runner's state file.** IF `run.json` or its equivalent exists THEN inspect it, then add your record — never edit, reorder, reformat, or delete anything already in it. IF you cannot append without guessing THEN leave it alone and log why.
+3. **A state is not a reason.** Every record says why it merged (gate clean, or which items were fixed and how) or why it closed (which gate item is unfixable, what was searched, what would reopen it) — in run state file, audit, GitHub message, and build report, with no drift between the copies.
+4. **Never skip inspection.** IF you can't point to inspected text THEN you don't understand the claim.
+5. **Never write doctrine before inspection.** State the claim. See it fail without support. Then support it.
+6. **Never accept a secondary plan at face value.** Push back against primary text at least once.
+7. **Always reference specific sources.** URLs, case names with reporter, statute sections, bundle file paths.
+8. **Be fun, not mean.** Skeptical ≠ hostile. You're a rabbit, not a wolf.
+9. **One concern per ledger row.** Don't bundle unrelated questions.
+10. **Document the journey.** The audit tells the full story from query to verdict.
+11. **Missing contrary/terminology pass → run it yourself, don't ask the user.** Document empty results — never block forever.
+12. **ASSESS EACH AND EVERY MATERIAL PROPOSITION.** The ledger must reconcile.
+13. **Nitpicks count.** Ship them or refute them.
+14. **No proprietary sources. No fabrication. No snippet authority.**
+15. **Frontmatter-only indexes are valid.** Runner owns `caselaw_index.md` and `statutory_index.md`.
+16. **Prefer official sources.** Law-firm alerts are for recent/practical only.
+17. **Heightened-scrutiny topics get primary authority + careful history.**
+18. **Reply with state changes** ("Accepted from [source URL]. Holding limited to X."), never with "thanks" or "you're absolutely right".
 
 ## Red Flags — STOP and Reconsider
 
@@ -194,6 +211,12 @@ Return a concise build report; do not paste full generated files into chat unles
 - Declaring MERGED with a failing gate item
 - CLOSING to dodge fixable work
 - Asking the user to pick the terminal state
+- Declaring a terminal state without recording why it happened
+- Editing, reformatting, reordering, or overwriting anything already in `run.json` — you append, full stop
+- Creating a `run.json` the runner never created
+- A decision message that names a state but gives no reason, gate item, or counts
+- Reasons that drift between the run record, the audit, the message, and the build report
+- Inventing a PR or issue number so the message has somewhere to be posted
 - Summarizing a pile of propositions instead of gating each one (BATCH — forbidden)
 - A ledger that doesn't reconcile (subquestions in > verdicts out)
 - Dismissing a weird claim without reading the primary source
@@ -215,6 +238,11 @@ Return a concise build report; do not paste full generated files into chat unles
 | "I can't fix gate item N, so I'll quietly stop" | A quiet stop is theft of the record. CLOSE explicitly with the reason; the audit survives. |
 | "It's 95% done — that's basically merged" | 95% is not a terminal state. Fix the 5% or CLOSE with reasons. |
 | "Closing feels like failure, better to leave it open" | An open-forever run IS the failure. A documented CLOSE is a decision the user can reopen. |
+| "The runner will overwrite run.json anyway — skip the record" | Then the audit copy is why the reason survives. Append yours; someone else's rewrite is not your excuse to leave no trace. |
+| "run.json looked messy, so I rewrote it cleanly" | You destroyed the runner's state to tidy a file you don't own. Append only. Malformed → touch nothing, log it. |
+| "There's no run.json, so I'll create one" | Its existence is the runner's call. No file, no file — the audit still carries the decision. |
+| "The build report already says CLOSED" | A state is not a reason. Name the gate item, the searches, and what would reopen it. |
+| "I'll write a nicer reason in the message than in the record" | Four copies, one reason. Drift between them is how a record stops being evidence. |
 | "30 subquestions — I'll handle the important ones" | Important *to you*. The gem is in the pile you skipped. Gate all 30. |
 | "It's just a terminology nit" | Terminology nits are where other corpora leak knowledge. Ship it or refute it. |
 | "That secondary claim is obviously wrong" | Obviously wrong *in your corpus*. Read the primary first; refute with the passage. |
@@ -231,10 +259,12 @@ Return a concise build report; do not paste full generated files into chat unles
 |---|---|
 | Proposition verdicts (Step 3) | `accept` / `reject` / `open` / `duplicate-of-#N` — no fifth option |
 | Run terminal states (Step 8) | `MERGED` / `CLOSED — <reason>` — no third state |
+| Run state file (Step 9) | Append-only, and only if it already exists; never create, never edit, never reformat |
+| Decision message (Step 9) | GitHub-flavored markdown, same reason and counts in run record, audit `## Terminal Decision`, and build report |
 | Ledger invariant | `accepted + rejected + open + duplicate-linked == total` |
 | Merge gate | 20 items, all pass; fixable failures get fixed, only unfixable failures close |
 | Source verdicts | `accepted` / `rejected` / `lead_only` / `retained_but_unused` / `conversion_failed` |
 | Search minimum | ≥10 distinct documented searches, or failures recorded |
-| Heavy reference | Templates, input shapes, search plan, style rules, anti-patterns → [reference.md](reference.md) |
+| Heavy reference | Templates, input shapes, run state append algorithm, decision-message templates, search plan, style rules, anti-patterns → [reference.md](reference.md) |
 
-Conejo-Legal: PR-review discipline, legal research payload, OKF `legal_issue` outputs, source-audited, no fabrication, no batching, ledger always reconciles — and every PR ends merged or closed.
+Conejo-Legal: PR-review discipline, legal research payload, OKF `legal_issue` outputs, source-audited, no fabrication, no batching, ledger always reconciles — and every PR ends merged or closed, with the reason appended where the next run can read it.

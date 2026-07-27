@@ -25,7 +25,8 @@ The workflow may branch, recurse, compress context, and degrade gracefully when 
 - Use injected candidate URLs when relevant; injected ≠ relevant.
 - Never cite uninspected injected material.
 - Retain source bodies deterministically when configured.
-- Leave runner-owned files (`caselaw_index.md`, `statutory_index.md`, `run.json`) to the runner. Skeletons created at materialization time are overwritten by the runner after your run.
+- Leave runner-owned files (`caselaw_index.md`, `statutory_index.md`) to the runner. Skeletons created at materialization time are overwritten by the runner after your run.
+- `run.json` is runner-owned in existence, append-only in content: never create it, never rewrite it, but IF it already exists THEN append this run's terminal-decision record to it (Step 9 — see [Run State File](#run-state-file-runjson) below). The runner may still rewrite the file after your run; that is why the same decision text is also written into the audit, which is yours.
 
 ### Injected primary sources protocol
 
@@ -193,6 +194,113 @@ resource: "{{TOPIC_DIRECTORY}}/{{NORMALIZED_TOPIC_LEAF}}.md"
 tags: [sources, snippets, audit]
 timestamp: "{{ISO_8601_UTC_TIMESTAMP}}"
 ***
+
+## Terminal Decision
+
+**Final state:** {{MERGED | CLOSED — <specific reason>}}
+**Run state file:** {{path appended to | "absent — no run state file found" | "present but not appended: <exact reason>"}}
+
+{{TERMINAL_DECISION_MESSAGE_VERBATIM}}
+```
+
+The `## Terminal Decision` section is required in every audit, MERGE and CLOSE alike, and comes first in the body — the audit is the copy of the record that survives a runner rewrite. Its message text must be byte-identical to the `github_message` value in the appended run record.
+
+---
+
+## Run State File (`run.json`)
+
+Step 9. The runner owns this file; you may only ever add to the end of it.
+
+### Discovery
+
+Look for `run.json` in the topic directory, then the bundle root, then the output root. Accept an equivalently-named run state file — `run_state.json`, `runs.json`, `_run.json`, `run.jsonl` — when the runtime clearly uses one instead. IF nothing is found THEN do not create anything; record `absent` in the audit and stop at the audit copy.
+
+### Inspect before you write
+
+1. Read the **whole** file into memory and keep those original bytes until verification passes.
+2. Parse it. Learn the existing top-level keys, the entry shape of any history array, key naming style, indentation, and whether the file ends with a newline.
+3. IF parsing fails, the file is truncated, or the shape is one you cannot extend without guessing THEN touch nothing and log the exact reason: `run.json present at <path> but unparseable (<exact error>) — decision record kept in audit only.`
+
+Never open the file in truncating write mode before the old content is parsed and held.
+
+### Append algorithm
+
+1. **Pick the history target.** IF an existing array already holds run records (`conejo_legal_runs`, `runs`, `history`, `events`) THEN append to that array, matching its key naming rather than fighting it. IF none exists THEN add a new top-level `conejo_legal_runs` array alongside the runner's keys — a new key, never a replacement for one.
+2. **Append. Only append.** Add exactly one record at the end. Do not modify, reorder, renumber, reformat, re-indent, deduplicate, or delete any existing key or entry — including records your own earlier runs appended.
+3. **Resumes and re-runs append too.** A run that supersedes an earlier record adds a new record carrying `supersedes: "<prior run_id>"`. The prior record stays exactly as it is, wrong terminal state and all — superseded history is history.
+4. **JSONL:** append one record as a single line, terminated with a newline. No rewrite of prior lines.
+5. **Write atomically:** serialize with the file's existing indentation (2-space default), write to a temp file in the same directory, then rename over the original. Preserve the trailing-newline convention.
+6. **Verify, then report.** Re-read the file: your record must be present, and every pre-existing top-level key and entry must survive unchanged. IF anything else moved THEN restore the original bytes you held and log the failure instead. Report the path in the build report.
+
+### Record schema
+
+Include what you can support from the audit; omit fields the runtime never supplied rather than inventing them. Timestamps come from the real clock.
+
+```json
+{
+  "skill": "conejo-legal",
+  "run_id": "{{RUNNER_RUN_ID_OR_AUDIT_TIMESTAMP}}",
+  "supersedes": null,
+  "timestamp": "{{ISO_8601_UTC}}",
+  "issue_id": "urn:legal-taxonomy:issue:{{NOTATION}}",
+  "notation": "{{NOTATION}}",
+  "topic_directory": "{{TOPIC_DIRECTORY}}",
+  "terminal_state": "MERGED",
+  "reason": "{{ONE SENTENCE — the operative why}}",
+  "reason_detail": ["{{evidence-level bullets, same content as the message}}"],
+  "gate": {
+    "items_total": 20,
+    "items_passed": 20,
+    "failed_then_fixed": [{"item": 5, "what": "{{failure}}", "fix": "{{what changed}}"}],
+    "failed_unfixable": []
+  },
+  "ledger": {"total": 34, "accepted": 26, "rejected": 5, "open": 2, "duplicate": 1, "reconciles": true},
+  "sources": {"accepted": 14, "rejected": 6, "lead_only": 3, "retained_but_unused": 2, "conversion_failed": 1},
+  "searches": 13,
+  "files_written": ["{{paths}}"],
+  "github_message": "{{TERMINAL_DECISION_MESSAGE_VERBATIM}}"
+}
+```
+
+CLOSE records use the same schema with `terminal_state: "CLOSED"`, the unfixable item in `gate.failed_unfixable`, and a `reopen_when` field naming the condition that would change the outcome. `reason` is never `"gate failed"` or `"could not complete"` — name the item, the searches, and the missing authority.
+
+---
+
+## Terminal Decision Message (GitHub format)
+
+Step 9. One message, written once, repeated verbatim in the run record's `github_message`, the audit's `## Terminal Decision` section, and the build report. Post it with `gh pr comment <NUMBER> -R <owner>/<repo> --body-file <file>` **only** when the runtime or user supplied a real PR or issue; otherwise the text itself is the deliverable.
+
+Style: GitHub-flavored markdown, state-change voice, ≤ ~200 words. Bold state first, then one reason sentence, then evidence bullets with numbers and gate item references. Never "thanks", never apology, never a reason the audit cannot defend, never a count you did not compute.
+
+### MERGED
+
+```markdown
+**Merged** — `CONTRACT_LAW.FORMATION.CAPACITY.MINORS`
+
+Merge gate 20/20. Ledger reconciles: 34 material subquestions = 26 accepted + 5 rejected + 2 open + 1 duplicate.
+
+**Why merged:** every digest proposition traces to an inspected free public source, and the two remaining gaps ship as `open` rather than smoothed into prose.
+
+- 13 documented searches; contrary-authority and terminology passes both run.
+- Sources: 14 accepted, 6 rejected, 3 lead-only, 1 conversion failure (CourtListener PDF extraction) — all preserved in the audit.
+- Fixed before merge: gate item 5 — one learning carried a snippet-only URL; replaced with inspected statute text at `sources/uscode-...md`, proposition re-verdicted, ledger re-reconciled.
+
+Bundle: `.../minors.md` · Audit: `.../_source_snippet_audit.md`
+```
+
+### CLOSED
+
+```markdown
+**Closed** — `{{NOTATION}}` — no accessible free public authority for the core issue.
+
+**Why closed:** gate item 11 cannot pass in this run — every candidate stating the operative test is paywalled, and the free repositories return nothing for the exact issue or its two historical labels. Not fixable by more effort inside this run.
+
+- 12 documented searches across CourtListener, GovInfo, eCFR, Cornell LII, and CRS — queries and empty results logged in the audit.
+- Ledger: 18 = 0 accepted + 4 rejected + 14 open.
+- Preserved: the audit at `.../_source_snippet_audit.md` and 2 retained sources.
+- Reopen when: the opinion enters a free repository, or a public agency version of the operative text becomes retrievable.
+
+A closed PR keeps its history; this closed run keeps its audit.
 ```
 
 ---
@@ -338,3 +446,6 @@ Optional reports supplement the bundle; they never replace digest or audit.
 6. **Audit cosplay** — a structured-looking audit that omits rejected sources, failed searches, or unused snippets.
 7. **Batch merge** — summarizing 30 subquestions into "the important ones" and shipping 8. Forbidden.
 8. **Zombie run** — ending neither MERGED nor CLOSED: files delivered with no declared terminal state, or a silent stop. Forbidden.
+9. **State-file clobber** — rewriting, reformatting, reordering, or "fixing" a runner-owned `run.json` instead of appending one record to it. Forbidden.
+10. **Bare verdict** — recording `MERGED` or `CLOSED` with no gate item, no counts, no defensible reason. A label is not a record.
+11. **Reason drift** — a friendlier reason in the message than in the run record, or counts that differ between the two.
