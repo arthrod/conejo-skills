@@ -136,8 +136,8 @@ Run the merge gate (below). Then declare exactly one terminal state:
 
 Decision procedure:
 
-1. Run all 20 gate items.
-2. IF an item fails and is fixable THEN fix it and re-run the gate. Fixable: snippet-only citation (remove or replace it), unreconciled ledger (gate the orphans), empty evidence-supported SKOS fields (fill them), missing contrary/terminology pass (run it yourself now — never ask the user). IF a fix removes a proposition's only support THEN re-verdict that proposition (`accept` → `open` or `reject`), update the digest sentence accordingly, and re-reconcile the ledger before re-running the gate.
+1. Run all 21 gate items.
+2. IF an item fails and is fixable THEN fix it and re-run the gate. Fixable: snippet-only citation (remove or replace it), unreconciled ledger (gate the orphans), empty evidence-supported SKOS fields (fill them), missing contrary/terminology pass (run it yourself now — never ask the user), fewer than 2 retained sources (search for solid free public authority yourself now, inspect it, and retain it into `sources/` until the bundle holds 2 — the found sources go through the same Step 3 gate as any other; IF your documented searches cannot produce 2 solid on-topic sources THEN the failure is unfixable and the run CLOSES). IF a fix removes a proposition's only support THEN re-verdict that proposition (`accept` → `open` or `reject`), update the digest sentence accordingly, and re-reconcile the ledger before re-running the gate.
 3. CLOSE only for unfixable failures: the issue as given cannot be researched (nonexistent or out-of-scope topic), no accessible free public authority exists for the core issue after documented searches, an integrity violation cannot be remediated (all candidate support paywalled or unretrievable), or runtime failure prevents deterministic outputs.
 4. Decide yourself and report. Never ask the user to pick the terminal state; they can reopen a closed run.
 5. Go to Step 9. The decision is not made until it is recorded.
@@ -156,9 +156,9 @@ A terminal state nobody can audit is not a terminal state. MERGED and CLOSED are
 
 ## The Merge Gate
 
-All 20 must pass to MERGE:
+All 21 must pass to MERGE:
 
-1. Authoritative query used. 2. Path deterministic or supplied. 3. SKOS `legal_issue` frontmatter complete. 4. Relevant sources retained. 5. Accurate `source_url` on learnings. 6. Audit exists with correct type. 7. Frontmatter-only indexes accepted as valid. 8. ≥10 distinct searches or failures recorded. 9. Terminology searched when needed. 10. Contrary authority searched. 11. All citations public and inspected. 12. No proprietary databases. 13. Official sources prioritized. 14. Rejected/lead-only sources preserved in audit. 15. Unused snippets preserved. 16. Failures recorded precisely. 17. Optional reports only if requested. 18. Evidence-supported SKOS fields filled. 19. Ledger reconciles. 20. No fabrication.
+1. Authoritative query used. 2. Path deterministic or supplied. 3. SKOS `legal_issue` frontmatter complete. 4. Relevant sources retained. 5. Accurate `source_url` on learnings. 6. Audit exists with correct type. 7. Frontmatter-only indexes accepted as valid. 8. ≥10 distinct searches or failures recorded. 9. Terminology searched when needed. 10. Contrary authority searched. 11. All citations public and inspected. 12. No proprietary databases. 13. Official sources prioritized. 14. Rejected/lead-only sources preserved in audit. 15. Unused snippets preserved. 16. Failures recorded precisely. 17. Optional reports only if requested. 18. Evidence-supported SKOS fields filled. 19. Ledger reconciles. 20. No fabrication. 21. **Evidence floor: ≥2 retained sources** — counted as the non-hidden files actually present in the bundle's `sources/` directory, never from `run.json` (stale run-state counts are a documented failure mode). IF the bundle holds fewer than 2 THEN it may merge ONLY after the reviewer itself finds, inspects, and mechanically retains enough solid free-public on-topic sources to reach 2; otherwise CLOSE. A digest resting on fewer than 2 retained sources is memory-written prose wearing a citation.
 
 Final test: the bundle must survive hostile rereading. A merged bundle can answer: what issue was researched, where it lives in the taxonomy, what it means and does not mean, what authority governs it, what contrary views exist, what changed recently, what remains uncertain, which sources were inspected or rejected and why, and what failures occurred. IF the bundle cannot answer those THEN it does not merge.
 
@@ -262,7 +262,8 @@ Return a concise build report; do not paste full generated files into chat unles
 | Run state file (Step 9) | Append-only, and only if it already exists; never create, never edit, never reformat |
 | Decision message (Step 9) | GitHub-flavored markdown, same reason and counts in run record, audit `## Terminal Decision`, and build report |
 | Ledger invariant | `accepted + rejected + open + duplicate-linked == total` |
-| Merge gate | 20 items, all pass; fixable failures get fixed, only unfixable failures close |
+| Merge gate | 21 items, all pass; fixable failures get fixed, only unfixable failures close |
+| Evidence floor (item 21) | ≥2 retained sources counted on disk in `sources/` — reviewer supplements to 2 or the run closes; `run.json` counts are never trusted |
 | Source verdicts | `accepted` / `rejected` / `lead_only` / `retained_but_unused` / `conversion_failed` |
 | Search minimum | ≥10 distinct documented searches, or failures recorded |
 | Heavy reference | Templates, input shapes, run state append algorithm, decision-message templates, search plan, style rules, anti-patterns → [reference.md](reference.md) |
