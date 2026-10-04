@@ -22,24 +22,29 @@ other agents. Authored once, referenced by every conejo-* skill.
 Probe ONCE per session, in this exact order. First hit wins.
 
 ```bash
-if   command -v crush    >/dev/null 2>&1; then DISPATCH=crush
+if   command -v pi       >/dev/null 2>&1; then DISPATCH=pi
+elif command -v crush    >/dev/null 2>&1; then DISPATCH=crush
 elif command -v opencode >/dev/null 2>&1; then DISPATCH=opencode
 elif command -v codex    >/dev/null 2>&1; then DISPATCH=codex
 elif command -v gemini   >/dev/null 2>&1; then DISPATCH=gemini
-elif command -v pi       >/dev/null 2>&1; then DISPATCH=pi
 else DISPATCH=subagents; fi
 echo "DISPATCH=$DISPATCH"
 ```
 
-- IF `crush` found → Template A.
-- ELIF `opencode` found → Template B (per-call `--model` = corpus diversity on demand).
-- ELIF `codex` / `gemini` / `pi` found → run `<cli> --help | head -40`, find its
-  non-interactive mode (`run` / `exec` / `-p`), map it onto Template C.
-- ELSE → subagents, Template D. Subagents ARE your Claude fallback — spawning a second
+- IF `pi` found → Template A — the default workhorse. Per-call `--provider`/`--model`
+  gives corpus diversity on demand; list scoped methods with `pi-help` (or
+  `pi --list-models`) and FAVOR THE BEST CHINESE MODELS available among them
+  (`zai/glm-5.3` flagship, `minimax/MiniMax-M3` second corpus, `zai/glm-5.3-highspeed`
+  fast lane). Details: [[pi-using]].
+- ELIF `crush` found → Template B.
+- ELIF `opencode` found → Template C (per-call `--model` = corpus diversity on demand).
+- ELIF `codex` / `gemini` found → run `<cli> --help | head -40`, find its
+  non-interactive mode (`run` / `exec` / `-p`), map it onto Template D.
+- ELSE → subagents, Template E. Subagents ARE your Claude fallback — spawning a second
   `claude -p` adds nothing over them, and subagents get better harness integration
   (parallelism, worktrees, completion notifications).
-- IF BOTH crush and opencode exist → prefer opencode when you need per-call model
-  switching (a genuinely different corpus for a review); crush otherwise.
+- IF pi is missing and BOTH crush and opencode exist → prefer opencode when you need
+  per-call model switching (a genuinely different corpus for a review); crush otherwise.
 - NEVER conclude "no agents available, I'll do everything inline." That torches your
   context and forfeits the second pair of eyes. The ladder always terminates: subagents
   always exist.
@@ -48,13 +53,22 @@ echo "DISPATCH=$DISPATCH"
 
 External dispatches are ALWAYS backgrounded, logged, and polled. NEVER foreground-block.
 
-**Template A — crush** (model comes from crush's own config):
+**Template A — pi** (per-call `--provider`/`--model`; the default workhorse.
+Scoped methods + launch syntax: run `pi-help`. Favor the best Chinese models —
+`zai/glm-5.3` smart, `zai/glm-5.3-highspeed` fast, `minimax/MiniMax-M3` second corpus):
+
+```bash
+( cd "$WORKDIR" && nohup pi --provider zai --model glm-5.3 --no-session \
+    -p "$PROMPT" > /tmp/pi-$NAME.log 2>&1 & )
+```
+
+**Template B — crush** (model comes from crush's own config):
 
 ```bash
 nohup crush run -q -y --cwd "$WORKDIR" "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
 ```
 
-**Template B — opencode** (per-call model; the corpus-diversity workhorse):
+**Template C — opencode** (per-call model; the corpus-diversity workhorse):
 
 ```bash
 nohup opencode run "$PROMPT" \
@@ -64,7 +78,7 @@ nohup opencode run "$PROMPT" \
   > /tmp/oc-$NAME.log 2>&1 &
 ```
 
-**Template C — other agent CLIs** (verify flags with `--help` before first use; the
+**Template D — other agent CLIs** (verify flags with `--help` before first use; the
 shapes that usually work):
 
 ```bash
@@ -72,10 +86,10 @@ shapes that usually work):
 ( cd "$WORKDIR" && nohup gemini -y -p "$PROMPT"           > /tmp/gem-$NAME.log   2>&1 & )
 ```
 
-For `pi`, see [[pi-using]]. IF any command errors on a flag → `<cli> --help`, re-map,
+IF any command errors on a flag → `<cli> --help`, re-map,
 retry once. Flags drift; the ladder doesn't. Don't abandon delegation over a flag.
 
-**Template D — subagents (no CLI found).** Use your harness's subagent mechanism
+**Template E — subagents (no CLI found).** Use your harness's subagent mechanism
 (Claude Code: the Agent tool). Same discipline as the CLIs:
 
 - One discrete unit per subagent; self-contained prompt (paths, expected output,
@@ -88,19 +102,23 @@ retry once. Flags drift; the ladder doesn't. Don't abandon delegation over a fla
   different lens (correctness / security / performance / "does it reproduce") and an
   adversarial charter. Diverse lenses are the poor rabbit's diverse corpora.
 
-## Model preferences (when the CLI takes `--model`, i.e. opencode)
+## Model preferences (when the CLI takes `--model`, i.e. pi and opencode)
+
+Run `pi-help` (zsh function; elsewhere `pi --list-models`) and favor the best CHINESE
+models available among the scoped methods:
 
 | Situation | Model |
 |---|---|
-| Default — specs/brainstorm review | `zai-coding-plan/glm-5.1` (smartest, slow) |
-| Default — plan review, failing tests, implement | `deepseek/deepseek-v4-pro` (a bit faster) |
-| User wants a different POV / contrarian / distrusts one model | `minimax-coding-plan/minimax-m3` |
-| User is budget-constrained ("cheap", "free", "poor") | `alibaba-coding-plan/qwen-3.7-max` |
-| Last-resort fallback | vanilla `minimax` |
+| Default — specs/brainstorm review | `zai/glm-5.3` (smartest, slow) |
+| Default — plan review, failing tests, implement | `zai/glm-5.3-highspeed` (fast lane) |
+| User wants a different POV / contrarian / distrusts one model | `minimax/MiniMax-M3` |
+| User is budget-constrained ("cheap", "free", "poor") | `zai/glm-5.3-flash` (or `nvidia/z-ai/glm-5.3-flash`) |
+| DeepSeek corpus specifically | `nvidia/deepseek-ai/deepseek-v4.1-flash` |
+| Last-resort fallback | any scoped method from `pi-help` |
 
-Always substitute the **biggest available model of the same family** (`qwen-3.7-max` →
-`qwen-4-max` the day it exists). IF swapping models for a stage → dispatch 2–4 agents
-in parallel (one per family) and judge; never sequentialize.
+Always substitute the **biggest available model of the same family** (`glm-5.3` →
+`glm-5.4` the day it exists). IF swapping models for a stage → dispatch 2–4 agents in
+parallel (one per family) and judge; never sequentialize.
 
 ## Dispatch hygiene (non-negotiable)
 
@@ -123,7 +141,7 @@ in parallel (one per family) and judge; never sequentialize.
 
 ```bash
 # Poll every ~60s. Cap the wait at 10 minutes wall-clock.
-sleep 60; tail -20 /tmp/oc-$NAME.log   # repeat until done-marker OR 20m elapsed
+sleep 60; tail -20 /tmp/pi-$NAME.log   # repeat until done-marker OR 10m elapsed
 # For GitHub bots (CodeRabbit etc.):
 # sleep 60; gh issue/pr view … --json comments  # same 20m cap
 ```

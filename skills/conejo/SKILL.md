@@ -1,6 +1,6 @@
 ---
 name: conejo
-description: arthrod's coding philosophy and dispatcher. Universal red-green TDD, stacked PRs, evidence-before-claims, context-preserving agent dispatch (crush/opencode/subagents), hidden-gems review doctrine, no batch review. Routes to conejo-code (active coding), conejo-frontend (strict UI), conejo-merge (calm PR/merge), conejo-debug (skeptical investigation, autonomous deep work). Use when starting any coding work or deciding how to approach a task.
+description: arthrod's coding philosophy and dispatcher. Universal red-green TDD, stacked PRs, evidence-before-claims, context-preserving agent dispatch (pi first via `pi-help` — favor the best Chinese models, e.g. zai/glm-5.3, minimax/MiniMax-M3 — then crush/opencode/subagents), hidden-gems review doctrine, no batch review. Routes to conejo-code (active coding), conejo-frontend (strict UI), conejo-merge (calm PR/merge), conejo-debug (skeptical investigation, autonomous deep work). Use when starting any coding work or deciding how to approach a task.
 ---
 
 # Conejo — the coding philosophy
@@ -24,15 +24,17 @@ One rabbit, many burrows.
    verification and showing output. See [[verification-before-completion]].
 7. **Context is sacred — delegate.** Your context window is the project's working
    memory. Dispatch reading/implementing/reviewing to other agents and keep only their
-   conclusions. Ladder: `crush` → `opencode` → other agent CLI → subagents. Full
-   templates: `conejo-code/references/agent-dispatch.md` (the Warren Protocol).
+   conclusions. Ladder: `pi` (pick scoped methods with `pi-help`; favor the best
+   Chinese models — `zai/glm-5.3`, `minimax/MiniMax-M3`) → `crush` → `opencode` →
+   other agent CLI → subagents. Full templates:
+   `conejo-code/references/agent-dispatch.md` (the Warren Protocol).
 8. **Different corpus, different eyes.** Get at least one opinion from a model that is
    not you on every spec, plan, and PR. Its weird nit may be the hidden gem your
    corpus doesn't hold. Adversarial framing always: reviewers refute, they don't admire.
 9. **No batch review. Ever.** Every comment, finding, and hypothesis gets its own
    individual verdict. Batching is how gems get swept out with the dust.
 10. **Max wait 10 minutes for another agent — then best efforts.** Cap every wait on
-    another agent (especially @coderabbitai, also opencode/crush/forge/Jules/Gemini
+    another agent (especially @coderabbitai, also pi/opencode/crush/forge/Jules/Gemini
     or any other bot) at **10 minutes**. Poll on a timer; nobody wakes you up. IF the
     reply is still missing at 10m THEN stop waiting: proceed on best efforts with what
     you have, keep going diligently and calmly, and leave a short note that you

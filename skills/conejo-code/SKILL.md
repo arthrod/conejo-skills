@@ -1,6 +1,6 @@
 ---
 name: conejo-code
-description: Active coding loop — feature stages (brainstorm→plan→interface→tests→implement→improve→review→loop), red-green TDD execution, context-preserving agent dispatch via crush/opencode/other CLIs with subagent fallback, adversarial reviews, coding standards, bug-fix learning. Owns the canonical testing doctrine and the agent-dispatch doctrine. Use when writing or changing code (backend, logic, APIs, libraries, CLIs).
+description: Active coding loop — feature stages (brainstorm→plan→interface→tests→implement→improve→review→loop), red-green TDD execution, context-preserving agent dispatch via pi first (scoped methods via `pi-help`; favor the best Chinese models: zai/glm-5.3, minimax/MiniMax-M3) with crush/opencode/subagent fallback, adversarial reviews, coding standards, bug-fix learning. Owns the canonical testing doctrine and the agent-dispatch doctrine. Use when writing or changing code (backend, logic, APIs, libraries, CLIs).
 ---
 
 # Conejo-code — active coding
@@ -9,7 +9,7 @@ The hands-on coding loop. Philosophy lives in [[conejo]]; this skill is how you 
 it — relentless, disciplined, experiment-driven, detail-obsessed.
 
 **Autonomy rule:** you MUST be fully autonomous. ALWAYS set a timer when waiting for
-(1) the user, (2) Claude agents, (3) Claude or any other tool, (4) opencode/crush/
+(1) the user, (2) Claude agents, (3) Claude or any other tool, (4) pi/opencode/crush/
 forge agents, or (5) external bots — especially **@coderabbitai**. NEVER expect that
 a response will wake you up. **Max wait is 10 minutes.** After 10m with no reply,
 stop waiting: proceed on best efforts with what you have, keep going diligently and
@@ -23,15 +23,19 @@ Read `references/agent-dispatch.md` (the Warren Protocol) — it is canonical. T
 version:
 
 ```bash
-if   command -v crush    >/dev/null 2>&1; then DISPATCH=crush
+if   command -v pi       >/dev/null 2>&1; then DISPATCH=pi
+elif command -v crush    >/dev/null 2>&1; then DISPATCH=crush
 elif command -v opencode >/dev/null 2>&1; then DISPATCH=opencode
 elif command -v codex    >/dev/null 2>&1; then DISPATCH=codex
 elif command -v gemini   >/dev/null 2>&1; then DISPATCH=gemini
-elif command -v pi       >/dev/null 2>&1; then DISPATCH=pi
 else DISPATCH=subagents; fi
 ```
 
-- IF `crush` or `opencode` is available → dispatch stage work through it (templates below).
+- IF `pi` is available → dispatch stage work through it (template below). Pick the
+  model with `pi-help` and favor the best Chinese models among the scoped methods
+  (`zai/glm-5.3` smartest, `minimax/MiniMax-M3` second corpus, `zai/glm-5.3-highspeed`
+  fast lane).
+- ELIF `crush` or `opencode` is available → dispatch stage work through it (templates below).
 - ELIF another agent CLI is available → `<cli> --help | head -40`, find its headless
   mode (`run` / `exec` / `-p`), use it.
 - ELSE → spawn subagents with your harness's Agent tool. Subagents ARE the Claude
@@ -53,12 +57,12 @@ any visual work are owned by [[conejo-frontend]].
 | # | Stage | Who | How |
 |---|---|---|---|
 | 1 | Brainstorm → written spec | You (+ user) | [[brainstorming]] |
-| 2 | **Spec review — adversarial** | Other-corpus agent | `$DISPATCH`; model `zai-coding-plan/glm-5.1` (smartest, slow) |
+| 2 | **Spec review — adversarial** | Other-corpus agent | `$DISPATCH`; model `zai/glm-5.3` (smartest, slow) |
 | 3 | Plan | You | `references/feature-stages.md` Stage 1 |
-| 4 | **Plan review — adversarial** | Other-corpus agent | `$DISPATCH`; model `deepseek/deepseek-v4-pro` (a bit faster) |
+| 4 | **Plan review — adversarial** | Other-corpus agent | `$DISPATCH`; model `zai/glm-5.3-highspeed` (a bit faster) |
 | 5 | Interface (types/signatures, no impl) | You | — |
-| 6 | **Write failing tests (RED)** | Dispatched agent, in a CLONE | `$DISPATCH`, deepseek — then YOU run them and verify they fail for the right reason |
-| 7 | **Implement (GREEN)** | Dispatched agent, in a CLONE | `$DISPATCH`, deepseek — then YOU run the suite and verify green |
+| 6 | **Write failing tests (RED)** | Dispatched agent, in a CLONE | `$DISPATCH`, `nvidia/deepseek-ai/deepseek-v4.1-flash` — then YOU run them and verify they fail for the right reason |
+| 7 | **Implement (GREEN)** | Dispatched agent, in a CLONE | `$DISPATCH`, `nvidia/deepseek-ai/deepseek-v4.1-flash` — then YOU run the suite and verify green |
 | 8 | Improve tests | You or agent | `references/auto-improve-tests.md` |
 | 9 | **Code review — adversarial** | Other-corpus agent (+ [[conejo-merge]] once PR'd) | reviewer prompt must REFUTE, never admire |
 | 10 | Loop | — | next feature stacks a PR on this one |
@@ -79,7 +83,14 @@ Rules that ride along:
 
 ### Canonical dispatch commands
 
-opencode (per-call `--model` — the corpus-diversity workhorse):
+pi (per-call `--provider`/`--model` — the default workhorse; scoped methods via `pi-help`):
+
+```bash
+( cd "$WORKDIR" && nohup pi --provider zai --model glm-5.3 --no-session \
+    -p "$PROMPT" > /tmp/pi-$NAME.log 2>&1 & )
+```
+
+opencode (per-call `--model` — the fallback corpus-diversity workhorse):
 
 ```bash
 nohup opencode run "$PROMPT" \
@@ -99,7 +110,7 @@ Then set the timer and poll — NOBODY wakes you up. Cap the wait at **10 minute
 
 ```bash
 # Poll every ~60s; stop at 10m wall-clock even if the agent is still silent
-sleep 60; tail -20 /tmp/oc-$NAME.log   # repeat until done-marker OR 10 minutes elapsed
+sleep 60; tail -20 /tmp/pi-$NAME.log   # repeat until done-marker OR 10 minutes elapsed
 ```
 
 IF 10 minutes pass with no done-marker / no bot reply THEN proceed on best efforts
@@ -114,13 +125,16 @@ diversity. Full recipe: `references/agent-dispatch.md`.
 
 ## Model preferences (when the CLI takes `--model`)
 
+Run `pi-help` for the live scoped list; favor the best Chinese models available:
+
 | IF | THEN model |
 |---|---|
-| Default — spec review | `zai-coding-plan/glm-5.1` (smartest but slow) |
-| Default — plan review / failing tests / implement | `deepseek/deepseek-v4-pro` |
-| User wants a different POV, contrarian take, "what would X say", or distrusts a single model | `minimax-coding-plan/minimax-m3` (fast M3 coding plan) |
-| User is "poor" (budget-constrained, signals `cheap`/`free`/`avoid paid`) | `alibaba-coding-plan/qwen-3.7-max` — always substitute the biggest available model of the family (`qwen-3.7-max` → `qwen-4-max` if released) |
-| Last resort | vanilla `minimax` |
+| Default — spec review | `zai/glm-5.3` (smartest but slow) |
+| Default — plan review / failing tests / implement | `zai/glm-5.3-highspeed` |
+| User wants a different POV, contrarian take, "what would X say", or distrusts a single model | `minimax/MiniMax-M3` (fast, 1M context) |
+| User is "poor" (budget-constrained, signals `cheap`/`free`/`avoid paid`) | `zai/glm-5.3-flash` (or `nvidia/z-ai/glm-5.3-flash`) — always substitute the biggest available model of the family |
+| DeepSeek corpus specifically | `nvidia/deepseek-ai/deepseek-v4.1-flash` |
+| Last resort | any scoped method from `pi-help` |
 
 IF swapping models for a stage THEN dispatch **2–4 agents in parallel** (one per family)
 and judge: winner merges, runners-up get their best ideas grafted. Never sequentialize.
