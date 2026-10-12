@@ -3,7 +3,32 @@
 _Bulk PR cleanup that complements conejo-debug's Hunt phase and conejo-merge's shipping.
 Merged from the former `pr-triage-gh` skill._
 
-Batch-triage PRs and branches using **only `gh` CLI and `git`** — no browser, no manual GitHub UI.
+Batch-triage PRs and branches using **only `gh` CLI (incl. the `gh stack` extension) and `git`** — no browser, no manual GitHub UI.
+
+## Stacked PRs — drive the chain with `gh stack`
+
+Never hand-rebase each branch onto its predecessor. GitHub's stacked-PR CLI does the
+whole cascade (install once, check with `gh stack --help`):
+
+```bash
+gh extension install github/gh-stack  # once
+gh stack init b1 b2 b3                # adopt existing branches as one stack, bottom → top
+gh stack init NEW                     # …or start a fresh stack; `gh stack add NEXT` adds a layer on top
+gh stack rebase --no-trunk            # rebase every branch onto the one below it, in one cascade
+gh stack rebase --continue            # after resolving a conflict
+gh stack rebase --abort               # restore every branch
+gh stack push                         # push all active branches
+gh stack submit                       # create/update the stack's PRs
+gh stack sync                         # pull remote state
+gh stack view                         # show the stack
+```
+
+Plain `gh stack rebase` also pulls and rebases onto the trunk; `--no-trunk` keeps `main`
+out of it. `--upstack` / `--downstack` limit the cascade to the branches above/below the
+current one.
+
+**Native-stack caveat:** PRs in a native `gh stack` stack refuse `gh pr edit --base` and
+normal merge — retargeting and merging the whole stack is what `gh stack merge` is for.
 
 ## Workflow
 
@@ -80,8 +105,9 @@ How to mix-and-match:
      ```bash
      gh pr list -R <OWNER/REPO> --state open --json number,baseRefName,headRefName
      ```
-     A PR is **stacked** when its `baseRefName` is another open PR's `headRefName` (not `main`/the default branch). Chain those links into bottom-up order (the one based on `main` is the bottom). If every PR's base is `main`, they're **independent** — merge them normally with `--delete-branch`. Only use the procedure below when at least one PR is stacked on another.
-   - **Stacked PRs (each based on the previous branch, not `main`) — do NOT use `--delete-branch` while merging.** Deleting a branch that another open PR is *based on* orphans that PR: GitHub auto-closes it and it CANNOT be reopened against a deleted base. Instead:
+     A PR is **stacked** when its `baseRefName` is another open PR's `headRefName` (not `main`/the default branch). Chain those links into bottom-up order (the one based on `main` is the bottom). If every PR's base is `main`, they're **independent** — merge them normally with `--delete-branch`. Only use the procedures below when at least one PR is stacked on another.
+   - **Stack managed by `gh stack` (native stack):** its PRs refuse `gh pr edit --base` and normal `gh pr merge` — expected, not breakage. Merge the whole stack with `gh stack merge` (see the `gh stack` section above), then verify branch cleanup in step 4/5 below. Skip the manual retarget dance.
+   - **Stacked PRs not managed by `gh stack` (each based on the previous branch, not `main`) — do NOT use `--delete-branch` while merging.** Deleting a branch that another open PR is *based on* orphans that PR: GitHub auto-closes it and it CANNOT be reopened against a deleted base. Instead:
      1. Retarget every still-open PR in the stack to the final base (`main`) **before** merging anything — use the REST API, because `gh pr edit --base` currently aborts on repos that still expose the deprecated projects-classic GraphQL field:
         ```bash
         gh api -X PATCH repos/<OWNER>/<REPO>/pulls/<N> -f base=main
@@ -128,7 +154,7 @@ Summarize what was done:
 - **Bot-only PRs**: When all authors/reviewers are bots (Jules, Renovate, CodeRabbit, etc.), there are no human sign-offs — apply extra scrutiny to the diff yourself
 - **Duplicate detection**: Compare PR titles AND diffs — two PRs can have different titles but fix the same code path
 - **Post-merge conflicts**: After merging PR A, PR B targeting the same files may shift from CLEAN to UNKNOWN — re-check merge state before proceeding
-- **Stacked-PR orphaning**: `--delete-branch` on a PR whose head branch is the *base* of another open PR auto-closes that dependent PR — and it can't be reopened against a deleted base. For a stack, retarget every dependent to `main` first (`gh api -X PATCH .../pulls/<N> -f base=main`), merge bottom-up **without** `--delete-branch`, and delete branches last. Recover an already-orphaned PR by recreating its content as a new PR to `main`. See Phase 3 step 2.
+- **Stacked-PR orphaning**: `--delete-branch` on a PR whose head branch is the *base* of another open PR auto-closes that dependent PR — and it can't be reopened against a deleted base. For a stack, retarget every dependent to `main` first (`gh api -X PATCH .../pulls/<N> -f base=main`), merge bottom-up **without** `--delete-branch`, and delete branches last. If the stack is `gh stack`-managed, `gh stack merge` handles the ordering for you (native stacks refuse `gh pr edit --base` and normal merge anyway — see the `gh stack` section). Recover an already-orphaned PR by recreating its content as a new PR to `main`. See Phase 3 step 2.
 - **Security patterns to watch for**:
   - IDOR: `protectedProcedure` alone is insufficient; ownership must be checked in the DB query (`eq(table.userId, ctx.userId)`)
   - Substring matching: `"admin@x.com".includes("min@x.com")` is true — use `.split(",").map(s => s.trim()).includes(email)` instead

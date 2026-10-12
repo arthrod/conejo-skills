@@ -370,5 +370,5 @@ Hunt → Burrow → Interrogate → TDD Implement. Lives in [[conejo-debug]] Pha
 
 - `refs/coderabbit-engine.md` — the CodeRabbit CLI local-review engine (install, auth, flags, severity triage).
 - `refs/autofix.md` — fetch + apply CodeRabbit PR comments interactively or in batch.
-- `refs/pr-triage.md` — bulk PR/branch triage, mix-and-match integration, stacked-PR merge order (and how not to orphan a stack).
+- `refs/pr-triage.md` — bulk PR/branch triage, mix-and-match integration, the `gh stack` stacked-PR workflow (init/rebase/push/submit/merge), and stacked-PR merge order (and how not to orphan a stack).
 - `refs/proud-zanahoria` — the contrarian carrot. 🥕
