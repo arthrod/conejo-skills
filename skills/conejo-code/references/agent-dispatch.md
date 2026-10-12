@@ -62,17 +62,17 @@ Scoped methods + launch syntax: run `pi-help`. Favor the best Chinese models —
     -p "$PROMPT" > /tmp/pi-$NAME.log 2>&1 & )
 ```
 
-**Template B — crush** (model comes from crush's own config). The invocation is
-`crush run [prompt...]` — prompt as arguments or on stdin, run in the CURRENT
-directory, so `cd` first:
+**Template B — crush** (model from crush's config, or per call with `-m`). The invocation is
+`crush run [prompt...]` — prompt as arguments or on stdin:
 
 ```bash
-cd "$WORKDIR" && nohup crush run --quiet "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
+nohup crush run -q -c "$WORKDIR" -m <provider/model> "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
 ```
 
-No `-y`, no `--cwd` — `-y` dies with "Unknown shorthand flag: 'y'" and the dispatch
-never starts. `--quiet` (not `-q`) hides the spinner. Check `crush run --help` if a
-flag is rejected rather than guessing.
+No `-y`: it is the root TUI's `--yolo` and `crush run` rejects it in either position
+("Unknown shorthand flag: 'y'"), which aborts the dispatch before the agent starts.
+`-c/--cwd`, `-q/--quiet` and `-m/--model` (per-call model) are `run` flags (crush
+v0.98.1). Check `crush run --help` if a flag is rejected rather than guessing.
 
 **Template C — opencode** (per-call model; the corpus-diversity workhorse):
 
