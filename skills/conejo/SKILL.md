@@ -15,8 +15,13 @@ One rabbit, many burrows.
    No implementation before a failing test. See [[test-driven-development]].
 2. **Test always. No exceptions.** IF you cannot write a test THEN you do not yet
    understand the problem — go understand it first.
-3. **Stacked PRs.** Branch over branch; PR often; each PR over its predecessor. Push
-   early. After it's on GitHub, clean their mess.
+3. **Stacked PRs, driven by `gh stack` — never hand-rebase the chain.** Branch over
+   branch; PR often; each PR over its predecessor. Push early. After it's on GitHub,
+   clean their mess. Install once (`gh extension install github/gh-stack`), adopt
+   existing branches with `gh stack init b1 b2 b3` (bottom to top), and let
+   `gh stack rebase --no-trunk` rebase every branch onto the one below it in one
+   cascade (`--continue`/`--abort` ride through conflicts). Full command set:
+   `conejo-merge/refs/pr-triage.md`.
 4. **Brainstorm before building** anything non-trivial. See [[brainstorming]].
 5. **Debug systematically**, never by guessing. See [[systematic-debugging]] and
    [[conejo-debug]].
@@ -69,6 +74,7 @@ console) live in [[conejo-frontend]].
 Three reminders that outrank enthusiasm:
 
 - Don't be afraid of sending several agents — split the tasks as small as they'll split.
-- PR over PR ALWAYS. Push. Then clean their mess on GitHub.
+- PR over PR ALWAYS, chained with `gh stack` (`rebase --no-trunk` beats N hand rebases).
+  Push. Then clean their mess on GitHub.
 - PRESERVE your context no matter what. Send the other-corpus agents FIRST (different
   perspectives); even when the work is yours, send YOUR agents. Don't pollute your context.
