@@ -65,7 +65,7 @@ any visual work are owned by [[conejo-frontend]].
 | 7 | **Implement (GREEN)** | Dispatched agent, in a CLONE | `$DISPATCH`, `nvidia/deepseek-ai/deepseek-v4.1-flash` — then YOU run the suite and verify green |
 | 8 | Improve tests | You or agent | `references/auto-improve-tests.md` |
 | 9 | **Code review — adversarial** | Other-corpus agent (+ [[conejo-merge]] once PR'd) | reviewer prompt must REFUTE, never admire |
-| 10 | Loop | — | next feature stacks a PR on this one |
+| 10 | Loop | — | next feature stacks a PR on this one: `gh stack add <branch>` |
 
 Rules that ride along:
 
@@ -76,7 +76,13 @@ Rules that ride along:
 - Don't be afraid of sending several agents: split the tasks as much as possible —
   up to 20 in parallel, one discrete unit each.
 - NEVER let two agents write to the same directory — clone/worktree first.
-- PR over PR ALWAYS. Push. After it is at GitHub, clean their mess.
+- PR over PR ALWAYS, chained with `gh stack` — never hand-rebase the chain. Install
+  once (`gh extension install github/gh-stack`), adopt existing branches with
+  `gh stack init b1 b2 b3` (bottom to top; `gh stack add NEXT` for a new layer).
+  `gh stack rebase --no-trunk` rebases every branch onto the one below it in one
+  cascade; on conflict, resolve then `gh stack rebase --continue` (`--abort` restores
+  every branch). `gh stack push` pushes all active branches, `gh stack submit`
+  creates/updates the PRs. Push. After it is at GitHub, clean their mess.
 - PRESERVE your context no matter what. Other-corpus agents first (different
   perspectives); if the work must be done anyway, send YOUR agents. Don't pollute
   your context.
