@@ -106,11 +106,17 @@ nohup opencode run "$PROMPT" \
   > /tmp/oc-$NAME.log 2>&1 &
 ```
 
-crush (model comes from crush's own config):
+crush (model comes from crush's own config). The invocation is simply
+`crush run [prompt...]` — it takes the prompt as arguments or on stdin, and runs in
+the CURRENT directory, so `cd` first:
 
 ```bash
-nohup crush run -q -y --cwd "$WORKDIR" "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
+cd "$WORKDIR" && nohup crush run --quiet "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
 ```
+
+No `-y`, no `--cwd` — `-y` dies with "Unknown shorthand flag: 'y'" and the dispatch
+never starts. `--quiet` (not `-q`) hides the spinner. Check `crush run --help` if a
+flag is rejected rather than guessing.
 
 Then set the timer and poll — NOBODY wakes you up. Cap the wait at **10 minutes**:
 

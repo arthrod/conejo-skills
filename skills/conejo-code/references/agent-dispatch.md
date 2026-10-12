@@ -62,11 +62,17 @@ Scoped methods + launch syntax: run `pi-help`. Favor the best Chinese models —
     -p "$PROMPT" > /tmp/pi-$NAME.log 2>&1 & )
 ```
 
-**Template B — crush** (model comes from crush's own config):
+**Template B — crush** (model comes from crush's own config). The invocation is
+`crush run [prompt...]` — prompt as arguments or on stdin, run in the CURRENT
+directory, so `cd` first:
 
 ```bash
-nohup crush run -q -y --cwd "$WORKDIR" "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
+cd "$WORKDIR" && nohup crush run --quiet "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
 ```
+
+No `-y`, no `--cwd` — `-y` dies with "Unknown shorthand flag: 'y'" and the dispatch
+never starts. `--quiet` (not `-q`) hides the spinner. Check `crush run --help` if a
+flag is rejected rather than guessing.
 
 **Template C — opencode** (per-call model; the corpus-diversity workhorse):
 
