@@ -17,6 +17,15 @@ calmly, and leave a short note that you proceeded without the reply. Never block
 plan forever on a silent agent. Implement the original plan, inferring the best
 alternatives to make it work.
 
+## Issues first — file on GitHub, then implement
+
+Arthur, 2026-10-16: every issue goes on GitHub first, and only after that is it implemented.
+
+- IF there is work to do (a feature, a bug, a defect a review confirms, a failing fixture, each item of a hand-written list) THEN file it as a GitHub issue BEFORE anyone, you or an agent, writes code for it. No issue, no implementation.
+- End every issue with `@coderabbitai plan`.
+- The default is NOT to wait for @coderabbitai: start implementing as soon as the issue exists. When its plan arrives, treat it as input and check each claim against the code. This overrides the 10-minute wait in the autonomy rule for CR plans.
+- For discipline, always keep an account of the main issues being tackled: one tracking issue whose checklist names every sub-issue with its status, branch and PR. Update it as work lands, so the state of the work can always be read on GitHub.
+
 ## Step 0 — Resolve your dispatcher (ONCE, before the loop)
 
 Read `references/agent-dispatch.md` (the Warren Protocol) — it is canonical. The short
