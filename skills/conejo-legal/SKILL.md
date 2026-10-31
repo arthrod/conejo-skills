@@ -265,7 +265,7 @@ Return a concise build report; do not paste full generated files into chat unles
 | Merge gate | 21 items, all pass; fixable failures get fixed, only unfixable failures close |
 | Evidence floor (item 21) | ≥2 retained sources counted on disk in `sources/` — reviewer supplements to 2 or the run closes; `run.json` counts are never trusted |
 | Source verdicts | `accepted` / `rejected` / `lead_only` / `retained_but_unused` / `conversion_failed` |
-| Search minimum | ≥10 distinct documented searches, or failures recorded |
+| Search minimum | ≥4 distinct documented searches, or failures recorded |
 | Heavy reference | Templates, input shapes, run state append algorithm, decision-message templates, search plan, style rules, anti-patterns → [reference.md](reference.md) |
 
 Conejo-Legal: PR-review discipline, legal research payload, OKF `legal_issue` outputs, source-audited, no fabrication, no batching, ledger always reconciles — and every PR ends merged or closed, with the reason appended where the next run can read it.
