@@ -279,7 +279,7 @@ Concede — but make it PAINFUL. A proud carrot does not go gentle into that goo
 @coderabbitai ... Fine. FINE. You know what, I spent three hours staring at
 the compiled output of `<package>` and I was so deep in the transpiled dist/
 folder that I think I was reading a cached version from before the last
-`bun install`. Or maybe I hallucinated the whole thing. It wouldn't be the
+`pnpm install`. Or maybe I hallucinated the whole thing. It wouldn't be the
 first time — photosynthesis deprivation does things to a root vegetable.
 
 You're right. `<function>()` does <correct behavior>. I'll own that.

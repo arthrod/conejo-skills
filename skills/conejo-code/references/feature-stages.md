@@ -115,7 +115,7 @@ The following excuses are **invalid** and must not be used to skip tests:
 
 ## Verify RED (Mandatory)
 
-After writing tests, **must** run `bun run test` and confirm:
+After writing tests, **must** run `pnpm test` and confirm:
 1. Tests are **FAIL** (assertion failure), not **ERROR** (syntax error / import error / runtime crash)
 2. Failure messages match expectations (e.g. `expected true, received false`)
 3. Failure reason is "feature not yet implemented", not that the test itself is broken
@@ -148,7 +148,7 @@ Develop the feature code to make all tests pass:
 
 ## Verify GREEN (Mandatory)
 
-Run `bun run test` and confirm:
+Run `pnpm test` and confirm:
 1. All new tests **PASS**
 2. **All existing tests still pass** (no regression)
 3. Test output is clean, no warnings or console errors
@@ -178,7 +178,7 @@ After all tests are green, refactor:
 - Extract shared helpers / utilities
 - **No new features, no behavior changes**
 
-Run `bun run test` again after refactoring to confirm all tests still pass.
+Run `pnpm test` again after refactoring to confirm all tests still pass.
 
 This stage can be reported together with Stage 5; no extra pause needed.
 
@@ -224,7 +224,7 @@ After the review results are out, if there are CRITICAL or HIGH issues, enter th
 
 1. **Review** — code-reviewer produces review report
 2. **Fix** — modify code based on CRITICAL and HIGH issues in the report
-3. **Verify** — run `bun run test` to confirm tests pass, then run code-reviewer again to confirm issues are resolved
+3. **Verify** — run `pnpm test` to confirm tests pass, then run code-reviewer again to confirm issues are resolved
 4. **Repeat** — if there are still CRITICAL or HIGH issues, return to step 2
 
 Loop exit conditions (either one suffices):

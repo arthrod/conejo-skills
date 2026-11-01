@@ -206,7 +206,7 @@ npx tsc --noEmit
 npx eslint <file> --rule '@typescript-eslint/no-explicit-any:error' \
                   --rule '@typescript-eslint/no-implicit-any-catch:error'
 # OR for this repo (oxlint):
-bun run lint
+pnpm run lint
 ```
 
 The lint gate is non-negotiable. If you typed an item and the file now contains `any` or an implicit-any binding (param, catch, callback), **you didn't finish the loop** — you smuggled `any` in to make the test pass. Go back to step 3 and revise the hypothesis.
@@ -273,7 +273,7 @@ Before stopping work:
 
 - [ ] Every typed item has at least one test that would fail if the type were widened to `any`
 - [ ] `npx tsc --noEmit` is clean
-- [ ] Lint gate clean: `no-explicit-any` and `no-implicit-any-catch` rules pass on every touched file (or `bun run lint` if the project uses oxlint/biome — confirm those rules are enabled)
+- [ ] Lint gate clean: `no-explicit-any` and `no-implicit-any-catch` rules pass on every touched file (or `pnpm run lint` if the project uses oxlint/biome — confirm those rules are enabled)
 - [ ] `tsconfig.json` has `noImplicitAny: true` (or `strict: true`) — if not, fix that first; without it the lint rule misses implicit anys
 - [ ] Each commit types exactly one item (or one tightly-coupled cluster justified in the message)
 - [ ] No new `as any`, `// @ts-ignore`, `// @ts-expect-error` *without justification* introduced
