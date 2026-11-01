@@ -170,7 +170,7 @@ RIGHT reason (assertion failure, not an import error).
 ## Standards & helpers
 
 - Coding standards: `references/coding-standards.md` (+ `-api-design.md`, `-testing.md`).
-- Dependency hygiene (bun): `references/deps-check.md`.
+- Dependency hygiene (pnpm): `references/deps-check.md`.
 - Capture bug-fix learnings: `references/bug-fix-learning.md`.
 - Strengthen tests after green: `references/auto-improve-tests.md`.
 - Optional auto-trigger hooks: `hooks/` — install with `scripts/install-conejo-hooks.sh`.
@@ -189,4 +189,4 @@ confidence:
 
 ## Tooling
 
-bun (not npm) · vitest (not jest, not `bun test`) · vite-plus (`vp`) for build/check · ESM only.
+pnpm (not npm, not bun) · vitest (not jest, not `bun test`) · vite-plus (`vp`) for build/check · ESM only.

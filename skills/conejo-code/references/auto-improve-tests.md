@@ -73,4 +73,4 @@ Suggestions:
 ## Execution
 
 Provide the target file path and the auto-improvement loop will begin.
-Run tests with `bun run test` to validate at each iteration.
+Run tests with `pnpm test` to validate at each iteration.

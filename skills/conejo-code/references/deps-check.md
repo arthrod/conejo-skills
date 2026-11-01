@@ -67,7 +67,7 @@ After the changes are complete, run a type-check to confirm no new cross-file er
 
 ```bash
 # Type-check the whole project
-bun run check
+pnpm run check
 
 # Or directly via vite-plus
 vp check

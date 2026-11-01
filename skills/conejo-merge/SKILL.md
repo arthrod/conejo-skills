@@ -262,7 +262,7 @@ When Step 5 says "if not installed, install it", use this:
 | Language / runtime | Test framework | Linter | Formatter | Install if missing |
 |---|---|---|---|---|
 | **Python** | `pytest` | `ruff check` | `ruff format` | `uv add --dev pytest ruff` (or `pip install`) |
-| **TypeScript / JS** | `vitest` (preferred) or `jest` | `biome check` / `eslint` | `biome format` / `prettier` | `bun add -D vitest` (or pnpm/npm) |
+| **TypeScript / JS** | `vitest` (preferred) or `jest` | `biome check` / `eslint` | `biome format` / `prettier` | `pnpm add -D vitest` |
 | **Rust** | `cargo test` (built-in) | `cargo clippy` | `cargo fmt` / `rustfmt` | already shipped with rustup; for nightly fmt: `rustup component add rustfmt` |
 | **Deno (Val Town)** | `Deno.test` (built-in) | `deno lint` | `deno fmt` | nothing to install |
 | **Go** | `go test` | `golangci-lint` | `gofmt` / `goimports` | install golangci-lint if linter requested |
