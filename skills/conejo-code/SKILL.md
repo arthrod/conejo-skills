@@ -1,6 +1,6 @@
 ---
 name: conejo-code
-description: Active coding loop — feature stages (brainstorm→plan→interface→tests→implement→improve→review→loop), red-green TDD execution, acceptance criteria with independent measurers on every task, context-preserving agent dispatch to other-corpus models (pi first — scoped models via `pi-help`, favor zai/glm-5.3 and minimax/MiniMax-M3 — then crush/codex/grok/cline/octo, subagents last), adversarial reviews, stacked PRs via `gh stack` with CI wait only on the last task, coding standards, bug-fix learning. Owns the canonical testing, agent-dispatch, acceptance-criteria and stacked-PR/CI doctrines. Use when writing or changing code (backend, logic, APIs, libraries, CLIs).
+description: Active coding loop — feature stages (brainstorm→plan→interface→tests→implement→improve→review→loop), red-green TDD execution, acceptance criteria with independent measurers on every task, context-preserving agent dispatch to other-corpus models (pi first — scoped models via `pi-help`, favor zai/glm-5.3 and minimax/MiniMax-M3 — then crush/codex/grok/cline/octo, subagents last), adversarial reviews, stacked PRs via `gh stack` with CI wait only on the last task, coding standards, bug-fix learning. Owns the canonical testing, agent-dispatch, acceptance-criteria, stacked-PR/CI, and oxlint/oxfmt doctrines. Use when writing or changing code (backend, logic, APIs, libraries, CLIs), or when configuring oxlint or oxfmt.
 ---
 
 # Conejo-code — active coding
@@ -166,6 +166,7 @@ measurer that goes RED before and GREEN after, run by you and by the reviewer:
 ## Standards & helpers
 
 - Coding standards: `references/coding-standards.md` (+ `-api-design.md`, `-testing.md`).
+- Oxlint and oxfmt (plugins, typechecker, Astro, Workers): `references/oxlint.md`.
 - Dependency hygiene (pnpm): `references/deps-check.md`.
 - Capture bug-fix learnings: `references/bug-fix-learning.md`.
 - Strengthen tests after green: `references/auto-improve-tests.md`.
@@ -186,7 +187,7 @@ confidence:
 ## Tooling (house stack — canonical list in `~/.claude/CLAUDE.md`)
 
 pnpm (not npm, not bun, not yarn) · vite + vitest (not jest, not `bun test`) · oxlint +
-oxfmt (not biome/eslint/prettier) · vite-plus (`vp`) where it is set up · ESM only ·
+oxfmt (not biome/eslint/prettier; how: `references/oxlint.md`) · vite-plus (`vp`) where it is set up · ESM only ·
 Python: uv + pyrefly (types) + ruff (lint/format) + pytest · Rust: cargo (through `mbx`, run `mbx setup` once) + cargo-nextest
 + clippy · sites: Astro · every project: complete README.md with badges, tagged semver
 releases, packages published via OIDC trusted publishing.

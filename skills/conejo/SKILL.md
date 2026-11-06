@@ -84,6 +84,8 @@ Doctrines are authored ONCE and referenced everywhere:
   any plan task.
 - **Stacked PRs and CI/CD:** `conejo-code/references/stacked-prs-and-ci.md` — read
   before pushing, opening a PR, or deciding whether to wait on CI.
+- **Oxlint / oxfmt:** `conejo-code/references/oxlint.md` — read before adding or
+  changing TS/JS lint or format config.
 
 ## Stack preference (house tooling)
 
