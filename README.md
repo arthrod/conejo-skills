@@ -47,9 +47,10 @@ doctrines authored once inside `conejo-code/references/` and route to each other
 | **`conejo-legal`** | Single-issue US doctrinal legal research run with PR-review discipline: source-audited OKF `legal_issue` bundle (SKOS digest, source/snippet ledger), same hidden-gems and one-by-one verification rules as the code family. |
 | **`conejo-debug`** | Skeptical investigator & autonomous deep work: hunt PRs like crime scenes, interrogate CodeRabbit plans, systematic debugging protocol with multi-agent second opinions, strict TDD fixes. Slow, powerful, one clue at a time. |
 
-> **Foundational top-level skills** — `react`, `react-best-practices`, `react-composables`,
-> `layout`, and `tailwind-v4` remain registered as independent top-level skills because they are
-> used well beyond frontend work and are referenced by non-frontend skill families.
+> **Foundational top-level skills** — `react`, `react-best-practices`, `react-composables`
+> and `tailwind-v4` remain registered as independent top-level skills because they are used
+> well beyond frontend work and are referenced by non-frontend skill families. `layout` was
+> folded into `conejo-frontend/refs/` and `impeccable` (commit 9a0b1f6).
 
 ### Helper scripts
 
@@ -123,7 +124,7 @@ DRY_RUN=1 ./scripts/refresh-superpowers.sh   # show what a refresh would touch
 | Family | Skills |
 |---|---|
 | **PR / code review workflow** | `conejo-merge`, `conejo-debug`, `conejo`, `code-review`, `receiving-code-review`, `requesting-code-review` |
-| **Design (Stitch-first)** | `impeccable`, `adapt`, `layout` — plus 13 design/UI skills folded under `conejo-frontend/refs/` (not separately invocable: `ui-ux-pro-max`, `ux-design-brief`, `shadcn-parity`, `stitch-design-taste`, `refine-distill-frontend`, `increase-impact-personality-frontend`, `typeset`, `colorize`, `type-mania`, `tanstack-router`, `tanstack-router-best-practices`, `json-render`, `seo-audit`) |
+| **Design (Stitch-first)** | `impeccable`, `adapt` — plus 13 design/UI skills folded under `conejo-frontend/refs/` (not separately invocable: `layout`, `ui-ux-pro-max`, `ux-design-brief`, `shadcn-parity`, `stitch-design-taste`, `refine-distill-frontend`, `increase-impact-personality-frontend`, `typeset`, `colorize`, `type-mania`, `tanstack-router`, `tanstack-router-best-practices`, `json-render`, `seo-audit`) |
 | **Pydantic AI** | `pydantic-acp`, `pydantic-ai-agent-builder`, `pydanticai-docs`, `pydantic-ai-common-pitfalls`, `pydantic-ai-testing` |
 | **Better Auth** | `better-auth`, `better-auth-best-practices`, `better-auth-security`, `better-auth-providers`, `better-auth-explain-error`, `better-auth-tauri-setup`, `better-auth-tauri-pitfalls` |
 | **Rust** | `rust-author`, `rust-review` |
