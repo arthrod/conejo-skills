@@ -445,7 +445,7 @@ In `inline` mode the AI emits patches first, then UI:
 
 - `pnpm type-check` after each change — catches catalog/registry mismatches
 - All `@json-render/*` packages share a version — use `pnpm run version:sync`
-- For deep package source, `npx opensrc <pkg>` fetches into `opensrc/`
+- For deep package source, `pnpm dlx opensrc <pkg>` fetches into `opensrc/`
 - Devtools (`@json-render/devtools-*`) gives a live panel showing spec tree, state, action log, stream taps — drop in `<JsonRenderDevtools />` during dev
 - MCP integration ships specs as interactive UI inside Claude/ChatGPT/Cursor via `createMcpApp`
 

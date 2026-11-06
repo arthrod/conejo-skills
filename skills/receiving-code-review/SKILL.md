@@ -27,7 +27,7 @@ WHEN receiving code review feedback:
 ## Forbidden Responses
 
 **NEVER:**
-- "You're absolutely right!" (explicit CLAUDE.md violation)
+- "You're absolutely right!" (explicit instruction-file violation)
 - "Great point!" / "Excellent feedback!" (performative)
 - "Let me implement that now" (before verification)
 
@@ -126,7 +126,7 @@ Push back when:
 - Reference working tests/code
 - Involve your human partner if architectural
 
-**Signal if uncomfortable pushing back out loud:** "Strange things are afoot at the Circle K"
+**If you're uncomfortable pushing back out loud:** Name that tension, then tell your partner about the issue you've seen. They'll appreciate your honesty.
 
 ## Acknowledging Correct Feedback
 
@@ -204,19 +204,38 @@ You understand 1,2,3,6. Unclear on 4,5.
 
 When replying to inline review comments on GitHub, reply in the comment thread (`gh api repos/{owner}/{repo}/pulls/{pr}/comments/{id}/replies`), not as a top-level PR comment.
 
-## The Bottom Line
-
-**External feedback = suggestions to evaluate, not orders to follow.**
-
-Verify. Question. Then implement.
-
-No performative agreement. Technical rigor always.
-
 <!-- vendored:start -->
 
 ## Source
 
-Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/receiving-code-review/SKILL.md) on 2026-05-16.
-Refresh with `./scripts/update-vendored.sh receiving-code-review` from the conejo-skills repo.
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/tree/v7.0.2/skills/receiving-code-review) **v7.0.2** (`22f0b46`) on 2026-11-06.
+Refresh with `./scripts/refresh-superpowers.sh` from the conejo-skills repo — the `<!-- conejo -->` block below is re-applied automatically; upstream text above it is left verbatim.
 
 <!-- vendored:end -->
+
+<!-- conejo:start -->
+
+## Conejo additions (arthrod's bundle)
+
+**On a GitHub PR, reply one comment at a time — without exception.** Every comment
+(CodeRabbit, Jules, Gemini, human, your own stack's re-review) gets its own gate
+verdict — `implement` / `push back` / `duplicate-of-#N`, no fourth option — and its own
+reply in its own thread (`gh api repos/{owner}/{repo}/pulls/{pr}/comments/{id}/replies`).
+Count the comments first; at the end `implemented + pushed-back + duplicate-linked ==
+total` or you are not done. Never sample, skim, or "address the important ones".
+
+**Hidden gems.** Different bots were trained on different corpora. The weird,
+pedantic, out-of-place nit is the one most likely to carry knowledge your corpus
+lacks — its verification priority goes UP. Check the claim against the dependency
+source before dismissing it; when two bots disagree on the same lines, that thread is
+the most valuable one on the PR. Full procedure, gate, and reply shapes:
+`conejo-merge` Phase 5; doctrine: `conejo-code/references/stacked-prs-and-ci.md`.
+
+**Push back is a reply, not a silence.** A rejected suggestion gets the technical
+reason in-thread (file:line, the test that proves current behavior, the ADR). A
+skipped comment is a stolen gem.
+
+**Stacked PRs.** Comments on a lower layer are fixed in that layer, then `gh stack
+rebase --no-trunk` and push — never hand-rebase the chain.
+
+<!-- conejo:end -->

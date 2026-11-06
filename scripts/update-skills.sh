@@ -23,6 +23,10 @@
 #   DRY_RUN=1            don't write, don't commit, just print what would happen
 #   AGENTS_DIR=<dir>     override ~/.agents/skills   (publish target)
 #   CLAUDE_DIR=<dir>     override ~/.claude/skills   (publish symlink location / subscribe source)
+#   AGENT_DIRS="d1 d2"   override the other-agent skills dirs that get symlinks in publish
+#                        (default: ~/.pi/agent/skills ~/.codex/skills ~/.config/crush/skills
+#                         ~/.grok/skills ~/.cline/skills ~/.gemini/skills ~/.config/agents/skills;
+#                         only dirs that already exist are touched)
 #   SOURCE=<dir>         (subscribe only) alias for CLAUDE_DIR
 #
 # Usage:
@@ -156,6 +160,41 @@ publish() {
   echo "    Already correct: $already"
   [ "$warned" -gt 0 ] && echo "    Warnings (resolve manually): $warned"
 
+  # Step 3b: other agents — symlink <agent skills dir>/<name> → $AGENTS_DIR/<name> (absolute)
+  # for every agent CLI whose skills directory exists (pi, codex, crush, grok, cline, gemini,
+  # and the cross-runtime ~/.config/agents). Same policy as Step 3: retarget wrong symlinks,
+  # never touch a real directory. Override the list with AGENT_DIRS="dir1 dir2".
+  echo "==> Step 3b: symlinking other agents' skills dirs → $AGENTS_DIR/<name>"
+  local agent_dirs
+  if [ -n "${AGENT_DIRS:-}" ]; then
+    read -r -a agent_dirs <<< "$AGENT_DIRS"
+  else
+    agent_dirs=("$HOME/.pi/agent/skills" "$HOME/.codex/skills" "$HOME/.config/crush/skills" \
+                "$HOME/.grok/skills" "$HOME/.cline/skills" "$HOME/.gemini/skills" "$HOME/.config/agents/skills")
+  fi
+  for adir in "${agent_dirs[@]}"; do
+    [ -d "$adir" ] || continue
+    local alinked=0 aalready=0 awarned=0
+    for d in "$SKILLS_DIR"/*/; do
+      [ -f "$d/SKILL.md" ] || continue
+      name="$(basename "$d")"
+      target="$adir/$name"
+      want="$AGENTS_DIR/$name"
+      if [ -L "$target" ]; then
+        if [ "$(readlink "$target")" = "$want" ]; then aalready=$((aalready+1)); continue; fi
+        [ "$DRY_RUN" = "1" ] || { rm -f "$target"; ln -s "$want" "$target"; }
+        alinked=$((alinked+1)); continue
+      fi
+      if [ -e "$target" ]; then
+        echo "    WARN  $target exists and is not a symlink; skipping"
+        awarned=$((awarned+1)); continue
+      fi
+      [ "$DRY_RUN" = "1" ] || ln -s "$want" "$target"
+      alinked=$((alinked+1))
+    done
+    echo "    $adir: linked $alinked, already correct $aalready, warnings $awarned"
+  done
+
   # Step 4: vendored refresh may have left ./skills/ dirty — surface it, don't auto-commit
   if [ -n "$(git status --porcelain skills)" ]; then
     echo
@@ -168,6 +207,7 @@ publish() {
   echo "==> Publish complete"
   echo "    ./skills/        → $AGENTS_DIR/   (copies)"
   echo "    $CLAUDE_DIR/ → $AGENTS_DIR/   (symlinks)"
+  echo "    other agents' skills dirs → $AGENTS_DIR/   (symlinks, Step 3b)"
 }
 
 # =====================================================================

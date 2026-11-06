@@ -9,7 +9,7 @@ Complete guide for integrating better-auth with PostgreSQL using Drizzle ORM or 
 ### Installation
 
 ```bash
-bun add better-auth drizzle-orm postgres drizzle-kit
+pnpm add better-auth drizzle-orm postgres drizzle-kit
 ```
 
 ### Database Connection
@@ -132,8 +132,8 @@ bunx drizzle-kit push
 ### Installation
 
 ```bash
-bun add better-auth @prisma/client
-bun add -D prisma
+pnpm add better-auth @prisma/client
+pnpm add -D prisma
 ```
 
 ### Schema Definition
@@ -235,7 +235,7 @@ bunx prisma migrate dev --name init
 ### Neon Setup
 
 ```bash
-bun add @neondatabase/serverless
+pnpm add @neondatabase/serverless
 ```
 
 **`src/db/index.ts`**:

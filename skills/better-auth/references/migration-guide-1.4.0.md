@@ -396,9 +396,9 @@ If using passkeys, you must install the new package.
 **Step 1**: Install the passkey package
 
 ```bash
-bun add @better-auth/passkey
+pnpm add @better-auth/passkey
 # or
-npm install @better-auth/passkey
+pnpm add @better-auth/passkey
 ```
 
 **Step 2**: Update imports
@@ -716,13 +716,13 @@ No code changes are required - the fix is automatically applied when upgrading t
 
 ```bash
 # Update better-auth and related packages
-bun add better-auth@^1.4.3 drizzle-orm@^0.44.7 drizzle-kit@^0.31.7
+pnpm add better-auth@^1.4.3 drizzle-orm@^0.44.7 drizzle-kit@^0.31.7
 
 # If using passkeys
-bun add @better-auth/passkey
+pnpm add @better-auth/passkey
 
 # If using Kysely
-bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
+pnpm add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
 ```
 
 ### Phase 3: Enable ESM (20 min)
@@ -754,7 +754,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
 
 4. **Test ESM**
    ```bash
-   bun run dev
+   pnpm dev
    ```
 
 ### Phase 4: Update API Calls (30 min)
@@ -785,7 +785,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
 
 1. **Unit tests**
    ```bash
-   bun test
+   pnpm vitest run
    ```
 
 2. **Integration tests**
@@ -929,7 +929,7 @@ export const auth = betterAuth({
 ### Issue: "Module not found: @better-auth/passkey"
 
 **Cause**: Passkey plugin moved to separate package
-**Fix**: `bun add @better-auth/passkey`
+**Fix**: `pnpm add @better-auth/passkey`
 
 ### Issue: Sessions not persisting after upgrade
 
@@ -957,14 +957,14 @@ If migration fails, you can rollback:
 
 ```bash
 git checkout pre-migration-v1.3.x
-bun install
+pnpm install
 wrangler deploy
 ```
 
 ### Option 2: Downgrade Packages
 
 ```bash
-bun add better-auth@1.3.34 drizzle-orm@0.36.0 drizzle-kit@0.28.0
+pnpm add better-auth@1.3.34 drizzle-orm@0.36.0 drizzle-kit@0.28.0
 
 # Remove ESM from package.json
 # Revert code changes

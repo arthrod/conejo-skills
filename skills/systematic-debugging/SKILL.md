@@ -7,8 +7,6 @@ description: Use when encountering any bug, test failure, or unexpected behavior
 
 ## Overview
 
-Random fixes waste time and create new bugs. Quick patches mask underlying issues.
-
 **Core principle:** ALWAYS find root cause before attempting fixes. Symptom fixes are failure.
 
 **Violating the letter of this process is violating the spirit of debugging.**
@@ -90,11 +88,11 @@ You MUST complete each phase before proceeding to the next.
    ```bash
    # Layer 1: Workflow
    echo "=== Secrets available in workflow: ==="
-   echo "IDENTITY: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
+   echo "IDENTITY: $([ -n "${IDENTITY:-}" ] && echo SET || echo UNSET)"
 
    # Layer 2: Build script
    echo "=== Env vars in build script: ==="
-   env | grep IDENTITY || echo "IDENTITY not in environment"
+   printenv IDENTITY >/dev/null 2>&1 && echo "IDENTITY in environment" || echo "IDENTITY not in environment"
 
    # Layer 3: Signing script
    echo "=== Keychain state: ==="
@@ -188,6 +186,7 @@ You MUST complete each phase before proceeding to the next.
    - Test passes now?
    - No other tests broken?
    - Issue actually resolved?
+   - Use the `superpowers:verification-before-completion` skill before claiming success
 
 4. **If Fix Doesn't Work**
    - STOP
@@ -237,7 +236,7 @@ If you catch yourself thinking:
 - "Is that not happening?" - You assumed without verifying
 - "Will it show us...?" - You should have added evidence gathering
 - "Stop guessing" - You're proposing fixes without understanding
-- "Ultrathink this" - Question fundamentals, not just symptoms
+- "Ultra-think this" - Question fundamentals, not just symptoms
 - "We're stuck?" (frustrated) - Your approach isn't working
 
 **When you see these:** STOP. Return to Phase 1.
@@ -283,23 +282,30 @@ These techniques are part of systematic debugging and available in this director
 - **`defense-in-depth.md`** - Add validation at multiple layers after finding root cause
 - **`condition-based-waiting.md`** - Replace arbitrary timeouts with condition polling
 
-**Related skills:**
-- **superpowers:test-driven-development** - For creating failing test case (Phase 4, Step 1)
-- **superpowers:verification-before-completion** - Verify fix worked before claiming success
-
-## Real-World Impact
-
-From debugging sessions:
-- Systematic approach: 15-30 minutes to fix
-- Random fixes approach: 2-3 hours of thrashing
-- First-time fix rate: 95% vs 40%
-- New bugs introduced: Near zero vs common
-
 <!-- vendored:start -->
 
 ## Source
 
-Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md) on 2026-05-16.
-Refresh with `./scripts/update-vendored.sh systematic-debugging` from the conejo-skills repo.
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/tree/v7.0.2/skills/systematic-debugging) **v7.0.2** (`22f0b46`) on 2026-11-06.
+Refresh with `./scripts/refresh-superpowers.sh` from the conejo-skills repo — the `<!-- conejo -->` block below is re-applied automatically; upstream text above it is left verbatim.
 
 <!-- vendored:end -->
+
+<!-- conejo:start -->
+
+## Conejo additions (arthrod's bundle)
+
+- **Phase 3 takes hypotheses from another corpus.** Send the evidence bundle to two
+  other-corpus agents (pi `zai/glm-5.3` and `minimax/MiniMax-M3`, or codex
+  `gpt-6-astra`, or grok `grok-4.7` — `conejo-code/references/agent-dispatch.md`) with:
+  "List the 3 most likely root causes, the evidence that would CONFIRM each, and the
+  evidence that would KILL each. Refute the obvious explanation first." When they
+  disagree, the disagreement is your next experiment. Poll 60 s, cap 10 min.
+- **Phase 4's failing test is also a measurer.** The regression test is the white-box
+  proof; the bug's original symptom, reproduced from outside (the command, the curl,
+  the click-flow), is the black-box acceptance criterion and gets re-run after the fix
+  (`conejo-code/references/acceptance-criteria.md`).
+- **One clue at a time. Never in batch.** The long form and the PR-as-crime-scene
+  procedure live in [[conejo-debug]].
+
+<!-- conejo:end -->

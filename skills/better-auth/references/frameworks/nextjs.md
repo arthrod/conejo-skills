@@ -9,9 +9,9 @@ Complete guide for integrating better-auth with Next.js 14+ (App Router and Page
 ### 1. Install Dependencies
 
 ```bash
-bun add better-auth drizzle-orm @neondatabase/serverless
+pnpm add better-auth drizzle-orm @neondatabase/serverless
 # or for Prisma:
-bun add better-auth @prisma/client
+pnpm add better-auth @prisma/client
 ```
 
 ### 2. Create Auth Configuration

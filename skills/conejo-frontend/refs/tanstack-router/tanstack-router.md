@@ -15,7 +15,7 @@ TanStack Router is a fully type-safe router for React (and Solid) applications. 
 ## Installation
 
 ```bash
-npm install @tanstack/react-router
+pnpm add @tanstack/react-router
 # For file-based routing with Vite:
 npm install -D @tanstack/router-plugin
 # Or standalone CLI:
@@ -762,7 +762,7 @@ TanStack Virtual provides virtualization logic for rendering only visible items 
 ## Installation
 
 ```bash
-npm install @tanstack/react-virtual
+pnpm add @tanstack/react-virtual
 ```
 
 ## Core Pattern

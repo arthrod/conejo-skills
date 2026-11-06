@@ -65,13 +65,16 @@ Each agent gets:
 
 ### 3. Dispatch in Parallel
 
-```typescript
-// In Claude Code / AI environment
-Task("Fix agent-tool-abort.test.ts failures")
-Task("Fix batch-completion-behavior.test.ts failures")
-Task("Fix tool-approval-race-conditions.test.ts failures")
-// All three run concurrently
+Issue all three subagent dispatches in the same response — they run in parallel:
+
+```text
+Subagent (general-purpose): "Fix agent-tool-abort.test.ts failures"
+Subagent (general-purpose): "Fix batch-completion-behavior.test.ts failures"
+Subagent (general-purpose): "Fix tool-approval-race-conditions.test.ts failures"
+# All three run concurrently.
 ```
+
+Multiple dispatch calls in one response = parallel execution. One per response = sequential.
 
 ### 4. Review and Integrate
 
@@ -155,15 +158,6 @@ Agent 3 → Fix tool-approval-race-conditions.test.ts
 
 **Integration:** All fixes independent, no conflicts, full suite green
 
-**Time saved:** 3 problems solved in parallel vs sequentially
-
-## Key Benefits
-
-1. **Parallelization** - Multiple investigations happen simultaneously
-2. **Focus** - Each agent has narrow scope, less context to track
-3. **Independence** - Agents don't interfere with each other
-4. **Speed** - 3 problems solved in time of 1
-
 ## Verification
 
 After agents return:
@@ -172,20 +166,30 @@ After agents return:
 3. **Run full suite** - Verify all fixes work together
 4. **Spot check** - Agents can make systematic errors
 
-## Real-World Impact
-
-From debugging session (2025-10-03):
-- 6 failures across 3 files
-- 3 agents dispatched in parallel
-- All investigations completed concurrently
-- All fixes integrated successfully
-- Zero conflicts between agent changes
-
 <!-- vendored:start -->
 
 ## Source
 
-Refreshed from [`obra/superpowers`](https://github.com/obra/superpowers/blob/main/skills/dispatching-parallel-agents/SKILL.md) on 2026-05-16.
-Refresh with `./scripts/update-vendored.sh dispatching-parallel-agents` from the conejo-skills repo.
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/tree/v7.0.2/skills/dispatching-parallel-agents) **v7.0.2** (`22f0b46`) on 2026-11-06.
+Refresh with `./scripts/refresh-superpowers.sh` from the conejo-skills repo — the `<!-- conejo -->` block below is re-applied automatically; upstream text above it is left verbatim.
 
 <!-- vendored:end -->
+
+<!-- conejo:start -->
+
+## Conejo additions (arthrod's bundle)
+
+- **Dispatch targets are the model CLIs first, subagents last.** pi, crush, codex,
+  grok, cline and octo each give a different corpus; the Claude Agent tool gives
+  parallelism but the same corpus. Listing/selecting models and the headless command
+  per tool: `conejo-code/references/agent-dispatch.md`.
+- **One writable directory per agent.** `git worktree add "$WORKDIR" -b agent/$NAME`
+  (or a clone) before any agent that edits files; read-only investigators may share.
+- **Background, log, poll, cap.** `nohup … > /tmp/<tool>-$NAME.log 2>&1 &`, then
+  `sleep 60; tail -20 <log>` — stop at 10 minutes and integrate what you have with a
+  note. Nobody wakes you up.
+- **Each agent's prompt carries the acceptance criterion it must make true and the
+  measurer that proves it** (`conejo-code/references/acceptance-criteria.md`); its
+  report ends with the measurer's output.
+
+<!-- conejo:end -->

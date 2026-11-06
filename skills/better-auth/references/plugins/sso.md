@@ -7,7 +7,7 @@ Single Sign-On with OIDC, OAuth2, and SAML 2.0 support. Production-ready with co
 ## Installation
 
 ```bash
-npm install @better-auth/sso
+pnpm add @better-auth/sso
 ```
 
 ### Server Setup

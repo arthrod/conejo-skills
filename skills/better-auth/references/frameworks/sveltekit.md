@@ -7,7 +7,7 @@ Complete guide for integrating better-auth with SvelteKit.
 ## Installation
 
 ```bash
-bun add better-auth drizzle-orm postgres
+pnpm add better-auth drizzle-orm postgres
 ```
 
 ---

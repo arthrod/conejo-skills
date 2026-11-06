@@ -175,8 +175,8 @@ parseId(42);
 **Run the test suite + type checker NOW, before adding the annotation.**
 
 ```bash
-npx vitest run path/to/test.ts   # type-level lib assertions
-npx tsc --noEmit                 # @ts-expect-error directives
+pnpm dlx vitest run path/to/test.ts   # type-level lib assertions
+pnpm dlx tsc --noEmit                 # @ts-expect-error directives
 ```
 
 It MUST fail. If it passes against the still-untyped code, your test cannot tell `any` from the real type — strengthen it before continuing.
@@ -200,13 +200,13 @@ export function parseId(input: string): string {
 ### 6. Run the test. Run the type checker. Run the lint gate. Confirm.
 
 ```bash
-npx vitest run path/to/test.ts
-npx tsc --noEmit
+pnpm dlx vitest run path/to/test.ts
+pnpm dlx tsc --noEmit
 # Lint gate — no new `any`, no implicit `any`
-npx eslint <file> --rule '@typescript-eslint/no-explicit-any:error' \
+pnpm dlx eslint <file> --rule '@typescript-eslint/no-explicit-any:error' \
                   --rule '@typescript-eslint/no-implicit-any-catch:error'
 # OR for this repo (oxlint):
-bun run lint
+pnpm run lint
 ```
 
 The lint gate is non-negotiable. If you typed an item and the file now contains `any` or an implicit-any binding (param, catch, callback), **you didn't finish the loop** — you smuggled `any` in to make the test pass. Go back to step 3 and revise the hypothesis.
@@ -272,8 +272,8 @@ The discipline scales: 200 small loops > one heroic refactor that nobody can rev
 Before stopping work:
 
 - [ ] Every typed item has at least one test that would fail if the type were widened to `any`
-- [ ] `npx tsc --noEmit` is clean
-- [ ] Lint gate clean: `no-explicit-any` and `no-implicit-any-catch` rules pass on every touched file (or `bun run lint` if the project uses oxlint/biome — confirm those rules are enabled)
+- [ ] `pnpm dlx tsc --noEmit` is clean
+- [ ] Lint gate clean: `no-explicit-any` and `no-implicit-any-catch` rules pass on every touched file (or `pnpm run lint` if the project uses oxlint/biome — confirm those rules are enabled)
 - [ ] `tsconfig.json` has `noImplicitAny: true` (or `strict: true`) — if not, fix that first; without it the lint rule misses implicit anys
 - [ ] Each commit types exactly one item (or one tightly-coupled cluster justified in the message)
 - [ ] No new `as any`, `// @ts-ignore`, `// @ts-expect-error` *without justification* introduced

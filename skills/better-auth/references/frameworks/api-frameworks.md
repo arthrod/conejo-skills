@@ -9,8 +9,8 @@ Complete guide for integrating better-auth with Express, Fastify, NestJS, and Ho
 ### Installation
 
 ```bash
-bun add better-auth express drizzle-orm postgres
-bun add -D @types/express
+pnpm add better-auth express drizzle-orm postgres
+pnpm add -D @types/express
 ```
 
 ### Setup
@@ -95,7 +95,7 @@ app.get("/api/protected", requireAuth, (req, res) => {
 ### Installation
 
 ```bash
-bun add better-auth fastify drizzle-orm postgres
+pnpm add better-auth fastify drizzle-orm postgres
 ```
 
 ### Setup
@@ -187,7 +187,7 @@ export default fp(authPlugin);
 ### Installation
 
 ```bash
-bun add better-auth @nestjs/common @nestjs/core drizzle-orm postgres
+pnpm add better-auth @nestjs/common @nestjs/core drizzle-orm postgres
 ```
 
 ### Auth Module
@@ -313,7 +313,7 @@ export class AppController {
 ### Installation
 
 ```bash
-bun add better-auth hono drizzle-orm postgres
+pnpm add better-auth hono drizzle-orm postgres
 ```
 
 ### Setup

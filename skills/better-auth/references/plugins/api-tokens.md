@@ -9,7 +9,7 @@ Complete guide for API authentication: API Keys, Bearer Tokens, JWT, and OIDC Pr
 Extracted to `@better-auth/api-key` in v1.5.0. Install separately:
 
 ```bash
-npm install @better-auth/api-key
+pnpm add @better-auth/api-key
 ```
 
 ### Server Configuration

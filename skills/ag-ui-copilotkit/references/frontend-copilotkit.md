@@ -5,7 +5,7 @@
 ### Install Dependencies
 
 ```bash
-bun add @copilotkit/react-core @copilotkit/react-ui @copilotkit/runtime
+pnpm add @copilotkit/react-core @copilotkit/react-ui @copilotkit/runtime
 ```
 
 ### Layout Configuration

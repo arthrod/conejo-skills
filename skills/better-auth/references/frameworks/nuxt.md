@@ -7,9 +7,9 @@ Complete guide for integrating better-auth with Nuxt 3 and H3.
 ## Installation
 
 ```bash
-bun add better-auth drizzle-orm postgres
+pnpm add better-auth drizzle-orm postgres
 # or with Prisma:
-bun add better-auth @prisma/client
+pnpm add better-auth @prisma/client
 ```
 
 ---

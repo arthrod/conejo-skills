@@ -7,7 +7,7 @@ Complete guide for integrating better-auth with MongoDB.
 ## Installation
 
 ```bash
-bun add better-auth mongodb
+pnpm add better-auth mongodb
 ```
 
 ---

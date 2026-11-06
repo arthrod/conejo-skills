@@ -27,12 +27,12 @@ metadata:
 
 **Option 1: Drizzle ORM (Recommended)**
 ```bash
-bun add better-auth drizzle-orm drizzle-kit
+pnpm add better-auth drizzle-orm drizzle-kit
 ```
 
 **Option 2: Kysely**
 ```bash
-bun add better-auth kysely @noxharmonium/kysely-d1
+pnpm add better-auth kysely @noxharmonium/kysely-d1
 ```
 
 ### ⚠️ v1.4.0+ Requirements
@@ -1139,7 +1139,7 @@ At the end of implementation, guide users thoroughly on remaining next steps (e.
 
 ## Installation
 
-**Core:** `npm install better-auth`
+**Core:** `pnpm add better-auth`
 
 **Scoped packages (as needed):**
 | Package | Use case |

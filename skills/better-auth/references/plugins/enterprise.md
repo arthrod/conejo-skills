@@ -9,7 +9,7 @@ Complete guide for enterprise features: Organizations, SSO/SAML, SCIM, and Admin
 ### Installation
 
 ```bash
-bun add better-auth
+pnpm add better-auth
 ```
 
 ### Server Configuration

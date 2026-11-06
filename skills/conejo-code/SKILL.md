@@ -1,6 +1,6 @@
 ---
 name: conejo-code
-description: Active coding loop — feature stages (brainstorm→plan→interface→tests→implement→improve→review→loop), red-green TDD execution, context-preserving agent dispatch via pi first (scoped methods via `pi-help`; favor the best Chinese models: zai/glm-5.3, minimax/MiniMax-M3) with crush/opencode/subagent fallback, adversarial reviews, coding standards, bug-fix learning. Owns the canonical testing doctrine and the agent-dispatch doctrine. Use when writing or changing code (backend, logic, APIs, libraries, CLIs).
+description: Active coding loop — feature stages (brainstorm→plan→interface→tests→implement→improve→review→loop), red-green TDD execution, acceptance criteria with independent measurers on every task, context-preserving agent dispatch to other-corpus models (pi first — scoped models via `pi-help`, favor zai/glm-5.3 and minimax/MiniMax-M3 — then crush/codex/grok/cline/octo, subagents last), adversarial reviews, stacked PRs via `gh stack` with CI wait only on the last task, coding standards, bug-fix learning. Owns the canonical testing, agent-dispatch, acceptance-criteria and stacked-PR/CI doctrines. Use when writing or changing code (backend, logic, APIs, libraries, CLIs).
 ---
 
 # Conejo-code — active coding
@@ -32,24 +32,22 @@ Read `references/agent-dispatch.md` (the Warren Protocol) — it is canonical. T
 version:
 
 ```bash
-if   command -v pi       >/dev/null 2>&1; then DISPATCH=pi
-elif command -v crush    >/dev/null 2>&1; then DISPATCH=crush
-elif command -v opencode >/dev/null 2>&1; then DISPATCH=opencode
-elif command -v codex    >/dev/null 2>&1; then DISPATCH=codex
-elif command -v gemini   >/dev/null 2>&1; then DISPATCH=gemini
-else DISPATCH=subagents; fi
+for c in pi crush codex grok cline octo; do command -v "$c" >/dev/null 2>&1 && echo "HAVE $c"; done
 ```
 
-- IF `pi` is available → dispatch stage work through it (template below). Pick the
-  model with `pi-help` and favor the best Chinese models among the scoped methods
-  (`zai/glm-5.3` smartest, `minimax/MiniMax-M3` second corpus, `zai/glm-5.3-highspeed`
-  fast lane).
-- ELIF `crush` or `opencode` is available → dispatch stage work through it (templates below).
-- ELIF another agent CLI is available → `<cli> --help | head -40`, find its headless
-  mode (`run` / `exec` / `-p`), use it.
-- ELSE → spawn subagents with your harness's Agent tool. Subagents ARE the Claude
-  fallback — do the same splitting, the same parallel dispatch, the same adversarial
-  prompts. A second `claude -p` adds nothing over them.
+Keep every tool that answers — each is a different corpus. Default order: **pi → crush
+→ codex → grok → cline → octo → subagents**.
+
+- **List and pick models** (verified commands, headless shapes, per tool):
+  `pi-help` / `pi --list-models [q]` · `crush models [q]` · codex: `/model` in the TUI
+  or `model=` in `~/.codex/config.toml` · `grok models` · `cline auth` (TTY picker) ·
+  `octo list`. Select with `pi --provider X --model Y`, `crush run -m provider/model`,
+  `codex exec -m`, `grok -m`, `cline -P provider -m model`, `octo prompt --model
+  "<nickname>"`. Full cheat-sheet: `references/agent-dispatch.md`.
+- **Rule of the second corpus (strict):** the reviewer of any stage is never the model
+  that produced it. You are Claude, so your reviewers are GLM/MiniMax/DeepSeek (pi,
+  crush), GPT (codex) or Grok (grok). Same-corpus subagents review only as the last
+  rung; they remain fine for implementers.
 - NEVER decide "no agents available, I'll do everything inline." That torches your
   context AND forfeits the second pair of eyes.
 
@@ -70,11 +68,12 @@ any visual work are owned by [[conejo-frontend]].
 | 3 | Plan | You | `references/feature-stages.md` Stage 1 |
 | 4 | **Plan review — adversarial** | Other-corpus agent | `$DISPATCH`; model `zai/glm-5.3-highspeed` (a bit faster) |
 | 5 | Interface (types/signatures, no impl) | You | — |
-| 6 | **Write failing tests (RED)** | Dispatched agent, in a CLONE | `$DISPATCH`, `nvidia/deepseek-ai/deepseek-v4.1-flash` — then YOU run them and verify they fail for the right reason |
-| 7 | **Implement (GREEN)** | Dispatched agent, in a CLONE | `$DISPATCH`, `nvidia/deepseek-ai/deepseek-v4.1-flash` — then YOU run the suite and verify green |
+| 5.5 | **Acceptance criteria → measurers RED** | You | every task's criteria from the plan; run each independent measurer, record fail/absent (`references/acceptance-criteria.md`) |
+| 6 | **Write failing tests (RED)** | Dispatched agent, in a CLONE | pi `zai/glm-5.3-highspeed` (deepseek stalls in `pi -p` — memory) — then YOU run them and verify they fail for the right reason |
+| 7 | **Implement (GREEN)** | Dispatched agent, in a CLONE | pi `zai/glm-5.3-highspeed` or crush `zai/glm-5.3` — then YOU run the suite and verify green, then run the measurers and record GREEN |
 | 8 | Improve tests | You or agent | `references/auto-improve-tests.md` |
-| 9 | **Code review — adversarial** | Other-corpus agent (+ [[conejo-merge]] once PR'd) | reviewer prompt must REFUTE, never admire |
-| 10 | Loop | — | next feature stacks a PR on this one: `gh stack add <branch>` |
+| 9 | **Code review — adversarial** | Other-corpus agent (+ [[conejo-merge]] once PR'd) | reviewer prompt must REFUTE, never admire, and must RUN the measurers |
+| 10 | Loop | — | commit, `gh stack add <branch>` / `gh stack push`, next task. **No CI/bot wait unless this was the last task** (`references/stacked-prs-and-ci.md`) |
 
 Rules that ride along:
 
@@ -96,36 +95,27 @@ Rules that ride along:
   perspectives); if the work must be done anyway, send YOUR agents. Don't pollute
   your context.
 
-### Canonical dispatch commands
-
-pi (per-call `--provider`/`--model` — the default workhorse; scoped methods via `pi-help`):
+### Canonical dispatch commands (full cheat-sheet: `references/agent-dispatch.md`)
 
 ```bash
+# pi — default workhorse; scoped models via `pi-help`, all via `pi --list-models [q]`
 ( cd "$WORKDIR" && nohup pi --provider zai --model glm-5.3 --no-session \
-    -p "$PROMPT" > /tmp/pi-$NAME.log 2>&1 & )
+    -p "$PROMPT" < /dev/null > /tmp/pi-$NAME.log 2>&1 & )
+# crush — `crush models [q]` to list; -m model or provider/model; no -y (run rejects it)
+nohup crush run -q -c "$WORKDIR" -m zai/glm-5.3 "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
+# codex — OpenAI corpus; no list subcommand (/model in the TUI, model= in ~/.codex/config.toml)
+( cd "$WORKDIR" && nohup codex exec -m gpt-6-astra -s workspace-write --approve-for-me \
+    "$PROMPT" > /tmp/codex-$NAME.log 2>&1 & )
+# grok — xAI corpus; `grok models` to list
+( cd "$WORKDIR" && nohup grok -m grok-4.7 --permission-mode bypassPermissions --no-subagents \
+    -p "$PROMPT" > /tmp/grok-$NAME.log 2>&1 & )
+# cline — `cline auth` (TTY) to see/set provider+model; -y auto-approves; -p is PLAN mode
+( cd "$WORKDIR" && nohup cline -y -c "$WORKDIR" -P <provider> -m <model> "$PROMPT" > /tmp/cline-$NAME.log 2>&1 & )
+# octo — `octo list` for nicknames; single-shot, good for reviews/judgments
+octo prompt --model "GLM 5.3 Flash (Synthetic)" "$PROMPT" > /tmp/octo-$NAME.log 2>&1
 ```
 
-opencode (per-call `--model` — the fallback corpus-diversity workhorse):
-
-```bash
-nohup opencode run "$PROMPT" \
-  --model <family>/<biggest-available-version> \
-  --dangerously-skip-permissions \
-  --dir "$WORKDIR" \
-  > /tmp/oc-$NAME.log 2>&1 &
-```
-
-crush (model from crush's config, or per call with `-m`). The invocation is simply
-`crush run [prompt...]` — it takes the prompt as arguments or on stdin:
-
-```bash
-nohup crush run -q -c "$WORKDIR" -m <provider/model> "$PROMPT" > /tmp/crush-$NAME.log 2>&1 &
-```
-
-No `-y`: it is the root TUI's `--yolo` and `crush run` rejects it in either position
-("Unknown shorthand flag: 'y'"), which aborts the dispatch before the agent starts.
-`-c/--cwd`, `-q/--quiet` and `-m/--model` (per-call model) are `run` flags (crush
-v0.98.1). Check `crush run --help` if a flag is rejected rather than guessing.
+Flags drift: IF a flag is rejected THEN `<cli> <sub> --help`, re-map, retry once.
 
 Then set the timer and poll — NOBODY wakes you up. Cap the wait at **10 minutes**:
 
@@ -154,8 +144,9 @@ Run `pi-help` for the live scoped list; favor the best Chinese models available:
 | Default — plan review / failing tests / implement | `zai/glm-5.3-highspeed` |
 | User wants a different POV, contrarian take, "what would X say", or distrusts a single model | `minimax/MiniMax-M3` (fast, 1M context) |
 | User is "poor" (budget-constrained, signals `cheap`/`free`/`avoid paid`) | `zai/glm-5.3-flash` (or `nvidia/z-ai/glm-5.3-flash`) — always substitute the biggest available model of the family |
-| DeepSeek corpus specifically | `nvidia/deepseek-ai/deepseek-v4.1-flash` |
-| Last resort | any scoped method from `pi-help` |
+| DeepSeek corpus specifically | `nvidia/deepseek-ai/deepseek-v4.1-flash` (stalls in `pi -p` sometimes — fall back to glm/MiniMax) |
+| A corpus that is neither Claude nor Chinese (tie-break, third opinion) | `gpt-6-astra` via codex, `grok-4.7` via grok |
+| Last resort | any scoped method from `pi-help`; then subagents (same corpus — different lenses) |
 
 IF swapping models for a stage THEN dispatch **2–4 agents in parallel** (one per family)
 and judge: winner merges, runners-up get their best ideas grafted. Never sequentialize.
@@ -163,14 +154,19 @@ and judge: winner merges, runners-up get their best ideas grafted. Never sequent
 ## Testing — READ FIRST
 
 The universal red-green doctrine is canonical in `references/testing-doctrine.md`.
-Backend/logic/CLI/library use `vitest`; UI behavior uses agent-browser click-flows
-(see [[conejo-frontend]]). Never implement before a failing test. RED must fail for the
+Backend/logic/CLI/library: `pnpm vitest run` (TS), `uv run pytest` (Python),
+`cargo nextest run` (Rust); UI behavior uses agent-browser click-flows (see
+[[conejo-frontend]]). Never implement before a failing test. RED must fail for the
 RIGHT reason (assertion failure, not an import error).
+
+**Acceptance criteria — READ SECOND.** Every task has them, each with an independent
+measurer that goes RED before and GREEN after, run by you and by the reviewer:
+`references/acceptance-criteria.md`. **Stacked PRs + CI:** `references/stacked-prs-and-ci.md`.
 
 ## Standards & helpers
 
 - Coding standards: `references/coding-standards.md` (+ `-api-design.md`, `-testing.md`).
-- Dependency hygiene (bun): `references/deps-check.md`.
+- Dependency hygiene (pnpm): `references/deps-check.md`.
 - Capture bug-fix learnings: `references/bug-fix-learning.md`.
 - Strengthen tests after green: `references/auto-improve-tests.md`.
 - Optional auto-trigger hooks: `hooks/` — install with `scripts/install-conejo-hooks.sh`.
@@ -187,6 +183,10 @@ confidence:
 - IF a multi-assumptions family needs closing → `references/zanahoria-decisions`
   (extract the load-bearing assumption, name a winner, capture an ADR, close the losers).
 
-## Tooling
+## Tooling (house stack — canonical list in `~/.claude/CLAUDE.md`)
 
-bun (not npm) · vitest (not jest, not `bun test`) · vite-plus (`vp`) for build/check · ESM only.
+pnpm (not npm, not bun, not yarn) · vite + vitest (not jest, not `bun test`) · oxlint +
+oxfmt (not biome/eslint/prettier) · vite-plus (`vp`) where it is set up · ESM only ·
+Python: uv + pyrefly (types) + ruff (lint/format) + pytest · Rust: cargo (through `mbx`, run `mbx setup` once) + cargo-nextest
++ clippy · sites: Astro · every project: complete README.md with badges, tagged semver
+releases, packages published via OIDC trusted publishing.

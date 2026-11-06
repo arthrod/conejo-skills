@@ -52,7 +52,7 @@ import { testAdapter, createTestSuite } from "@better-auth/test-utils/adapter";
 Install separately:
 
 ```bash
-npm install @better-auth/api-key
+pnpm add @better-auth/api-key
 ```
 
 Update imports:

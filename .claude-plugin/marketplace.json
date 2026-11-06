@@ -5,13 +5,13 @@
     "email": "arthursrodrigues@gmail.com"
   },
   "metadata": {
-    "description": "arthrod's curated skill set \u2014 centred on the Conejo coding-philosophy family (conejo/conejo-code/conejo-debug/conejo-frontend/conejo-merge) with strict frontend testing doctrine, plus Pydantic AI, Plate/DOCX, Tauri/better-auth, Rust, and Pi terminal agent.",
-    "version": "3.2.0"
+    "description": "arthrod's curated skill set — centred on the Conejo coding-philosophy family (conejo/conejo-code/conejo-debug/conejo-frontend/conejo-merge/conejo-legal) with strict frontend testing doctrine, acceptance criteria with independent measurers, other-corpus reviews, stacked PRs via gh stack, and the obra/superpowers v7.0.2 process skills with conejo blocks; plus Pydantic AI, Plate/DOCX, Tauri/better-auth, Rust, and Pi terminal agent.",
+    "version": "3.3.0"
   },
   "plugins": [
     {
       "name": "arthrod-skills",
-      "description": "82 skills as one bundle, organized around the Conejo coding-philosophy family. See README.md for the family map.",
+      "description": "80 skills as one bundle, organized around the Conejo coding-philosophy family. See README.md for the family map.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -34,7 +34,6 @@
         "./skills/brainstorming",
         "./skills/browser-test-agent",
         "./skills/changeset",
-        "./skills/claude-api",
         "./skills/code-review",
         "./skills/coderlm",
         "./skills/computer-use-agents",
@@ -42,9 +41,11 @@
         "./skills/conejo-code",
         "./skills/conejo-debug",
         "./skills/conejo-frontend",
+        "./skills/conejo-legal",
         "./skills/conejo-merge",
         "./skills/deepagents",
         "./skills/desktop-test-agent-tauri",
+        "./skills/diagnosing-superpowers",
         "./skills/dispatching-parallel-agents",
         "./skills/dogfood",
         "./skills/dogfood-quirks",
@@ -63,14 +64,12 @@
         "./skills/orchestrating-swarms",
         "./skills/pi-extending",
         "./skills/pi-using",
-        "./skills/plate-testing-strategy",
-        "./skills/pr-docx",
+        "./skills/pydantic-acp",
         "./skills/pydantic-ai-agent-builder",
         "./skills/pydantic-ai-common-pitfalls",
         "./skills/pydantic-ai-testing",
         "./skills/pydanticai-docs",
         "./skills/python-code-review",
-        "./skills/ralph-prd-generator",
         "./skills/react",
         "./skills/react-best-practices",
         "./skills/react-composables",
@@ -94,7 +93,6 @@
         "./skills/using-superpowers",
         "./skills/val-town",
         "./skills/verification-before-completion",
-        "./skills/work-task",
         "./skills/writing-plans",
         "./skills/writing-skills"
       ]

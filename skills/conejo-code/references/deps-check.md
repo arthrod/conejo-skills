@@ -66,10 +66,10 @@ Start editing only after the user confirms. If new dependencies surface during e
 After the changes are complete, run a type-check to confirm no new cross-file errors were introduced:
 
 ```bash
-# Type-check the whole project
-bun run check
+# Type-check + lint the whole project (pnpm scripts; oxlint + tsc under the hood)
+pnpm check
 
-# Or directly via vite-plus
+# Or directly via vite-plus, where the project uses it
 vp check
 ```
 

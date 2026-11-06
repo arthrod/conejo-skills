@@ -8,7 +8,7 @@ Complete guide for integrating better-auth with Expo and React Native mobile app
 
 ```bash
 npx expo install expo-secure-store expo-web-browser expo-auth-session
-bun add better-auth
+pnpm add better-auth
 ```
 
 ---

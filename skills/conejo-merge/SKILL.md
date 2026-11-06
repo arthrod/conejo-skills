@@ -231,10 +231,15 @@ Or if no test (nitpick): `"Fixed in <SHA>."`
 1. **Reconcile:** `implemented + pushed-back + duplicate-linked == total from Step 1`.
    IF the equation doesn't hold THEN find the orphan comments and gate them — you are
    not done.
-2. Push.
+2. Push (`gh stack push` when the PR is a stack layer — never hand-rebase the chain).
 3. Request re-review from EACH bot separately (syntax in the Commenter Source Matrix
-   below), then set a timer — nobody wakes you up. **Max wait 10 minutes**; after that,
-   best efforts and keep going diligently and calmly (don't block on a silent re-review).
+   below).
+4. **Wait for CI/CD and the re-reviews only if this PR is the plan's LAST task.**
+   Otherwise go to the next task now and come back when the last task lands
+   (`../conejo-code/references/stacked-prs-and-ci.md`). When you do wait: timer, poll
+   every 60 s, **max 10 minutes**; after that, best efforts and keep going diligently
+   and calmly (don't block on a silent re-review). If the runners never start
+   (billing), note it and rely on the local suite + acceptance measurers.
 
 ---
 
@@ -261,16 +266,19 @@ When Step 5 says "if not installed, install it", use this:
 
 | Language / runtime | Test framework | Linter | Formatter | Install if missing |
 |---|---|---|---|---|
-| **Python** | `pytest` | `ruff check` | `ruff format` | `uv add --dev pytest ruff` (or `pip install`) |
-| **TypeScript / JS** | `vitest` (preferred) or `jest` | `biome check` / `eslint` | `biome format` / `prettier` | `bun add -D vitest` (or pnpm/npm) |
-| **Rust** | `cargo test` (built-in) | `cargo clippy` | `cargo fmt` / `rustfmt` | already shipped with rustup; for nightly fmt: `rustup component add rustfmt` |
+| **Python** | `uv run pytest` | `ruff check` + `pyrefly check` (types) | `ruff format` | `uv add --dev pytest ruff pyrefly` (never pip/poetry) |
+| **TypeScript / JS** | `pnpm vitest run` (jest only if already wired) | `oxlint` | `oxfmt` | `pnpm add -D vitest oxlint oxfmt` (never npm/bun/yarn) |
+| **Rust** | `cargo nextest run` | `cargo clippy` | `cargo fmt` / `rustfmt` | `cargo install cargo-nextest --locked`; fmt via `rustup component add rustfmt` |
 | **Deno (Val Town)** | `Deno.test` (built-in) | `deno lint` | `deno fmt` | nothing to install |
 | **Go** | `go test` | `golangci-lint` | `gofmt` / `goimports` | install golangci-lint if linter requested |
 
 Rules:
 - IF the project has both vitest and jest THEN don't migrate — use whichever is wired up.
 - IF the project has neither THEN install **vitest** for new TS/JS work.
-- For Python: prefer `ruff` over `flake8 + black + isort` — single tool, faster.
+- For Python: prefer `ruff` over `flake8 + black + isort` — single tool, faster; `pyrefly`
+  for types (not mypy/pyright unless already wired).
+- Package manager is **pnpm** (TS) / **uv** (Python) / **cargo** (Rust) — never add a
+  dependency with npm, bun, yarn, pip or poetry.
 - NEVER skip the test step because the framework isn't installed. Install it.
 
 ---

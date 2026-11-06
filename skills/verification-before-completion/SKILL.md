@@ -7,8 +7,6 @@ description: Use when about to claim work is complete, fixed, or passing, before
 
 ## Overview
 
-Claiming work is complete without verification is dishonesty, not efficiency.
-
 **Core principle:** Evidence before claims, always.
 
 **Violating the letter of this rule is violating the spirit of this rule.**
@@ -105,15 +103,6 @@ Skip any step = lying, not verifying
 ❌ Trust agent report
 ```
 
-## Why This Matters
-
-From 24 failure memories:
-- your human partner said "I don't believe you" - trust broken
-- Undefined functions shipped - would crash
-- Missing requirements shipped - incomplete features
-- Time wasted on false completion → redirect → rework
-- Violates: "Honesty is a core value. If you lie, you'll be replaced."
-
 ## When To Apply
 
 **ALWAYS before:**
@@ -130,10 +119,28 @@ From 24 failure memories:
 - Implications of success
 - ANY communication suggesting completion/correctness
 
-## The Bottom Line
+<!-- vendored:start -->
 
-**No shortcuts for verification.**
+## Source
 
-Run the command. Read the output. THEN claim the result.
+Vendored from [`obra/superpowers`](https://github.com/obra/superpowers/tree/v7.0.2/skills/verification-before-completion) **v7.0.2** (`22f0b46`) on 2026-11-06.
+Refresh with `./scripts/refresh-superpowers.sh` from the conejo-skills repo — the `<!-- conejo -->` block below is re-applied automatically; upstream text above it is left verbatim.
 
-This is non-negotiable.
+<!-- vendored:end -->
+
+<!-- conejo:start -->
+
+## Conejo additions (arthrod's bundle)
+
+Two more rows for the Common Failures table:
+
+| Claim | Requires | Not Sufficient |
+|-------|----------|----------------|
+| Acceptance criterion met | Its independent measurer run NOW, output shown (`conejo-code/references/acceptance-criteria.md`) | Reading the diff; the implementer's own unit test alone |
+| PR ready / task shipped | Local suite green + measurers green + pushed to the stack | Green CI (you don't wait for CI unless it is the plan's last task — `conejo-code/references/stacked-prs-and-ci.md`) |
+| Reviewed | A report from a model of another corpus, including the measured-AC section | Your own re-read; a same-corpus subagent's "looks good" |
+
+House commands for the evidence: `pnpm vitest run`, `uv run pytest`, `cargo nextest
+run`, `oxlint`, `oxfmt`, `ruff check`, `pyrefly check`, `cargo clippy`.
+
+<!-- conejo:end -->

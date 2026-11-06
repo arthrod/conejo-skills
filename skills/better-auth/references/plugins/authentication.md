@@ -9,7 +9,7 @@ Complete guide for enhanced authentication methods: 2FA, Passkeys, Magic Links, 
 ### Installation
 
 ```bash
-bun add better-auth
+pnpm add better-auth
 ```
 
 ### Server Configuration
@@ -107,7 +107,7 @@ await authClient.twoFactor.disable({
 Passkey plugin is a separate package since v1.4.0:
 
 ```bash
-bun add @better-auth/passkey
+pnpm add @better-auth/passkey
 ```
 
 ### Server Configuration

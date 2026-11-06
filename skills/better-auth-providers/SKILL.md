@@ -1,4 +1,5 @@
 ---
+name: better-auth-providers
 description: Display Better Auth available authentication providers and their configuration
 argument-hint: [provider_name]
 ---

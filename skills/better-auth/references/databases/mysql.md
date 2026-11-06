@@ -9,7 +9,7 @@ Complete guide for integrating better-auth with MySQL and PlanetScale.
 ### Installation
 
 ```bash
-bun add better-auth drizzle-orm mysql2 drizzle-kit
+pnpm add better-auth drizzle-orm mysql2 drizzle-kit
 ```
 
 ### Database Connection
@@ -112,7 +112,7 @@ PlanetScale is a serverless MySQL-compatible database.
 ### Installation
 
 ```bash
-bun add better-auth drizzle-orm @planetscale/database drizzle-kit
+pnpm add better-auth drizzle-orm @planetscale/database drizzle-kit
 ```
 
 ### Connection

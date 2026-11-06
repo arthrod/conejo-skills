@@ -1,6 +1,6 @@
 ---
 name: conejo
-description: arthrod's coding philosophy and dispatcher. Universal red-green TDD, stacked PRs, evidence-before-claims, context-preserving agent dispatch (pi first via `pi-help` — favor the best Chinese models, e.g. zai/glm-5.3, minimax/MiniMax-M3 — then crush/opencode/subagents), hidden-gems review doctrine, no batch review. Routes to conejo-code (active coding), conejo-frontend (strict UI), conejo-merge (calm PR/merge), conejo-debug (skeptical investigation, autonomous deep work). Use when starting any coding work or deciding how to approach a task.
+description: arthrod's coding philosophy and dispatcher. Universal red-green TDD, acceptance criteria with independent measurers on every task, stacked PRs via `gh stack`, evidence-before-claims, context-preserving agent dispatch to OTHER-corpus models (pi → crush → codex → grok → cline → octo → subagents; `pi-help` for scoped models, favor zai/glm-5.3 and minimax/MiniMax-M3; the reviewer is never the author's corpus), CI/CD wait only on the last task, hidden-gems review doctrine, one-by-one PR replies, no batch review. Routes to conejo-code (active coding), conejo-frontend (strict UI), conejo-merge (calm PR/merge), conejo-debug (skeptical investigation, autonomous deep work). Use when starting any coding work or deciding how to approach a task.
 ---
 
 # Conejo — the coding philosophy
@@ -29,13 +29,17 @@ One rabbit, many burrows.
    verification and showing output. See [[verification-before-completion]].
 7. **Context is sacred — delegate.** Your context window is the project's working
    memory. Dispatch reading/implementing/reviewing to other agents and keep only their
-   conclusions. Ladder: `pi` (pick scoped methods with `pi-help`; favor the best
-   Chinese models — `zai/glm-5.3`, `minimax/MiniMax-M3`) → `crush` → `opencode` →
-   other agent CLI → subagents. Full templates:
-   `conejo-code/references/agent-dispatch.md` (the Warren Protocol).
-8. **Different corpus, different eyes.** Get at least one opinion from a model that is
-   not you on every spec, plan, and PR. Its weird nit may be the hidden gem your
-   corpus doesn't hold. Adversarial framing always: reviewers refute, they don't admire.
+   conclusions. Ladder: `pi` (scoped models via `pi-help`; favor the best Chinese
+   models — `zai/glm-5.3`, `minimax/MiniMax-M3`) → `crush` → `codex` → `grok` →
+   `cline` → `octo` → subagents. How to list and select each tool's models, and the
+   headless command per tool: `conejo-code/references/agent-dispatch.md` (the Warren
+   Protocol).
+8. **Different corpus, different eyes — STRICT.** Every review (spec, plan, code, PR
+   comment verification, debugging hypotheses) comes from a model that is NOT the
+   model that produced the work: GLM/MiniMax/DeepSeek via pi or crush, GPT via codex,
+   Grok via grok. Same-corpus subagents review only as the last rung. Its weird nit
+   may be the hidden gem your corpus doesn't hold. Adversarial framing always:
+   reviewers refute, they don't admire.
 9. **No batch review. Ever.** Every comment, finding, and hypothesis gets its own
    individual verdict. Batching is how gems get swept out with the dust.
 10. **Max wait 10 minutes for another agent — then best efforts.** Cap every wait on
@@ -45,6 +49,19 @@ One rabbit, many burrows.
     you have, keep going diligently and calmly, and leave a short note that you
     proceeded without the reply. Never block the plan forever on a silent agent.
     Canonical detail: `conejo-code/references/agent-dispatch.md`.
+11. **Acceptance criteria on every plan task — ALWAYS, no exceptions — each with an
+    independent measurer.** A criterion is an observable behavior plus the command,
+    probe, click-flow, diff or metric that proves it from outside the code; reading
+    the diff is review, not measurement. Measurers go red before and green after, the
+    reviewer runs them, the ledger records their output.
+    `conejo-code/references/acceptance-criteria.md`.
+12. **Wait for CI/CD only on the LAST task.** Middle of a plan: commit, `gh stack
+    push`, next task — no polling of Actions or bots. Last task: wait (10-minute cap),
+    then handle every PR comment one by one. If the runners never start (billing),
+    local suite + measurers are the evidence.
+    `conejo-code/references/stacked-prs-and-ci.md`.
+13. **Every PR interaction is one comment at a time.** Own verdict, own reply, ledger
+    reconciles. Without exception — that is how hidden gems survive. [[conejo-merge]].
 
 ## Dispatch (IF this, THEN that)
 
@@ -61,13 +78,31 @@ Doctrines are authored ONCE and referenced everywhere:
 - **Testing doctrine:** `conejo-code/references/testing-doctrine.md` — read before
   writing any test. conejo-frontend adds the UI superset.
 - **Agent dispatch (Warren Protocol):** `conejo-code/references/agent-dispatch.md` —
-  read before dispatching any agent.
+  read before dispatching any agent; it lists how to see and pick each tool's models.
+- **Acceptance criteria / independent measurers:**
+  `conejo-code/references/acceptance-criteria.md` — read before writing or executing
+  any plan task.
+- **Stacked PRs and CI/CD:** `conejo-code/references/stacked-prs-and-ci.md` — read
+  before pushing, opening a PR, or deciding whether to wait on CI.
+
+## Stack preference (house tooling)
+
+pnpm (never npm/bun/yarn) · uv (never pip/poetry) · pyrefly for Python types · ruff
+for Python lint/format · oxlint + oxfmt for TS/JS (not biome/eslint/prettier) · vite +
+vitest (not jest) · Astro for sites · cargo-nextest for Rust tests · `mbx setup` once so plain
+cargo runs through mbx (shared, self-pruning build cache — output and target dirs don't
+explode context) · every project has
+a complete README.md with badges, tagged semver releases, and packages published via
+OIDC trusted publishing (npm, PyPI, crates.io) — no long-lived tokens. Canonical list:
+`~/.claude/CLAUDE.md`.
 
 ## The loop, at a glance
 
-Brainstorm (specs) → **external spec review** → Plan → **external plan review** →
-Interface → **failing tests** (dispatched) → **Implement** (dispatched) → Improve
-tests → Code review → (loop). Stage-by-stage commands, model choices, and the
+Brainstorm (specs + acceptance criteria) → **other-corpus spec review** → Plan (every
+task: acceptance criteria + measurer + stack layer) → **other-corpus plan review** →
+Interface → **measurers RED, failing tests RED** (dispatched) → **Implement** (dispatched)
+→ tests GREEN, measurers GREEN → Improve tests → **other-corpus code review** → commit,
+`gh stack push`, next task (CI only after the last) → (loop). Stage-by-stage commands, model choices, and the
 dispatch ladder live in [[conejo-code]]. UI stages (design, screenshots, critique,
 console) live in [[conejo-frontend]].
 

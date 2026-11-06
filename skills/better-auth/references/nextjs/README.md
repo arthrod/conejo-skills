@@ -22,7 +22,7 @@ Complete Next.js API route with better-auth using:
 
 **Installation**:
 ```bash
-npm install better-auth drizzle-orm postgres
+pnpm add better-auth drizzle-orm postgres
 ```
 
 **Environment variables**:

@@ -9,7 +9,7 @@ Complete guide for payment integrations: Stripe and Polar.
 ### Installation
 
 ```bash
-bun add better-auth stripe
+pnpm add better-auth stripe
 ```
 
 ### Server Configuration
@@ -146,7 +146,7 @@ Polar is an open-source alternative to Patreon/Stripe for developers.
 ### Installation
 
 ```bash
-bun add better-auth @polar-sh/sdk
+pnpm add better-auth @polar-sh/sdk
 ```
 
 ### Server Configuration

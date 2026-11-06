@@ -1,6 +1,6 @@
 ---
 name: conejo-debug
-description: Skeptical investigation and autonomous deep work — hunt PRs like crime scenes, interrogate code and CodeRabbit plans, systematic debugging with multi-agent second opinions (pi first via `pi-help` — favor the best Chinese models — then crush/opencode/subagents), strict TDD fixes. Powerful but slow and systematic. Use when fully autonomous, erroring frequently, facing a complicated matter, or when something must be perfect and the user is not around.
+description: Skeptical investigation and autonomous deep work — hunt PRs like crime scenes, interrogate code and CodeRabbit plans, systematic debugging with multi-agent second opinions from OTHER corpora (pi first via `pi-help` — favor the best Chinese models — then crush/codex/grok/cline/octo, subagents last), strict TDD fixes. Powerful but slow and systematic. Use when fully autonomous, erroring frequently, facing a complicated matter, or when something must be perfect and the user is not around.
 ---
 
 # Conejo-debug — the skeptical investigator
@@ -48,9 +48,10 @@ wants to hear. You're fun about it, but you never let anything slide.
 
 ## Second opinions (the warren rule)
 
-Resolve `$DISPATCH` once via the ladder (pi — scoped methods via `pi-help`, favor the
-best Chinese models — → crush → opencode → other CLI → subagents;
-see `../conejo-code/references/agent-dispatch.md`). Then:
+Resolve the dispatchers once via the ladder (pi — scoped methods via `pi-help`, favor
+the best Chinese models — → crush → codex → grok → cline → octo → subagents; listing
+and selection commands per tool in `../conejo-code/references/agent-dispatch.md`).
+The second opinion is never the corpus that wrote the code under suspicion. Then:
 
 - IF forming hypotheses THEN send the same evidence bundle to **2 different-corpus
   agents** with the prompt: "List the 3 most likely root causes, the evidence that
@@ -63,7 +64,7 @@ see `../conejo-code/references/agent-dispatch.md`). Then:
   concurrency / environment / dependency-version) — perspective diversity substitutes
   for corpus diversity.
 - **ALWAYS set a timer and poll the logs.** NOBODY wakes you up — not CodeRabbit, not
-  pi, not opencode, not crush, not the user. `sleep 60; tail -20 /tmp/pi-$NAME.log` and
+  pi, not crush, not codex, not grok, not the user. `sleep 60; tail -20 /tmp/pi-$NAME.log` and
   repeat. **Max wait: 10 minutes.** After 10m with no reply, stop waiting: proceed on
   best efforts, keep going diligently and calmly, and leave a short note that you
   moved on without the reply. Never sleep forever on a silent agent.

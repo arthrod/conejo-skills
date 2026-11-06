@@ -199,12 +199,12 @@ console.log("Configure this URL in Google Console:", callbackURL);
 
 **For Drizzle approach**:
 ```bash
-npm install better-auth drizzle-orm drizzle-kit @cloudflare/workers-types
+pnpm add better-auth drizzle-orm drizzle-kit @cloudflare/workers-types
 ```
 
 **For Kysely approach**:
 ```bash
-npm install better-auth kysely @noxharmonium/kysely-d1 @cloudflare/workers-types
+pnpm add better-auth kysely @noxharmonium/kysely-d1 @cloudflare/workers-types
 ```
 
 ---

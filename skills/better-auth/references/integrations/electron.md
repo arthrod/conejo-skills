@@ -7,7 +7,7 @@ Full desktop authentication support for Electron apps via system browser OAuth f
 ## Installation
 
 ```bash
-npm install better-auth @better-auth/electron
+pnpm add better-auth @better-auth/electron
 ```
 
 Supports two major versions behind the latest stable Electron release.
@@ -108,7 +108,7 @@ export const authClient = createAuthClient({
 ### Default Storage (using `conf` package)
 
 ```bash
-npm install conf
+pnpm add conf
 ```
 
 ```typescript

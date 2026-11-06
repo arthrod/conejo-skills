@@ -39,7 +39,7 @@ The plugin works in two halves: a **server plugin** (Better Auth middleware) and
 ### Required Tauri Plugins (peer dependencies)
 
 ```bash
-bun add @tauri-apps/api @tauri-apps/plugin-deep-link @tauri-apps/plugin-http @tauri-apps/plugin-os @tauri-apps/plugin-opener better-auth
+pnpm add @tauri-apps/api @tauri-apps/plugin-deep-link @tauri-apps/plugin-http @tauri-apps/plugin-os @tauri-apps/plugin-opener better-auth
 ```
 
 | Plugin | Min Version | Purpose |

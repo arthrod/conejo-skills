@@ -8,6 +8,9 @@
 #   3. Updates ./skills/<name>/ with the refreshed content
 #
 # Skills marked CUSTOMIZED are skipped — they have local edits worth preserving.
+# Skills marked SUPERPOWERS are skipped here — scripts/refresh-superpowers.sh owns
+# them (whole-directory refresh from obra/superpowers incl. scripts/ and prompts).
+# Local <!-- conejo:start --> … <!-- conejo:end --> blocks are preserved on refresh.
 # Skills marked LIGHT-EDIT print a warning but are NOT auto-updated; review manually.
 #
 # Usage:
@@ -83,6 +86,7 @@ while IFS=$'\t' read -r name repo skill_path verdict ours_ups diff_count actual_
   # Preserve our local cross-ref block + Stitch block (extract from current SKILL.md)
   current="$target_dir/SKILL.md"
   cross_ref_block=$(awk '/<!-- cross-ref:start -->/,/<!-- cross-ref:end -->/' "$current" 2>/dev/null || true)
+  conejo_block=$(awk '/<!-- conejo:start -->/,/<!-- conejo:end -->/' "$current" 2>/dev/null || true)
 
   # Build new SKILL.md
   tmp=$(mktemp)
@@ -107,6 +111,12 @@ EOF
   if [ -n "$cross_ref_block" ]; then
     echo "" >> "$tmp"
     echo "$cross_ref_block" >> "$tmp"
+  fi
+
+  # Re-append conejo block (local rules for vendored skills) if we had one
+  if [ -n "$conejo_block" ]; then
+    echo "" >> "$tmp"
+    echo "$conejo_block" >> "$tmp"
   fi
 
   if [ "$DRY_RUN" = "1" ]; then
