@@ -179,7 +179,7 @@ IF the repository ships a gate script (`ops/review_gate.py <bundle dir>`) THEN r
 | Citation format | the digest has at least one citation; every `[n]` marker resolves to an entry of its `# Citations` section that carries a URL; every inline citation is an `[authority](url)` link. A digest that mixes both styles must pass both checks |
 | Bundle shape | the digest, `index.md`, `_source_snippet_audit.md`, `caselaw_index.md` and `statutory_index.md` exist, plus whatever else the repository's own CI requires of a bundle (a runner's `timestamp.md` and `run.json`). A file the repository does not require is recorded as absent, not failed |
 | Lint | the repository's OKF linter (the gate script runs it) reports no error. IF no linter ships THEN record `unavailable` and check by hand that the frontmatter keys are present and `id`/`notation` agree; a missing linter is never a reason to close |
-| On-topic sources | ≥4 retained sources are about the legal issue (open each one; a namesake entity counts as zero) |
+| On-topic sources | ≥4 retained sources are about the legal issue. Open each one; a source about an unrelated entity that shares a name or acronym with a legal term counts as zero (RUPA → a company called Rupa; a "how to type §" page kept for a § search). Name each off-topic file and what it actually is |
 | Core support | the digest's central statement of the rule, and every passage in quotation marks, is traced to a passage in a retained source. Anything that fails the trace becomes a finding in R2 |
 
 Numbered citations with a generated `# Citations` list are a valid format. IF two reviewers could read a row differently THEN the row is computed wrong — open the file and settle it.
@@ -229,7 +229,39 @@ Everything else merges once the gate passes after your fixes.
 
 ### R5 — The review comment
 
-One comment per PR, for both verdicts, every cell traceable to a file you opened or a command you ran. Template → [reference.md](reference.md#pr-review-comment). It carries: the verdict header, the close code (closes only), the gate table, a findings ledger with one row per finding, and a 2–6 sentence verdict quoting the PR.
+One comment per PR, for both verdicts, posted before the verdict is executed. Every cell traces to a file you opened, a passage you quote or a command you ran. The comment is about the PR, never about you: no mention of your run, tools, retries, context or sessions. IF you cannot fill a table from evidence THEN you skipped R1 or R2 — go back.
+
+```markdown
+## Tenancious Review — MERGE   (or CLOSE)
+
+<one sentence naming the decisive fact>
+
+**Close code:** `CODE`   (CLOSE only — exactly one code)
+
+### Evidence examined
+| Check | Result | Evidence |
+|---|---|---|
+| Sources retained | N files (floor 4, goal 8) | list of `sources/` filenames |
+| On-topic sources | N of M | name each off-topic file and what it actually is |
+| Citation format | pass/fail | markers resolved, or the first marker that does not |
+| Bundle shape | pass/fail | files present / missing |
+| OKF lint | pass/fail | linter output line |
+| Findings | F fixed · R refuted · O runner-owned · X noise · U unfixable | see ledger |
+
+### Findings ledger
+| Finding (author, ≤20-word quote) | Verdict | Action and evidence |
+|---|---|---|
+(one row per finding, including `noise` rows)
+
+### Verdict
+2–6 sentences. Quote at least one passage or file path from the PR. For a
+close: the code, exactly what is deficient, and what a re-run must produce
+to pass.
+```
+
+`MERGE` or `CLOSE` is a verdict on the PR's content, never on your own run: IF a tool fails or you cannot see your earlier evidence THEN re-run the commands. Deciding without having done R1–R3 is fabrication.
+
+**This section is the single source of PR review policy.** A review harness adds only its own mechanics (how to check out the branch, post the comment, return the result); where a harness prompt and this section disagree, this section wins and the harness is wrong.
 
 ## Deliverables
 

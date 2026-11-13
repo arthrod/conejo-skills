@@ -307,33 +307,7 @@ A closed PR keeps its history; this closed run keeps its audit.
 
 ## PR Review Comment
 
-```markdown
-## Tenancious Review — MERGE   (or CLOSE)
-
-<one sentence naming the decisive fact>
-
-**Close code:** `CODE`   (CLOSE only — exactly one code)
-
-### Evidence examined
-| Check | Result | Evidence |
-|---|---|---|
-| Sources retained | N files (floor 4, goal 8) | list of `sources/` filenames |
-| On-topic sources | N of M | name each off-topic file and what it actually is |
-| Citation format | pass/fail | markers resolved, or the first marker that does not |
-| Bundle shape | pass/fail | files present / missing |
-| OKF lint | pass/fail | linter output line |
-| Findings | F fixed · R refuted · O runner-owned · X noise · U unfixable | see ledger |
-
-### Findings ledger
-| Finding (author, ≤20-word quote) | Verdict | Action and evidence |
-|---|---|---|
-(one row per finding, including `noise` rows)
-
-### Verdict
-2–6 sentences. Quote at least one passage or file path from the PR. For a
-close: the code, exactly what is deficient, and what a re-run must produce
-to pass.
-```
+The template lives in one place: [SKILL.md → PR Review Mode → R5](SKILL.md#r5--the-review-comment). Harnesses and reviewers read it from there.
 
 ---
 
