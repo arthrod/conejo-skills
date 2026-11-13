@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "arthrod-skills",
-      "description": "80 skills as one bundle, organized around the Conejo coding-philosophy family. See README.md for the family map.",
+      "description": "81 skills as one bundle, organized around the Conejo coding-philosophy family. See README.md for the family map.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -70,6 +70,7 @@
         "./skills/pydantic-ai-testing",
         "./skills/pydanticai-docs",
         "./skills/python-code-review",
+        "./skills/ralph-prd-generator",
         "./skills/react",
         "./skills/react-best-practices",
         "./skills/react-composables",

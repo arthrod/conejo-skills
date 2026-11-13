@@ -1,6 +1,6 @@
 # arthrod's Skill Registry
 
-**80 skills** — last sync `2026-11-06`. **v3.3.0**
+**81 skills** — last sync `2026-11-13`. **v3.3.0**
 
 Major restructure: families collapsed (Pi → 2 skills, Pydantic AI → 1 with `references/`,
 Rust → `rust-author` + `rust-review`, Better Auth slimmed, design dials folded into `impeccable`),
@@ -137,7 +137,7 @@ DRY_RUN=1 ./scripts/refresh-superpowers.sh   # show what a refresh would touch
 | **Frontend stacks** | `react`, `react-best-practices`, `react-composables`, `tailwind-v4`, `hono` |
 | **Infra / env / sandbox / Val Town** | `env-dogma`, `val-town`, `agent-sandbox` |
 | **Legal** | `conejo-legal` |
-| **Other** | `advanced-elicitation`, `coderlm`, `draft-docs`, `major-task`, `marimo`, `python-code-review`, `review-llm-artifacts`, `review-plan`, `review-python`, `review-rust`, `sqlalchemy-code-review`, `sqlite-vec` |
+| **Other** | `advanced-elicitation`, `coderlm`, `draft-docs`, `major-task`, `marimo`, `python-code-review`, `ralph-prd-generator`, `review-llm-artifacts`, `review-plan`, `review-python`, `review-rust`, `sqlalchemy-code-review`, `sqlite-vec` |
 
 ## Full Index
 
@@ -360,6 +360,10 @@ Use this skill whenever the user is working with the Pydantic AI framework — i
 ### `python-code-review`
 
 Reviews Python code AND pytest test code — type safety, async patterns, error handling, common mistakes, plus pytest setup correctness (test file location, conftest.py wiring, asyncio_mode), fixtures, parametrize, mocki…
+
+### `ralph-prd-generator`
+
+Generates Product Requirements Documents (PRDs) and specifications for Ralph for Claude Code autonomous development. Use when users want to create a PRD, write specifications, plan a new project for Ralph, convert ideas into Ralph-compatible format (PROMPT.md, @fix_plan.md, specs/), or prepare requirements for autonomous AI development loops.
 
 ### `react`
 
