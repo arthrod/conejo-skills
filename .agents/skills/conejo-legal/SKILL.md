@@ -171,13 +171,13 @@ Use this mode when the task is a pull request that already carries a bundle (dig
 
 ### R1 — Compute the gate, don't eyeball it
 
-IF the repository ships a gate script (`ops/review_gate.py <bundle dir>`) THEN run it and copy its rows. Otherwise compute the same rows by hand:
+IF the repository ships a gate script (`ops/review_gate.py <bundle dir>`) THEN run it and copy its rows; IF the script fails or none ships THEN compute the same rows by hand:
 
 | Row | Passes when |
 |---|---|
 | Sources retained | ≥4 distinct sources as non-hidden files in `sources/` (the same authority in two files counts once), counted on disk (goal 8 is advisory) |
 | Citation format | the digest has at least one citation; every `[n]` marker resolves to an entry of its `# Citations` section that carries a URL; every inline citation is an `[authority](url)` link. A digest that mixes both styles must pass both checks |
-| Bundle shape | the digest, `index.md`, `_source_snippet_audit.md`, `caselaw_index.md` and `statutory_index.md` exist, plus whatever else the repository's own CI requires of a bundle (a runner's `timestamp.md` and `run.json`). A file the repository does not require is recorded as absent, not failed |
+| Bundle shape | the digest, `index.md`, `_source_snippet_audit.md`, `caselaw_index.md` and `statutory_index.md` exist, plus whatever else the repository's own CI requires of a bundle (for example a runner's `timestamp.md` and `run.json`). A file the repository does not require is recorded as absent, not failed |
 | Lint | the repository's OKF linter (the gate script runs it) reports no error. IF no linter ships THEN record `unavailable` and check by hand that the frontmatter keys are present and `id`/`notation` agree; a missing linter is never a reason to close |
 | On-topic sources | ≥4 retained sources are about the legal issue. Open each one; a source about an unrelated entity that shares a name or acronym with a legal term counts as zero (RUPA → a company called Rupa; a "how to type §" page kept for a § search). Name each off-topic file and what it actually is |
 | Core support | the digest's central statement of the rule, and every passage in quotation marks, is traced to a passage in a retained source. Anything that fails the trace becomes a finding in R2 |
@@ -233,7 +233,7 @@ Everything else merges once the gate passes after your fixes.
 One comment per PR, for both verdicts, posted before the verdict is executed. Every cell traces to a file you opened, a passage you quote or a command you ran. The comment is about the PR, never about you: no mention of your run, tools, retries, context or sessions. IF you cannot fill a table from evidence THEN you skipped R1 or R2 — go back.
 
 ```markdown
-## Tenancious Review — MERGE   (or CLOSE)
+## Tenacious Review — MERGE   (or CLOSE)
 
 <one sentence naming the decisive fact>
 
@@ -280,7 +280,7 @@ IF you are handing off without write access (R3) THEN still post one score, for 
 
 `MERGE` or `CLOSE` is a verdict on the PR's content, never on your own run: IF a tool fails or you cannot see your earlier evidence THEN re-run the commands. Deciding without having done R1–R3 is fabrication.
 
-**This section is the single source of PR review policy.** A review harness adds only its own mechanics (how to check out the branch, post the comment, return the result); where a harness prompt and this section disagree, this section wins and the harness is wrong.
+**This section is the single source of PR review policy.** A review harness adds only its own mechanics (how to check out the branch, post the comment, return the result — including any approval or authorization steps the harness itself requires); where a harness prompt and this section disagree on review policy, this section wins and the harness is wrong.
 
 ## Deliverables
 
