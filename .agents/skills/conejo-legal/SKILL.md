@@ -233,7 +233,7 @@ Everything else merges once the gate passes after your fixes.
 One comment per PR, for both verdicts, posted before the verdict is executed. Every cell traces to a file you opened, a passage you quote or a command you ran. The comment is about the PR, never about you: no mention of your run, tools, retries, context or sessions. IF you cannot fill a table from evidence THEN you skipped R1 or R2 — go back.
 
 ```markdown
-## Tenacious Review — MERGE   (or CLOSE)
+## Tenancious Review — MERGE   (or CLOSE)
 
 <one sentence naming the decisive fact>
 
