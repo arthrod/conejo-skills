@@ -236,6 +236,8 @@ One comment per PR, for both verdicts, posted before the verdict is executed. Ev
 
 <one sentence naming the decisive fact>
 
+**Quality score:** <quality_score>0.00</quality_score>
+
 **Close code:** `CODE`   (CLOSE only — exactly one code)
 
 ### Evidence examined
@@ -258,6 +260,18 @@ One comment per PR, for both verdicts, posted before the verdict is executed. Ev
 close: the code, exactly what is deficient, and what a re-run must produce
 to pass.
 ```
+
+**Quality score.** Every review comment carries exactly one `<quality_score>x</quality_score>` line, for both verdicts: a decimal from 0 to 1 with two places and nothing else inside the tag (`<quality_score>0.82</quality_score>`). It is read by a parser, so never write a range, a percentage or a word there. Score the bundle as it stands after your fixes — not your effort, not the number of bot comments, not their tone.
+
+| Score | The bundle after your fixes |
+|---|---|
+| 0.90–1.00 | 8 or more on-topic sources; primary law supports every core rule; findings were noise or refuted |
+| 0.75–0.89 | Merges with small corrections (a cite, a pin cite, an index label); no core rule changed |
+| 0.50–0.74 | Merges but is thin: 4 to 7 sources, or a fix narrowed or deleted a proposition, or a secondary source carries a core rule |
+| 0.25–0.49 | A close code applies, yet the research is salvageable: a re-run would likely pass |
+| 0.00–0.24 | Wrong issue, an integrity violation, or nothing usable |
+
+IF you are about to post a MERGE below 0.50 or a CLOSE at 0.50 or above THEN the score and the verdict contradict each other — re-check R4 before posting.
 
 `MERGE` or `CLOSE` is a verdict on the PR's content, never on your own run: IF a tool fails or you cannot see your earlier evidence THEN re-run the commands. Deciding without having done R1–R3 is fabrication.
 
