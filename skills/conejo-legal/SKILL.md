@@ -195,6 +195,7 @@ A finding is a human review comment, an inline bot finding, a quoted passage tha
 | `fixed` | the finding is right and you corrected the text within the evidence | file and line changed, and the supporting `sources/<file>` passage. For a deletion: "deleted: not supported" plus the retained sources you checked. For a mechanical fix: the gate or linter line that now passes |
 | `runner-owned` | the finding is about counts or classifications inside `run.json` (append-only) | the discrepancy, for the runner's backlog |
 | `unfixable` | the finding is right, no retained source supports a corrected version, and deleting the text triggers a close code | the close code, the digest lines affected and the retained sources you checked |
+| `pending` | the finding is fixable within the evidence but you have no write access to the branch (R3 hand-off); it goes on the posted fix list | the fix to apply, the digest line, and the supporting `sources/<file>` passage |
 
 A wrong row in `caselaw_index.md` or `statutory_index.md` is not runner-owned: correct the row and mark it `fixed`. This is the one exception to the rule that the runner owns the indexes — a reviewer corrects rows a finding shows to be wrong and writes nothing else there. Hidden gems still apply — a strange nit from a bot gets opened and checked, not waved through.
 
@@ -210,7 +211,7 @@ A wrong row in `caselaw_index.md` or `statutory_index.md` is not runner-owned: c
 
 After the fixes: re-run the gate, confirm no heading is left empty and no sentence points at a citation you removed, then commit and push (never force-push).
 
-IF the harness gives you no write access to the branch THEN you cannot fix, and a fixable finding is still not a reason to close: post the fix list and leave the PR open for a reviewer that can write. This hand-off is the one exception to "every run ends merged or closed"; it is an unfinished review, not a third verdict. Close only on a close code.
+IF the harness gives you no write access to the branch THEN you cannot fix, and a fixable finding is still not a reason to close: post the fix list (each such finding recorded `pending`) and leave the PR open for a reviewer that can write. This hand-off is the one exception to "every run ends merged or closed"; it is an unfinished review, not a third verdict. Close only on a close code.
 
 ### R4 — Close only on a code
 
@@ -248,7 +249,7 @@ One comment per PR, for both verdicts, posted before the verdict is executed. Ev
 | Citation format | pass/fail | markers resolved, or the first marker that does not |
 | Bundle shape | pass/fail | files present / missing |
 | OKF lint | pass/fail | linter output line |
-| Findings | F fixed · R refuted · O runner-owned · X noise · U unfixable | see ledger |
+| Findings | F fixed · R refuted · P pending · O runner-owned · X noise · U unfixable | see ledger |
 
 ### Findings ledger
 | Finding (author, ≤20-word quote) | Verdict | Action and evidence |
@@ -266,12 +267,16 @@ to pass.
 | Score | The bundle after your fixes |
 |---|---|
 | 0.90–1.00 | 8 or more on-topic sources; primary law supports every core rule; findings were noise or refuted |
-| 0.75–0.89 | Merges with small corrections (a cite, a pin cite, an index label); no core rule changed |
+| 0.75–0.89 | 8 or more on-topic sources; merges with small corrections (a cite, a pin cite, an index label); no core rule changed |
 | 0.50–0.74 | Merges but is thin: 4 to 7 sources, or a fix narrowed or deleted a proposition, or a secondary source carries a core rule |
 | 0.25–0.49 | A close code applies, yet the research is salvageable: a re-run would likely pass |
 | 0.00–0.24 | Wrong issue, an integrity violation, or nothing usable |
 
+IF more than one row describes the bundle THEN use the lowest one.
+
 IF you are about to post a MERGE below 0.50 or a CLOSE at 0.50 or above THEN the score and the verdict contradict each other — re-check R4 before posting.
+
+IF you are handing off without write access (R3) THEN still post one score, for the bundle as it would stand after the fixes you list; the MERGE/CLOSE contradiction check does not apply.
 
 `MERGE` or `CLOSE` is a verdict on the PR's content, never on your own run: IF a tool fails or you cannot see your earlier evidence THEN re-run the commands. Deciding without having done R1–R3 is fabrication.
 
@@ -388,7 +393,7 @@ Return a concise build report; do not paste full generated files into chat unles
 | Source verdicts | `accepted` / `rejected` / `lead_only` / `retained_but_unused` / `conversion_failed` |
 | Search minimum | ≥4 distinct documented searches, or failures recorded (floor 4; goal 8) |
 | PR Review close codes | `EVIDENCE_FLOOR` / `CORE_RULE_UNSUPPORTED` / `WRONG_ISSUE` / `INTEGRITY_VIOLATION` / `GUTTED_BY_FIXES` / `BUNDLE_UNREPAIRABLE` |
-| PR Review verdicts per finding | `noise` / `refuted` / `fixed` / `runner-owned` / `unfixable` |
+| PR Review verdicts per finding | `noise` / `refuted` / `fixed` / `pending` (hand-off only) / `runner-owned` / `unfixable` |
 | Heavy reference | Templates, input shapes, run state append algorithm, decision-message templates, search plan, style rules, anti-patterns → [reference.md](reference.md) |
 
 Conejo-Legal: PR-review discipline, legal research payload, OKF `legal_issue` outputs, source-audited, no fabrication, no batching, ledger always reconciles — and every PR ends merged or closed, with the reason appended where the next run can read it.
