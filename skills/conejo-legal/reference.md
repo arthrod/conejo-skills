@@ -305,6 +305,12 @@ A closed PR keeps its history; this closed run keeps its audit.
 
 ---
 
+## PR Review Comment
+
+The template lives in one place: [SKILL.md → PR Review Mode → R5](SKILL.md#r5--the-review-comment). Harnesses and reviewers read it from there.
+
+---
+
 ## Search Plan
 
 Structured outline of 4–8 sections. Standard outline:
@@ -313,7 +319,7 @@ Structured outline of 4–8 sections. Standard outline:
 
 Query families: exact issue name, close synonyms, historical labels, statute/regulation identifiers, leading case names, agency names, constitutional clauses, limiting doctrines, recent developments, public practical explainers.
 
-Document queries in the audit. **Target ≥10 distinct searches** unless the runtime was constrained or failures are recorded. A "search" is a distinct query or retrieval attempt, not vague browsing.
+Document queries in the audit. **Goal: 8 distinct searches (floor 4, or failures recorded)**. A constrained runtime satisfies the floor only when the constraint is recorded as a failure. A "search" is a distinct query or retrieval attempt, not vague browsing.
 
 Strong public-source families: Congress.gov, GovInfo, eCFR, Supreme Court opinions, CourtListener, Cornell LII, Constitution Annotated, CRS reports, GAO materials, official agency and executive pages. Free repositories still need careful inspection — metadata quality varies.
 
@@ -355,6 +361,28 @@ Rejected-note style: `Rejected: article paraphrases doctrine too generally and o
 ### Retention rules (`return_sources=True`)
 
 Retain when a source directly supports a digest sentence, illuminates contrary/limiting authority, establishes modern terminology, supplies recent developments, contributes important primary text, or matters to case/statutory indexes. Do not retain junk to inflate counts; do not skip relevant sources to keep the folder tidy; never retain inaccessible, fully superseded lead-only, duplicate, irrelevant, or paywalled material.
+
+---
+
+## Source Kinds
+
+The kind decides which index a source belongs to and whether it counts as primary law.
+
+| Kind | What it is | Primary | Index |
+|---|---|---|---|
+| `case` | a court's opinion or order | yes | caselaw |
+| `statute` | enacted legislation, codified or session law | yes | statutory |
+| `regulation` | agency rule in a code of regulations or register | yes | statutory |
+| `constitution` | constitutional text | yes | statutory |
+| `court_rule` | rules of procedure, evidence, appellate or local court rules | yes | statutory |
+| `agency_guidance` | attorney-general and OLC opinions, agency manuals, guidance, enforcement policy | no | secondary |
+| `legislative_material` | bills, committee reports, hearings, legislative history | no | secondary |
+| `uniform_act` | UCC, Restatements, model and uniform acts as promulgated — not law until a jurisdiction adopts it, and never federal law | no | secondary |
+| `filing` | a party's brief, motion, complaint or sample agreement — advocacy, never authority for the rule | no | secondary |
+| `secondary` | treatises, law reviews, encyclopedias, practice guides, firm alerts | no | secondary |
+| `other` | anything else that is on topic | no | secondary |
+
+A page hosted on a case-law site is not a case because of its host: a statute on `law.justia.com` is a `statute`, a blog post on a court's site is `secondary`.
 
 ---
 

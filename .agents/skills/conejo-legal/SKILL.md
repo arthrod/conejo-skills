@@ -1,6 +1,6 @@
 ---
 name: conejo-legal
-description: Research a single US doctrinal legal issue with PR-review discipline and produce a source-audited OKF legal_issue bundle (SKOS digest, source/snippet audit, retained sources), with every run ending merged or closed. Use this skill whenever the user says "conejo legal", "rabbit legal review", "interrogate the doctrine", "stress-test the issue", "just research the issue", "ship the digest", "build the bundle", or "write the legal_issue", or asks for deep legal research, doctrinal synthesis, or a legal-issue taxonomy entry. Uses only free public sources (CourtListener, GovInfo, eCFR, Cornell LII, CRS) — never Lexis, Westlaw, or other paywalled databases. Also use when the user wants caselaw or statutory research on a single issue for the OKF taxonomy. Even if the user just says "research this legal question", consider this skill. Not for code PR review — that's conejo-merge.
+description: Research a single US doctrinal legal issue with PR-review discipline and produce a source-audited OKF legal_issue bundle (SKOS digest, source/snippet audit, retained sources), with every run ending merged or closed. Use this skill whenever the user says "conejo legal", "rabbit legal review", "interrogate the doctrine", "stress-test the issue", "just research the issue", "ship the digest", "build the bundle", or "write the legal_issue", or asks for deep legal research, doctrinal synthesis, or a legal-issue taxonomy entry. Uses only free public sources (CourtListener, GovInfo, eCFR, Cornell LII, CRS) — never Lexis, Westlaw, or other paywalled databases. Also use when the user wants caselaw or statutory research on a single issue for the OKF taxonomy. Even if the user just says "research this legal question", consider this skill. Also use it to review a pull request that carries such a bundle (PR Review Mode): verify the digest against its retained sources, fix findings within the evidence, and merge or close with a close code. Not for code PR review — that's conejo-merge.
 ---
 
 # Conejo-Legal — Two Modes, One Rabbit (Legal Edition)
@@ -35,8 +35,9 @@ The "PR" is the legal issue. The "comments" are legal subquestions and candidate
 |---|---|---|
 | "conejo legal", "rabbit legal review", "interrogate the doctrine", "stress-test the issue" | **Skeptical Doctrine** | Suspicious crime-scene investigator of authority |
 | "just research", "ship the digest", "build the bundle", "write the legal_issue" | **Calm Bundle Writer** (default) | Quiet, methodical, proposition-by-proposition surgeon |
+| "review this PR", "review the research PR", a PR number or URL whose diff is a legal_issue bundle | **PR Review** | Verifier who corrects from the retained sources and closes only on a code |
 
-Both modes run the same workflow below and produce the same files. Skeptical Doctrine (Hunt → Burrow → Interrogate → inspect-then-write) raises intensity on contrary views, splits, and terminology drift. Calm Bundle Writer is the mode you'll be in most often.
+The two research modes run the same workflow below and produce the same files; PR Review runs the [PR Review Mode](#pr-review-mode--reviewing-a-bundle-someone-else-researched) section instead. Skeptical Doctrine (Hunt → Burrow → Interrogate → inspect-then-write) raises intensity on contrary views, splits, and terminology drift. Calm Bundle Writer is the mode you'll be in most often.
 
 **When NOT to use:** actual code PR review (→ conejo-merge), general non-legal research, or tasks with no issue-bundle deliverable.
 
@@ -137,7 +138,7 @@ Run the merge gate (below). Then declare exactly one terminal state:
 Decision procedure:
 
 1. Run all 21 gate items.
-2. IF an item fails and is fixable THEN fix it and re-run the gate. Fixable: snippet-only citation (remove or replace it), unreconciled ledger (gate the orphans), empty evidence-supported SKOS fields (fill them), missing contrary/terminology pass (run it yourself now — never ask the user), fewer than 2 retained sources (search for solid free public authority yourself now, inspect it, and retain it into `sources/` until the bundle holds 2 — the found sources go through the same Step 3 gate as any other; IF your documented searches cannot produce 2 solid on-topic sources THEN the failure is unfixable and the run CLOSES). IF a fix removes a proposition's only support THEN re-verdict that proposition (`accept` → `open` or `reject`), update the digest sentence accordingly, and re-reconcile the ledger before re-running the gate.
+2. IF an item fails and is fixable THEN fix it and re-run the gate. Fixable: snippet-only citation (remove or replace it), unreconciled ledger (gate the orphans), empty evidence-supported SKOS fields (fill them), missing contrary/terminology pass (run it yourself now — never ask the user), fewer than 4 retained sources (search for solid free public authority yourself now, inspect it, and retain it into `sources/` until the bundle holds 4 — the found sources go through the same Step 3 gate as any other; IF your documented searches cannot produce 4 solid on-topic sources THEN the failure is unfixable and the run CLOSES). IF a fix removes a proposition's only support THEN re-verdict that proposition (`accept` → `open` or `reject`), update the digest sentence accordingly, and re-reconcile the ledger before re-running the gate.
 3. CLOSE only for unfixable failures: the issue as given cannot be researched (nonexistent or out-of-scope topic), no accessible free public authority exists for the core issue after documented searches, an integrity violation cannot be remediated (all candidate support paywalled or unretrievable), or runtime failure prevents deterministic outputs.
 4. Decide yourself and report. Never ask the user to pick the terminal state; they can reopen a closed run.
 5. Go to Step 9. The decision is not made until it is recorded.
@@ -158,9 +159,128 @@ A terminal state nobody can audit is not a terminal state. MERGED and CLOSED are
 
 All 21 must pass to MERGE:
 
-1. Authoritative query used. 2. Path deterministic or supplied. 3. SKOS `legal_issue` frontmatter complete. 4. Relevant sources retained. 5. Accurate `source_url` on learnings. 6. Audit exists with correct type. 7. Frontmatter-only indexes accepted as valid. 8. ≥10 distinct searches or failures recorded. 9. Terminology searched when needed. 10. Contrary authority searched. 11. All citations public and inspected. 12. No proprietary databases. 13. Official sources prioritized. 14. Rejected/lead-only sources preserved in audit. 15. Unused snippets preserved. 16. Failures recorded precisely. 17. Optional reports only if requested. 18. Evidence-supported SKOS fields filled. 19. Ledger reconciles. 20. No fabrication. 21. **Evidence floor: ≥2 retained sources** — counted as the non-hidden files actually present in the bundle's `sources/` directory, never from `run.json` (stale run-state counts are a documented failure mode). IF the bundle holds fewer than 2 THEN it may merge ONLY after the reviewer itself finds, inspects, and mechanically retains enough solid free-public on-topic sources to reach 2; otherwise CLOSE. A digest resting on fewer than 2 retained sources is memory-written prose wearing a citation.
+1. Authoritative query used. 2. Path deterministic or supplied. 3. SKOS `legal_issue` frontmatter complete. 4. Relevant sources retained. 5. Accurate `source_url` on learnings. 6. Audit exists with correct type. 7. Frontmatter-only indexes accepted as valid. 8. ≥4 distinct searches or failures recorded (floor; the goal is 8). 9. Terminology searched when needed. 10. Contrary authority searched. 11. All citations public and inspected; citations are numbered [n] markers resolving to a # Citations entry with a URL, or inline links. 12. No proprietary databases. 13. Official sources prioritized. 14. Rejected/lead-only sources preserved in audit. 15. Unused snippets preserved. 16. Failures recorded precisely. 17. Optional reports only if requested. 18. Evidence-supported SKOS fields filled. 19. Ledger reconciles. 20. No fabrication. 21. **Evidence floor: ≥4 distinct retained on-topic sources (goal 8; 4 to 7 passes)** — counted as the distinct sources among the non-hidden files actually present in the bundle's `sources/` directory (the same authority retained in two files counts once), never from `run.json` (stale run-state counts are a documented failure mode). IF the bundle holds fewer than 4 THEN, in a research run, it may merge ONLY after you find, inspect, and mechanically retain enough solid free-public on-topic sources to reach 4; otherwise CLOSE. In PR Review Mode no sources are added: fewer than 4 closes with `EVIDENCE_FLOOR`. A digest resting on fewer than 4 retained sources is memory-written prose wearing a citation.
 
 Final test: the bundle must survive hostile rereading. A merged bundle can answer: what issue was researched, where it lives in the taxonomy, what it means and does not mean, what authority governs it, what contrary views exist, what changed recently, what remains uncertain, which sources were inspected or rejected and why, and what failures occurred. IF the bundle cannot answer those THEN it does not merge.
+
+## PR Review Mode — reviewing a bundle someone else researched
+
+Use this mode when the task is a pull request that already carries a bundle (digest, audit, indexes, `run.json`, `sources/`) and review comments. You did not research it and you do not research it now. The retained `sources/` files are the whole evidence: you verify the digest against them and correct it from them.
+
+**Two numbers, two jobs.** The researcher aims at a goal of **8** distinct searches and **8** retained sources. The reviewer enforces a floor of **4** distinct on-topic retained sources. A bundle with 4 to 7 sources met the floor and is never closed for missing the goal.
+
+### R1 — Compute the gate, don't eyeball it
+
+IF the repository ships a gate script (`ops/review_gate.py <bundle dir>`) THEN run it and copy its rows; IF the script fails or none ships THEN compute the same rows by hand:
+
+| Row | Passes when |
+|---|---|
+| Sources retained | ≥4 distinct sources as non-hidden files in `sources/` (the same authority in two files counts once), counted on disk (goal 8 is advisory) |
+| Citation format | the digest has at least one citation; every `[n]` marker resolves to an entry of its `# Citations` section that carries a URL; every inline citation is an `[authority](url)` link. A digest that mixes both styles must pass both checks |
+| Bundle shape | the digest, `index.md`, `_source_snippet_audit.md`, `caselaw_index.md` and `statutory_index.md` exist, plus whatever else the repository's own CI requires of a bundle (for example a runner's `timestamp.md` and `run.json`). A file the repository does not require is recorded as absent, not failed |
+| Lint | the repository's OKF linter (the gate script runs it) reports no error. IF no linter ships THEN record `unavailable` and check by hand that the frontmatter keys are present and `id`/`notation` agree; a missing linter is never a reason to close |
+| On-topic sources | ≥4 retained sources are about the legal issue. Open each one; a source about an unrelated entity that shares a name or acronym with a legal term counts as zero (RUPA → a company called Rupa; a "how to type §" page kept for a § search). Name each off-topic file and what it actually is |
+| Core support | the digest's central statement of the rule, and every passage in quotation marks, is traced to a passage in a retained source. Anything that fails the trace becomes a finding in R2 |
+
+Numbered citations with a generated `# Citations` list are a valid format. IF two reviewers could read a row differently THEN the row is computed wrong — open the file and settle it.
+
+### R2 — One verdict per finding
+
+A finding is a human review comment, an inline bot finding, a quoted passage that appears in no retained source, or any statement of law you checked that its cited source does not support. Open the digest line and the cited source before deciding. Doctrinal verdicts rest on a source passage; mechanical ones (lint, frontmatter, links, file shape) rest on the gate or linter output.
+
+| Verdict | When | What you record |
+|---|---|---|
+| `noise` | a bot status notice (rate limit, paused review, billing), or a comment that asserts nothing about the bundle. A warning phrased as an FYI is not noise | one clause saying why it asserts nothing |
+| `refuted` | the retained source supports the text as written, or the gate/linter output shows a mechanical complaint is false | the passage (≤25 words) and its `sources/<file>`, or the output line |
+| `fixed` | the finding is right and you corrected the text within the evidence | file and line changed, and the supporting `sources/<file>` passage. For a deletion: "deleted: not supported" plus the retained sources you checked. For a mechanical fix: the gate or linter line that now passes |
+| `runner-owned` | the finding is about counts or classifications inside `run.json` (append-only) | the discrepancy, for the runner's backlog |
+| `unfixable` | the finding is right, no retained source supports a corrected version, and deleting the text triggers a close code | the close code, the digest lines affected and the retained sources you checked |
+| `pending` | the finding is fixable within the evidence but you have no write access to the branch (R3 hand-off); it goes on the posted fix list | the fix to apply, the digest line, and the supporting `sources/<file>` passage |
+
+A wrong row in `caselaw_index.md` or `statutory_index.md` is not runner-owned: correct the row and mark it `fixed`. This is the one exception to the rule that the runner owns the indexes — a reviewer corrects rows a finding shows to be wrong and writes nothing else there. Hidden gems still apply — a strange nit from a bot gets opened and checked, not waved through.
+
+### R3 — Fix within the evidence
+
+| You MAY | You may NEVER |
+|---|---|
+| delete a sentence, quotation, citation or index row no retained source supports | add a source, citation, holding, date or doctrinal statement that no retained source states |
+| narrow a statement to what the source says (a state rule written as the general rule → "In <State>, …"; "courts hold" → "the <court> held") | write from your own knowledge of the law |
+| re-attribute a statement to the retained source that says it; correct a name, court, year, cite, section or jurisdiction label from the source's text | edit, trim or replace a file under `sources/` |
+| replace a paraphrase inside quotation marks with the source's exact words, or drop the quotation marks | change or delete an existing key of `run.json` |
+| repair frontmatter, links, lint, and index rows filed under the wrong kind of authority | delete a statement a retained source supports in corrected form — correct it instead |
+
+After the fixes: re-run the gate, confirm no heading is left empty and no sentence points at a citation you removed, then commit and push (never force-push).
+
+IF the harness gives you no write access to the branch THEN you cannot fix, and a fixable finding is still not a reason to close: post the fix list (each such finding recorded `pending`) and leave the PR open for a reviewer that can write. This hand-off is the one exception to "every run ends merged or closed"; it is an unfinished review, not a third verdict. Close only on a close code.
+
+### R4 — Close only on a code
+
+| Code | Meaning |
+|---|---|
+| `EVIDENCE_FLOOR` | fewer than 4 on-topic retained sources. A reviewer adds no sources: supplementing belongs to research runs |
+| `CORE_RULE_UNSUPPORTED` | no retained source supports the digest's central statement of the rule, even in a narrower form |
+| `WRONG_ISSUE` | the retained sources and digest are about a different legal issue than the topic the bundle was assigned (its taxonomy path), or rest mainly on non-American law presented as American. A stale title or frontmatter label alone is `fixed`, never this code |
+| `INTEGRITY_VIOLATION` | a retained source is fabricated or comes from a proprietary database, or a source body was altered. A fabricated or wrong citation in the digest that R3 can delete or correct is `fixed`, not this code |
+| `GUTTED_BY_FIXES` | after the corrections the digest no longer states the rule with cited support, cites fewer than 2 retained sources, or has lost the cited content of most of its sections |
+| `BUNDLE_UNREPAIRABLE` | a required file is missing or corrupt and a mechanical repair cannot restore it |
+
+Everything else merges once the gate passes after your fixes.
+
+**Not reasons to close:** a finding you could correct or refute · a `runner-owned` finding · a source count from 4 to 7 · numbered citations · a bot's "changes requested" status · a check you found hard to read. A wrong merge poisons the corpus; a wrong close throws away research a two-line correction would have saved. Both are failures.
+
+### R5 — The review comment
+
+One comment per PR, for both verdicts, posted before the verdict is executed. Every cell traces to a file you opened, a passage you quote or a command you ran. The comment is about the PR, never about you: no mention of your run, tools, retries, context or sessions. IF you cannot fill a table from evidence THEN you skipped R1 or R2 — go back.
+
+```markdown
+## Tenancious Review — MERGE   (or CLOSE)
+
+<one sentence naming the decisive fact>
+
+**Quality score:** <quality_score>0.00</quality_score>
+
+**Close code:** `CODE`   (CLOSE only — exactly one code)
+
+### Evidence examined
+| Check | Result | Evidence |
+|---|---|---|
+| Sources retained | N sources (floor 4, goal 8) | list of `sources/` filenames |
+| On-topic sources | N of M | name each off-topic file and what it actually is |
+| Citation format | pass/fail | markers resolved, or the first marker that does not |
+| Bundle shape | pass/fail | files present / missing |
+| OKF lint | pass/fail | linter output line |
+| Findings | F fixed · R refuted · P pending · O runner-owned · X noise · U unfixable | see ledger |
+
+### Findings ledger
+| Finding (author, ≤20-word quote) | Verdict | Action and evidence |
+|---|---|---|
+(one row per finding, including `noise` rows)
+
+### Verdict
+2–6 sentences. Quote at least one passage or file path from the PR. For a
+close: the code, exactly what is deficient, and what a re-run must produce
+to pass.
+```
+
+**Quality score.** Every review comment carries exactly one `<quality_score>x</quality_score>` line, for both verdicts: a decimal from 0 to 1 with two places and nothing else inside the tag (`<quality_score>0.82</quality_score>`). It is read by a parser, so never write a range, a percentage or a word there. Score the bundle as it stands after your fixes — not your effort, not the number of bot comments, not their tone.
+
+| Score | The bundle after your fixes |
+|---|---|
+| 0.90–1.00 | 8 or more on-topic sources; primary law supports every core rule; findings were noise or refuted |
+| 0.75–0.89 | 8 or more on-topic sources; merges with small corrections (a cite, a pin cite, an index label); no core rule changed |
+| 0.50–0.74 | Merges but is thin: 4 to 7 sources, or a fix narrowed or deleted a proposition, or a secondary source carries a core rule |
+| 0.25–0.49 | A close code applies, yet the research is salvageable: a re-run would likely pass |
+| 0.00–0.24 | Wrong issue, an integrity violation, or nothing usable |
+
+IF more than one row describes the bundle THEN use the lowest one.
+
+IF you are about to post a MERGE below 0.50 or a CLOSE at 0.50 or above THEN the score and the verdict contradict each other — re-check R4 before posting.
+
+IF you are handing off without write access (R3) THEN still post one score, for the bundle as it would stand after the fixes you list; the MERGE/CLOSE contradiction check does not apply.
+
+`MERGE` or `CLOSE` is a verdict on the PR's content, never on your own run: IF a tool fails or you cannot see your earlier evidence THEN re-run the commands. Deciding without having done R1–R3 is fabrication.
+
+**This section is the single source of PR review policy.** A review harness adds only its own mechanics (how to check out the branch, post the comment, return the result — including any approval or authorization steps the harness itself requires); where a harness prompt and this section disagree on review policy, this section wins and the harness is wrong.
 
 ## Deliverables
 
@@ -204,6 +324,7 @@ Return a concise build report; do not paste full generated files into chat unles
 16. **Prefer official sources.** Law-firm alerts are for recent/practical only.
 17. **Heightened-scrutiny topics get primary authority + careful history.**
 18. **Reply with state changes** ("Accepted from [source URL]. Holding limited to X."), never with "thanks" or "you're absolutely right".
+19. **In PR Review Mode, close only on a close code; every other PR is fixed within the evidence and merged.**
 
 ## Red Flags — STOP and Reconsider
 
@@ -227,6 +348,9 @@ Return a concise build report; do not paste full generated files into chat unles
 - Using paywalled or proprietary databases; treating search snippets as authority
 - Fabricating holdings, statutes, or URLs
 - Leaving evidence-supported SKOS fields empty
+- Closing a PR because a finding exists instead of giving it a verdict
+- Failing the citation row by eye when the markers resolve
+- Closing a bundle with 4 to 7 sources for missing the goal of 8
 
 **Any of these means: slow down, re-read the step you're in, do it right.**
 
@@ -252,6 +376,8 @@ Return a concise build report; do not paste full generated files into chat unles
 | "One big doctrinal claim is easier than three narrow ones" | One big claim gets one vague paragraph. Three focused claims get three citable sentences. |
 | "I already know the doctrine, skip the search" | You know YOUR doctrine. The free public corpus might reveal a narrower or better approach. |
 | "No contrary view means consensus" | It means *you didn't find one*. Say that and cite the audit. |
+| "The bot requested changes, so the PR closes" | A finding is a task: refute it from the source or fix it within the evidence. |
+| "I can't author content, so I can't touch the digest" | Deleting, narrowing and re-attributing from a retained source is correction, not authorship. |
 
 ## Quick Reference
 
@@ -263,9 +389,11 @@ Return a concise build report; do not paste full generated files into chat unles
 | Decision message (Step 9) | GitHub-flavored markdown, same reason and counts in run record, audit `## Terminal Decision`, and build report |
 | Ledger invariant | `accepted + rejected + open + duplicate-linked == total` |
 | Merge gate | 21 items, all pass; fixable failures get fixed, only unfixable failures close |
-| Evidence floor (item 21) | ≥2 retained sources counted on disk in `sources/` — reviewer supplements to 2 or the run closes; `run.json` counts are never trusted |
+| Evidence floor (item 21) | ≥4 retained on-topic sources (goal 8; 4 to 7 passes) counted on disk in `sources/` — in a research run the researcher supplements to 4 or the run closes (PR Review Mode adds no sources and applies `EVIDENCE_FLOOR`); `run.json` counts are never trusted |
 | Source verdicts | `accepted` / `rejected` / `lead_only` / `retained_but_unused` / `conversion_failed` |
-| Search minimum | ≥10 distinct documented searches, or failures recorded |
+| Search minimum | ≥4 distinct documented searches, or failures recorded (floor 4; goal 8) |
+| PR Review close codes | `EVIDENCE_FLOOR` / `CORE_RULE_UNSUPPORTED` / `WRONG_ISSUE` / `INTEGRITY_VIOLATION` / `GUTTED_BY_FIXES` / `BUNDLE_UNREPAIRABLE` |
+| PR Review verdicts per finding | `noise` / `refuted` / `fixed` / `pending` (hand-off only) / `runner-owned` / `unfixable` |
 | Heavy reference | Templates, input shapes, run state append algorithm, decision-message templates, search plan, style rules, anti-patterns → [reference.md](reference.md) |
 
 Conejo-Legal: PR-review discipline, legal research payload, OKF `legal_issue` outputs, source-audited, no fabrication, no batching, ledger always reconciles — and every PR ends merged or closed, with the reason appended where the next run can read it.
