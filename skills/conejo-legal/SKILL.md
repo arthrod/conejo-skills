@@ -176,26 +176,27 @@ IF the repository ships a gate script (`ops/review_gate.py <bundle dir>`) THEN r
 | Row | Passes when |
 |---|---|
 | Sources retained | ≥4 non-hidden files in `sources/`, counted on disk (goal 8 is advisory) |
-| Citation format | every `[n]` marker in the digest resolves to an entry of its `# Citations` section that carries a URL, **or** the digest cites with inline `[authority](url)` links |
-| Bundle shape | `index.md`, `_source_snippet_audit.md`, `caselaw_index.md`, `statutory_index.md`, `timestamp.md`, `run.json` and the digest exist |
-| Lint | the OKF linter reports no error |
+| Citation format | the digest has at least one citation; every `[n]` marker resolves to an entry of its `# Citations` section that carries a URL; every inline citation is an `[authority](url)` link. A digest that mixes both styles must pass both checks |
+| Bundle shape | the digest, `index.md`, `_source_snippet_audit.md`, `caselaw_index.md` and `statutory_index.md` exist, plus whatever else the repository's own CI requires of a bundle (a runner's `timestamp.md` and `run.json`). A file the repository does not require is recorded as absent, not failed |
+| Lint | the repository's OKF linter (the gate script runs it) reports no error. IF no linter ships THEN record `unavailable` and check by hand that the frontmatter keys are present and `id`/`notation` agree; a missing linter is never a reason to close |
 | On-topic sources | ≥4 retained sources are about the legal issue (open each one; a namesake entity counts as zero) |
+| Core support | the digest's central statement of the rule, and every passage in quotation marks, is traced to a passage in a retained source. Anything that fails the trace becomes a finding in R2 |
 
 Numbered citations with a generated `# Citations` list are a valid format. IF two reviewers could read a row differently THEN the row is computed wrong — open the file and settle it.
 
 ### R2 — One verdict per finding
 
-A finding is a human review comment, an inline bot finding, or a quoted passage that appears in no retained source. Open the digest line and the cited source before deciding.
+A finding is a human review comment, an inline bot finding, a quoted passage that appears in no retained source, or any statement of law you checked that its cited source does not support. Open the digest line and the cited source before deciding. Doctrinal verdicts rest on a source passage; mechanical ones (lint, frontmatter, links, file shape) rest on the gate or linter output.
 
 | Verdict | When | What you record |
 |---|---|---|
-| `noise` | bot status notice, or a remark that asks for no change | nothing more |
-| `refuted` | the retained source supports the text as written | the passage (≤25 words) and its `sources/<file>` |
-| `fixed` | the finding is right and you corrected the text within the evidence | file and line changed, and the supporting `sources/<file>` passage — or "deleted: no retained source supports it" |
+| `noise` | a bot status notice (rate limit, paused review, billing), or a comment that asserts nothing about the bundle. A warning phrased as an FYI is not noise | one clause saying why it asserts nothing |
+| `refuted` | the retained source supports the text as written, or the gate/linter output shows a mechanical complaint is false | the passage (≤25 words) and its `sources/<file>`, or the output line |
+| `fixed` | the finding is right and you corrected the text within the evidence | file and line changed, and the supporting `sources/<file>` passage. For a deletion: "deleted: not supported" plus the retained sources you checked. For a mechanical fix: the gate or linter line that now passes |
 | `runner-owned` | the finding is about counts or classifications inside `run.json` (append-only) | the discrepancy, for the runner's backlog |
-| `unfixable` | the finding is right, no retained source supports a corrected version, and deleting the text triggers a close code | the close code |
+| `unfixable` | the finding is right, no retained source supports a corrected version, and deleting the text triggers a close code | the close code, the digest lines affected and the retained sources you checked |
 
-A wrong row in `caselaw_index.md` or `statutory_index.md` is not runner-owned: correct the row and mark it `fixed`. Hidden gems still apply — a strange nit from a bot gets opened and checked, not waved through.
+A wrong row in `caselaw_index.md` or `statutory_index.md` is not runner-owned: correct the row and mark it `fixed`. This is the one exception to the rule that the runner owns the indexes — a reviewer corrects rows a finding shows to be wrong and writes nothing else there. Hidden gems still apply — a strange nit from a bot gets opened and checked, not waved through.
 
 ### R3 — Fix within the evidence
 
@@ -209,17 +210,17 @@ A wrong row in `caselaw_index.md` or `statutory_index.md` is not runner-owned: c
 
 After the fixes: re-run the gate, confirm no heading is left empty and no sentence points at a citation you removed, then commit and push (never force-push).
 
-IF the harness gives you no write access to the branch THEN you cannot fix, and a fixable finding is still not a reason to close: post the fix list and leave the PR open for a reviewer that can write. Close only on a close code.
+IF the harness gives you no write access to the branch THEN you cannot fix, and a fixable finding is still not a reason to close: post the fix list and leave the PR open for a reviewer that can write. This hand-off is the one exception to "every run ends merged or closed"; it is an unfinished review, not a third verdict. Close only on a close code.
 
 ### R4 — Close only on a code
 
 | Code | Meaning |
 |---|---|
-| `EVIDENCE_FLOOR` | fewer than 4 on-topic retained sources |
+| `EVIDENCE_FLOOR` | fewer than 4 on-topic retained sources. A reviewer adds no sources: supplementing belongs to research runs |
 | `CORE_RULE_UNSUPPORTED` | no retained source supports the digest's central statement of the rule, even in a narrower form |
-| `WRONG_ISSUE` | the bundle is about a different legal issue than its title, or rests mainly on non-American law presented as American |
-| `INTEGRITY_VIOLATION` | a retained source or its citation is fabricated, comes from a proprietary database, or a source body was altered |
-| `GUTTED_BY_FIXES` | after the corrections the digest no longer states the rule with cited support, or cites fewer than 2 retained sources |
+| `WRONG_ISSUE` | the retained sources and digest are about a different legal issue than the topic the bundle was assigned (its taxonomy path), or rest mainly on non-American law presented as American. A stale title or frontmatter label alone is `fixed`, never this code |
+| `INTEGRITY_VIOLATION` | a retained source is fabricated or comes from a proprietary database, or a source body was altered. A fabricated or wrong citation in the digest that R3 can delete or correct is `fixed`, not this code |
+| `GUTTED_BY_FIXES` | after the corrections the digest no longer states the rule with cited support, cites fewer than 2 retained sources, or has lost the cited content of most of its sections |
 | `BUNDLE_UNREPAIRABLE` | a required file is missing or corrupt and a mechanical repair cannot restore it |
 
 Everything else merges once the gate passes after your fixes.
@@ -337,7 +338,7 @@ Return a concise build report; do not paste full generated files into chat unles
 | Decision message (Step 9) | GitHub-flavored markdown, same reason and counts in run record, audit `## Terminal Decision`, and build report |
 | Ledger invariant | `accepted + rejected + open + duplicate-linked == total` |
 | Merge gate | 21 items, all pass; fixable failures get fixed, only unfixable failures close |
-| Evidence floor (item 21) | ≥4 retained on-topic sources (goal 8; 4 to 7 passes) counted on disk in `sources/` — reviewer supplements to 4 or the run closes; `run.json` counts are never trusted |
+| Evidence floor (item 21) | ≥4 retained on-topic sources (goal 8; 4 to 7 passes) counted on disk in `sources/` — in a research run the researcher supplements to 4 or the run closes (PR Review Mode adds no sources and applies `EVIDENCE_FLOOR`); `run.json` counts are never trusted |
 | Source verdicts | `accepted` / `rejected` / `lead_only` / `retained_but_unused` / `conversion_failed` |
 | Search minimum | ≥4 distinct documented searches, or failures recorded (floor 4; goal 8) |
 | PR Review close codes | `EVIDENCE_FLOOR` / `CORE_RULE_UNSUPPORTED` / `WRONG_ISSUE` / `INTEGRITY_VIOLATION` / `GUTTED_BY_FIXES` / `BUNDLE_UNREPAIRABLE` |
