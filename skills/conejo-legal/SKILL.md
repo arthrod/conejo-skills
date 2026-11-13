@@ -159,7 +159,7 @@ A terminal state nobody can audit is not a terminal state. MERGED and CLOSED are
 
 All 21 must pass to MERGE:
 
-1. Authoritative query used. 2. Path deterministic or supplied. 3. SKOS `legal_issue` frontmatter complete. 4. Relevant sources retained. 5. Accurate `source_url` on learnings. 6. Audit exists with correct type. 7. Frontmatter-only indexes accepted as valid. 8. ≥4 distinct searches or failures recorded (floor; the goal is 8). 9. Terminology searched when needed. 10. Contrary authority searched. 11. All citations public and inspected; citations are numbered [n] markers resolving to a # Citations entry with a URL, or inline links. 12. No proprietary databases. 13. Official sources prioritized. 14. Rejected/lead-only sources preserved in audit. 15. Unused snippets preserved. 16. Failures recorded precisely. 17. Optional reports only if requested. 18. Evidence-supported SKOS fields filled. 19. Ledger reconciles. 20. No fabrication. 21. **Evidence floor: ≥4 retained on-topic sources (goal 8; 4 to 7 passes)** — counted as the non-hidden files actually present in the bundle's `sources/` directory, never from `run.json` (stale run-state counts are a documented failure mode). IF the bundle holds fewer than 4 THEN it may merge ONLY after the reviewer itself finds, inspects, and mechanically retains enough solid free-public on-topic sources to reach 4; otherwise CLOSE. A digest resting on fewer than 4 retained sources is memory-written prose wearing a citation.
+1. Authoritative query used. 2. Path deterministic or supplied. 3. SKOS `legal_issue` frontmatter complete. 4. Relevant sources retained. 5. Accurate `source_url` on learnings. 6. Audit exists with correct type. 7. Frontmatter-only indexes accepted as valid. 8. ≥4 distinct searches or failures recorded (floor; the goal is 8). 9. Terminology searched when needed. 10. Contrary authority searched. 11. All citations public and inspected; citations are numbered [n] markers resolving to a # Citations entry with a URL, or inline links. 12. No proprietary databases. 13. Official sources prioritized. 14. Rejected/lead-only sources preserved in audit. 15. Unused snippets preserved. 16. Failures recorded precisely. 17. Optional reports only if requested. 18. Evidence-supported SKOS fields filled. 19. Ledger reconciles. 20. No fabrication. 21. **Evidence floor: ≥4 distinct retained on-topic sources (goal 8; 4 to 7 passes)** — counted as the distinct sources among the non-hidden files actually present in the bundle's `sources/` directory (the same authority retained in two files counts once), never from `run.json` (stale run-state counts are a documented failure mode). IF the bundle holds fewer than 4 THEN, in a research run, it may merge ONLY after you find, inspect, and mechanically retain enough solid free-public on-topic sources to reach 4; otherwise CLOSE. In PR Review Mode no sources are added: fewer than 4 closes with `EVIDENCE_FLOOR`. A digest resting on fewer than 4 retained sources is memory-written prose wearing a citation.
 
 Final test: the bundle must survive hostile rereading. A merged bundle can answer: what issue was researched, where it lives in the taxonomy, what it means and does not mean, what authority governs it, what contrary views exist, what changed recently, what remains uncertain, which sources were inspected or rejected and why, and what failures occurred. IF the bundle cannot answer those THEN it does not merge.
 
@@ -167,7 +167,7 @@ Final test: the bundle must survive hostile rereading. A merged bundle can answe
 
 Use this mode when the task is a pull request that already carries a bundle (digest, audit, indexes, `run.json`, `sources/`) and review comments. You did not research it and you do not research it now. The retained `sources/` files are the whole evidence: you verify the digest against them and correct it from them.
 
-**Two numbers, two jobs.** The researcher aims at a goal of **8** distinct searches and **8** retained sources. The reviewer enforces a floor of **4** on-topic retained sources. A bundle with 4 to 7 sources met the floor and is never closed for missing the goal.
+**Two numbers, two jobs.** The researcher aims at a goal of **8** distinct searches and **8** retained sources. The reviewer enforces a floor of **4** distinct on-topic retained sources. A bundle with 4 to 7 sources met the floor and is never closed for missing the goal.
 
 ### R1 — Compute the gate, don't eyeball it
 
@@ -175,7 +175,7 @@ IF the repository ships a gate script (`ops/review_gate.py <bundle dir>`) THEN r
 
 | Row | Passes when |
 |---|---|
-| Sources retained | ≥4 non-hidden files in `sources/`, counted on disk (goal 8 is advisory) |
+| Sources retained | ≥4 distinct sources as non-hidden files in `sources/` (the same authority in two files counts once), counted on disk (goal 8 is advisory) |
 | Citation format | the digest has at least one citation; every `[n]` marker resolves to an entry of its `# Citations` section that carries a URL; every inline citation is an `[authority](url)` link. A digest that mixes both styles must pass both checks |
 | Bundle shape | the digest, `index.md`, `_source_snippet_audit.md`, `caselaw_index.md` and `statutory_index.md` exist, plus whatever else the repository's own CI requires of a bundle (a runner's `timestamp.md` and `run.json`). A file the repository does not require is recorded as absent, not failed |
 | Lint | the repository's OKF linter (the gate script runs it) reports no error. IF no linter ships THEN record `unavailable` and check by hand that the frontmatter keys are present and `id`/`notation` agree; a missing linter is never a reason to close |
@@ -243,7 +243,7 @@ One comment per PR, for both verdicts, posted before the verdict is executed. Ev
 ### Evidence examined
 | Check | Result | Evidence |
 |---|---|---|
-| Sources retained | N files (floor 4, goal 8) | list of `sources/` filenames |
+| Sources retained | N sources (floor 4, goal 8) | list of `sources/` filenames |
 | On-topic sources | N of M | name each off-topic file and what it actually is |
 | Citation format | pass/fail | markers resolved, or the first marker that does not |
 | Bundle shape | pass/fail | files present / missing |
