@@ -319,7 +319,7 @@ Structured outline of 4–8 sections. Standard outline:
 
 Query families: exact issue name, close synonyms, historical labels, statute/regulation identifiers, leading case names, agency names, constitutional clauses, limiting doctrines, recent developments, public practical explainers.
 
-Document queries in the audit. **Goal: 8 distinct searches (floor 4)** unless the runtime was constrained or failures are recorded. A "search" is a distinct query or retrieval attempt, not vague browsing.
+Document queries in the audit. **Goal: 8 distinct searches (floor 4, or failures recorded)**. A constrained runtime satisfies the floor only when the constraint is recorded as a failure. A "search" is a distinct query or retrieval attempt, not vague browsing.
 
 Strong public-source families: Congress.gov, GovInfo, eCFR, Supreme Court opinions, CourtListener, Cornell LII, Constitution Annotated, CRS reports, GAO materials, official agency and executive pages. Free repositories still need careful inspection — metadata quality varies.
 
