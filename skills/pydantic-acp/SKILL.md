@@ -1,6 +1,6 @@
 ---
 name: pydantic-acp
-description: Use pydantic-acp to drive an external ACP CLI agent (crush-acp, cline --acp) as a pydantic-ai model backend — create_acp_model, AcpProvider, delegate host clients (filesystem/terminal/permissions), PromptedOutput structured output, and the classic hang/leak gotchas. Use when wrapping cline/crush/any ACP agent in a pydantic_ai.Agent, when acp logs "Error parsing JSON-RPC message" / "Expecting value: line 1 column 1", when an ACP-backed run hangs until its timeout, or when implementing an acp.interfaces.Client delegate.
+description: 'Use pydantic-acp to drive an external ACP CLI agent (crush-acp, cline --acp) as a pydantic-ai model backend — create_acp_model, AcpProvider, delegate host clients (filesystem/terminal/permissions), PromptedOutput structured output, and the classic hang/leak gotchas. Use when wrapping cline/crush/any ACP agent in a pydantic_ai.Agent, when acp logs "Error parsing JSON-RPC message" / "Expecting value: line 1 column 1", when an ACP-backed run hangs until its timeout, or when implementing an acp.interfaces.Client delegate.'
 ---
 
 # pydantic-acp: ACP agents as pydantic-ai models

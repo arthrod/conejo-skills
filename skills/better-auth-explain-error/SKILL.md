@@ -1,7 +1,7 @@
 ---
 name: better-auth-explain-error
 description: Explain Better Auth error codes and provide solutions with code examples
-argument-hint: [error_code or error_message]
+argument-hint: '[error_code or error_message]'
 ---
 
 # Explain Better Auth Error
