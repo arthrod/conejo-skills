@@ -1,6 +1,6 @@
 ---
 name: dogfood-quirks
-description: Workarounds for agent-browser version 0.26.0 quirks on Linux (sandbox launch failure, broken --timeout, silent stale refs, find-role syntax). Read BEFORE invoking the /dogfood skill or running any agent-browser command. Otherwise: Chrome won't launch, refs will silently click the wrong element, waits will take 30s instead of 3s.
+description: 'Workarounds for agent-browser version 0.26.0 quirks on Linux (sandbox launch failure, broken --timeout, silent stale refs, find-role syntax). Read BEFORE invoking the /dogfood skill or running any agent-browser command. Otherwise: Chrome won''t launch, refs will silently click the wrong element, waits will take 30s instead of 3s.'
 ---
 
 # dogfood-quirks

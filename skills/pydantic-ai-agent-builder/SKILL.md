@@ -1,7 +1,6 @@
 ---
-name: Pydantic AI Agent Builder
+name: pydantic-ai-agent-builder
 description: Expert guidance for building AI agents with Pydantic AI framework. Use when creating multi-agent systems, AI orchestration workflows, or structured LLM applications with type safety and validation.
-version: 1.0.0
 allowed-tools:
   - Read
   - Write
@@ -9,6 +8,8 @@ allowed-tools:
   - Bash
   - Glob
   - Grep
+metadata:
+  version: "1.0.0"
 ---
 
 # Pydantic AI Agent Builder
