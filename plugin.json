@@ -4,8 +4,7 @@
   "version": "3.3.0",
   "description": "arthrod's curated skill set, centred on the Conejo coding-philosophy family (conejo, conejo-code, conejo-debug, conejo-frontend, conejo-merge, conejo-legal) plus the obra/superpowers process skills, Pydantic AI, Plate/DOCX, Tauri/better-auth, Rust, and the Pi terminal agent.",
   "author": {
-    "name": "arthrod",
-    "url": "https://github.com/arthrod"
+    "name": "arthrod"
   },
   "repository": "https://github.com/arthrod/conejo-skills",
   "license": "MIT",
