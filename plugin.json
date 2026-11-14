@@ -9,5 +9,13 @@
   },
   "homepage": "https://github.com/arthrod/conejo-skills#readme",
   "repository": "https://github.com/arthrod/conejo-skills",
-  "keywords": ["agent-skills", "conejo", "claude-code", "superpowers", "code-review", "tdd"]
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "conejo",
+    "claude-code",
+    "superpowers",
+    "code-review",
+    "tdd"
+  ]
 }
