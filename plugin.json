@@ -6,12 +6,9 @@
   "author": {
     "name": "arthrod"
   },
-  "repository": "https://github.com/arthrod/conejo-skills",
   "license": "MIT",
   "keywords": [
-    "agent-skills",
     "conejo",
-    "claude-code",
     "superpowers",
     "code-review",
     "tdd"
