@@ -1,5 +1,7 @@
 # arthrod's Skill Registry
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **81 skills** — last sync `2026-11-13`. **v3.3.0**
 
 Major restructure: families collapsed (Pi → 2 skills, Pydantic AI → 1 with `references/`,
@@ -464,3 +466,9 @@ Use when you have a spec or requirements for a multi-step task, before touching 
 ### `writing-skills`
 
 Use when creating new skills, editing existing skills, or verifying skills work before deployment
+
+## License
+
+Original work in this repository is licensed under the [MIT License](LICENSE).
+Vendored and adapted third-party skills keep their upstream licenses; see each skill's
+frontmatter or folder and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
